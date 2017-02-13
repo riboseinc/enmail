@@ -16,7 +16,7 @@ secure email sending via either standard (or a combination of both).
 The mail-secure gem uses the concept of "adapters" to support different
 underlying libraries. For OpenPGP, there are two existing
 implementations: GnuPG and NetPGP. For S/MIME the default Ruby Openssl
-implementation can be used.
+implementation should be used.
 
 Implementations to support:
 * OpenPGP
@@ -28,6 +28,10 @@ Implementations to support:
 This gem allows you to select different OpenPGP implementations
 including NetPGP and GnuPG as different OpenPGP adapters, and also
 S/MIME.
+
+References:
+* https://github.com/jkraemer/mail-gpg
+* https://github.com/bluerail/mr_smime
 
 Example code:
 
