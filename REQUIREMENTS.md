@@ -37,6 +37,23 @@ Example code:
 
 
 ```ruby
+message = Mail.new
+message.decrypt
+signed_mail = m.sign(signature)
+encrypted_mail = m.encrypt(identity)
+signed_email.signature_valid?
+signed_email.signature_valid?
+signed_email.secure?
+signed_email.pgp? => :inline, :mime, nil
+signed_email.pgp_inline?
+signed_email.pgp_mime?
+encrypted_email.secure? => "OpenPGP RFC 4880"
+signed_email.smime?
+Mail::Secure::OpenPGP.verify_signature?(signed_email)
+
+```
+
+```ruby
 mail-gpg
 
 Mail.new do
