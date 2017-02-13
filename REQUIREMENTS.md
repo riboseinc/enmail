@@ -54,7 +54,17 @@ Mail::Secure::OpenPGP.verify_signature?(signed_email)
 ```
 
 ```ruby
-mail-gpg
+
+Mail::Secure.configuration = {
+  method: :openpgp,
+  implementation: :netpgp,
+  key: "ASCII-ARMORED-PGP-KEY"
+# or
+  key_id: "key-id",
+  keyring: "keyring-location",
+# or infer from GNUPGHOME
+  key_id: "key-id"
+}
 
 Mail.new do
   to 'jane@doe.net'
@@ -63,9 +73,15 @@ Mail.new do
   body "encrypt me!"
   add_file "some_attachment.zip"
 
-  # encrypt message, no signing
-# gpg encrypt: true
-  secure netpgp: true
+  # using default configuration
+  secure encrypt: true, encrypt_for: Key.find("mike@kite.com")
+
+  secure sign: true
+  secure encrypt: true, encrypt_for: PrivateKey.find("myself")
+  secure sign: true, sign_as: PrivateKey.find("myself")
+  secure encrypt: true
+  secure encrypt: true, passphrase: "secret"
+  secure encrypt: true, passphrase_callback: ->(...) {}
 
   # encrypt and sign message with sender's private key, using the given
   # passphrase to decrypt the key
@@ -79,7 +95,8 @@ Mail.new do
   # passphrase.
   gpg encrypt: true, sign_as: 'joe@otherdomain.com',
       passphrase_callback: ->(obj, uid_hint, passphrase_info, prev_was_bad, fd){puts "Enter passphrase for #{passphrase_info}: "; (IO.for_fd(fd, 'w') << readline.chomp).flush }
-end.deliver
+
+end
 ---------
 
 
