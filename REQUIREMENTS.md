@@ -1,7 +1,6 @@
-Ruby mail extension for sending/receiving secure mail
+# Ruby mail extension for sending/receiving secure mail
 
-# TODO: JL add interceptor
-
+[//]: # (TODO: JL add interceptor)
 
 OpenPGP (RFC 4880) and S/MIME (RFC 5751) are two methods for secure mail
 delivery today.
@@ -18,7 +17,7 @@ underlying libraries. For OpenPGP, there are two existing
 implementations: GnuPG and NetPGP. For S/MIME the default Ruby Openssl
 implementation should be used.
 
-Implementations to support:
+### Implementations to support:
 * OpenPGP
   * NetPGP
   * GnuPG
@@ -29,77 +28,109 @@ This gem allows you to select different OpenPGP implementations
 including NetPGP and GnuPG as different OpenPGP adapters, and also
 S/MIME.
 
-References:
-* https://github.com/jkraemer/mail-gpg
-* https://github.com/bluerail/mr_smime
+### References:
+* <https://github.com/jkraemer/mail-gpg>
+* <https://github.com/bluerail/mr_smime>
 
-Example code:
 
+## OpenPGP Example code
 
 ```ruby
 message = Mail.new
 message.decrypt
-signed_mail = m.sign(signature)
-encrypted_mail = m.encrypt(identity)
-signed_email.signature_valid?
-signed_email.signature_valid?
-signed_email.secure?
-signed_email.pgp? => :inline, :mime, nil
-signed_email.pgp_inline?
-signed_email.pgp_mime?
-encrypted_email.secure? => "OpenPGP RFC 4880"
-signed_email.smime?
-Mail::Secure::OpenPGP.verify_signature?(signed_email)
+
+signed_mail    = message.sign(key)
+encrypted_mail = message.encrypt(identity)
+
+signed_email.signature_valid? # => true, false
+signed_email.secure?          # => true, false
+signed_email.pgp              # => :inline, :mime, nil
+signed_email.pgp?             # => true, false
+signed_email.pgp_inline?      # => true, false
+signed_email.pgp_mime?        # => true, false
+encrypted_email.secure        # => "OpenPGP RFC 4880", nil
+encrypted_email.secure?       # => true, false
+signed_email.smime?           # => true, false
+
+Mail::Secure::OpenPGP.signature_valid?(signed_email) # => true, false
+```
+
+## OpenPGP Configuration
+
+```ruby
+Mail::Secure.configuration = {
+  method:         :openpgp,
+  implementation: :netpgp, # :gpgme
+
+  # Specify PGP key in 3 ways.
+  # Only providing the key:
+  key:     "ASCII-ARMORED-PGP-KEY",
+  key:     "non-armored-raw-bytes-pgp-key",
+  # or:
+  key_id:  "key-id",
+  keyring: "/Users/whoami/keyring-location",
+  # or infer "keyring" from GNUPGHOME:
+  key_id:  "key-id",
+}
 
 ```
 
+### Sample mail object
+
 ```ruby
-
-Mail::Secure.configuration = {
-  method: :openpgp,
-  implementation: :netpgp,
-  key: "ASCII-ARMORED-PGP-KEY"
-# or
-  key_id: "key-id",
-  keyring: "keyring-location",
-# or infer from GNUPGHOME
-  key_id: "key-id"
-}
-
 Mail.new do
-  to 'jane@doe.net'
-  from 'john@doe.net'
-  subject 'gpg test'
-  body "encrypt me!"
+  to       'jane@doe.net'
+  from     'john@doe.net'
+  subject  'gpg test'
+  body     "encrypt me!"
   add_file "some_attachment.zip"
 
-  # using default configuration
+  # Using default :method configuration:
   secure encrypt: true, encrypt_for: Key.find("mike@kite.com")
 
-  secure sign: true
-  secure encrypt: true, encrypt_for: PrivateKey.find("myself")
-  secure sign: true, sign_as: PrivateKey.find("myself")
-  secure encrypt: true
-  secure encrypt: true, passphrase: "secret"
-  secure encrypt: true, passphrase_callback: ->(...) {}
+  # #secure's first argument is optional: :openpgp | :smime
+  # If missing, then use the default configuration.
+  secure :openpgp, encrypt: true, encrypt_for: Key.find("mike@kite.com")
+  secure :smime,   encrypt: true, encrypt_for: Key.find("mike@kite.com")
+
+  # #secure as a long-hand:
+  secure :openpgp, sign: true
+  secure :openpgp, encrypt: true, encrypt_for: PrivateKey.find("myself")
+  secure :openpgp, sign: true, sign_as: PrivateKey.find("myself")
+  secure :openpgp, encrypt: true
+  secure :openpgp, encrypt: true, passphrase: "secret"
+  secure :openpgp, encrypt: true, passphrase_callback: ->(...) {}
+
+  # #openpgp or #smime as short-hand:
+  smime sign: true
+  smime encrypt: true, encrypt_for: PrivateKey.find("myself")
+  smime sign: true, sign_as: PrivateKey.find("myself")
+  openpgp encrypt: true
+  openpgp encrypt: true, passphrase: "secret"
+  openpgp encrypt: true, passphrase_callback: ->(...) {}
 
   # encrypt and sign message with sender's private key, using the given
   # passphrase to decrypt the key
-  gpg encrypt: true, sign: true, password: 'secret'
+  openpgp encrypt: true, sign: true, password: 'secret'
 
   # encrypt and sign message using a different key
-  gpg encrypt: true, sign_as: 'joe@otherdomain.com', password: 'secret'
+  openpgp encrypt: true, sign_as: 'joe@otherdomain.com', password: 'secret'
 
 
   # encrypt and sign message and use a callback function to provide the
   # passphrase.
-  gpg encrypt: true, sign_as: 'joe@otherdomain.com',
-      passphrase_callback: ->(obj, uid_hint, passphrase_info, prev_was_bad, fd){puts "Enter passphrase for #{passphrase_info}: "; (IO.for_fd(fd, 'w') << readline.chomp).flush }
+  openpgp encrypt: true, sign_as: 'joe@otherdomain.com',
+    passphrase_callback: ->(obj, uid_hint, passphrase_info, prev_was_bad, fd) {
+      puts "Enter passphrase for #{passphrase_info}: "
+      (IO.for_fd(fd, 'w') << readline.chomp).flush
+    }
+end.deliver
 
-end
----------
+```
 
+#### Encrypt mail using OpenPGP public key directly
 
+```ruby
 johns_key = <<-END
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v1.4.12 (GNU/Linux)
@@ -113,8 +144,11 @@ Mail.new do
   gpg encrypt: true, keys: { 'john@foo.bar' => johns_key }
 end
 
-----------------
-passphrase
+```
+
+### Decrypting mail using passphrase
+
+```ruby
 
 mail = Mail.first
 mail.subject # subject is never encrypted
@@ -124,16 +158,23 @@ if mail.encrypted?
   # the plaintext_mail, is a full Mail::Message object, just decrypted
 end
 
--------------
-sign
+```
+
+### Signing mail (simplest case)
+
+```ruby
+
 
 Mail.new do
   to 'jane@doe.net'
   gpg sign: true
 end.deliver 
 
----------------
-verify signature
+```
+
+### Verifying signature
+
+```ruby
 
 mail = Mail.first
 if !mail.encrypted? && mail.signed?
@@ -150,4 +191,3 @@ if mail.encrypted?
 end
 
 ```
-
