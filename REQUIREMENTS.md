@@ -2,7 +2,7 @@
 
 [//]: # (TODO: JL add interceptor)
 
-OpenPGP (RFC 4880) and S/MIME (RFC 5751) are two methods for secure mail
+OpenPGP [RFC 4880] and S/MIME [RFC 5751] are two methods for secure mail
 delivery today.
 
 Currently there is no existing mail gem extension (Ruby Gem) that allows
@@ -13,11 +13,14 @@ leveraging existing OpenPGP and S/MIME mail extension code to allow
 secure email sending via either standard (or a combination of both).
 
 The mail-secure gem uses the concept of "adapters" to support different
-underlying libraries. For OpenPGP, there are two existing
-implementations: GnuPG and NetPGP. For S/MIME the default Ruby Openssl
-implementation should be used.
+underlying libraries.
 
-### Implementations to support:
+* For OpenPGP, there are two existing implementations: GnuPG and NetPGP.
+* For S/MIME, the default Ruby OpenSSL implementation should be used.
+
+
+## Implementations to support:
+
 * OpenPGP
   * NetPGP
   * GnuPG
@@ -28,9 +31,27 @@ This gem allows you to select different OpenPGP implementations
 including NetPGP and GnuPG as different OpenPGP adapters, and also
 S/MIME.
 
-### References:
+## References and notes
+
 * <https://github.com/jkraemer/mail-gpg>
 * <https://github.com/bluerail/mr_smime>
+
+The `mail-gpg` gem hacks the default `mail` gem Deliverer to ensure the
+OpenPGP encryption/signing step is done at the last. This is extremely
+dirty and fragile.
+
+The `mr_smime` gem uses an interceptor hook (supplied by the `mail` gem)
+to encrypt/sign the email. The catch is the `mail` gem supports
+multiple interceptors (like Rack middlewares) so there is no guarantee
+that it is the last interceptor.
+
+A better approach is to use the interceptor pattern, and hack the
+interceptor methods in `mail` to force a particular interceptor (the one
+to implement) to be at the very end.
+
+Technically, this resulting implementation could allow usage of OpenPGP
+to sign/encrypt a message, then use S/MIME to sign (and/or encrypt) the
+OpenPGP-encoded message at the same time.
 
 
 ## OpenPGP Example code
@@ -133,7 +154,7 @@ end.deliver
 ```ruby
 johns_key = <<-END
 -----BEGIN PGP PUBLIC KEY BLOCK-----
-Version: GnuPG v1.4.12 (GNU/Linux)
+Version: GnuPG vX.X.XX (GNU/Linux)
 
 mQGiBEk39msRBADw1ExmrLD1OUMdfvA7cnVVYTC7CyqfNvHUVuuBDhV7azs
 ....
@@ -154,7 +175,7 @@ mail = Mail.first
 mail.subject # subject is never encrypted
 if mail.encrypted?
   # decrypt using your private key, protected by the given passphrase
-  plaintext_mail = mail.decrypt(:password => 'abc')
+  plaintext_mail = mail.decrypt(password: 'abc')
   # the plaintext_mail, is a full Mail::Message object, just decrypted
 end
 
@@ -168,7 +189,7 @@ end
 Mail.new do
   to 'jane@doe.net'
   gpg sign: true
-end.deliver 
+end.deliver
 
 ```
 
