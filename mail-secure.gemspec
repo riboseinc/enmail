@@ -29,9 +29,12 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "actionmailer", "~> 4.1.16"
-  spec.add_dependency "mail", "~> 2.5", ">= 2.5.3"
-  spec.add_dependency "gpgme", "~> 2.0", ">= 2.0.2"
+  spec.add_dependency "mail", "~> 2.6.4"
+  spec.add_dependency "mail-gpg", "~> 0.3.0"
+  spec.add_dependency "mr_smime", "~> 0.1.0"
+  spec.add_dependency "activesupport", "~> 5.0.2"
+
+  spec.add_development_dependency "pry"
   spec.add_development_dependency "bundler", "~> 1.14"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"

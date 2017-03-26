@@ -1,6 +1,0 @@
-[submodule "mr_smime"]
-	path = mr_smime
-	url = https://github.com/bluerail/mr_smime
-[submodule "mail-gpg"]
-	path = mail-gpg
-	url = https://github.com/jkraemer/mail-gpg

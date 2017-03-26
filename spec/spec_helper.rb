@@ -11,6 +11,6 @@ RSpec.configure do |config|
   end
 end
 
-Mail.defaults do
-  delivery_method :test
-end
+# Mail.defaults do
+#   delivery_method :test
+# end
