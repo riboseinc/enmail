@@ -1,5 +1,7 @@
 # Mail::Secure
 
+[![CircleCI](https://circleci.com/gh/abunashir/mail-secure/tree/master.svg?style=svg&circle-token=5f553bfa04e22b7f5d2e393afe0859595e6db6d5)](https://circleci.com/gh/abunashir/mail-secure/tree/master)
+
 Mail::Secure helps the Ruby mail gem send secure messages.
 
 The two ways for secure mail are:
