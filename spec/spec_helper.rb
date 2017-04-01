@@ -15,7 +15,7 @@ RSpec.configure do |config|
   config.before(:all) do
     EnMail.configure do |enmail_config|
       enmail_config.certificates_path =
-        File.expand_path("../fixtures/certificates", __FILE__)
+        File.expand_path("../fixtures", __FILE__)
     end
   end
 end
