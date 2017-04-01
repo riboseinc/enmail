@@ -32,6 +32,24 @@ Or install it yourself as:
 gem install enmail
 ```
 
+## Configure
+
+The `EnMail` gem provides a very easier interface to set custom configurations
+or configure the underlying dependencies, we can configure it by adding an
+initializer with the following code
+
+```ruby
+EnMail.configure do |config|
+  config.certificates_path = "CERTIFICATES_ROOT_PAH"
+end
+```
+
+Or
+
+```ruby
+EnMail.configuration.certificates_path = "CERTIFICATES_ROOT_PAH"
+```
+
 ## Usage
 
 ```sh
