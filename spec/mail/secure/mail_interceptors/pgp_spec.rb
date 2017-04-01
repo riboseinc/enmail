@@ -1,9 +1,8 @@
 require "spec_helper"
 
-RSpec.describe MailInterceptors::PGP do
-  pending "Still needs the implementation"
-end
-
+# RSpec.describe MailInterceptors::PGP do
+# end
+#
 # class TestMailer < ActionMailer::Base
 #   include Mail::Secure::PGPMailable
 #

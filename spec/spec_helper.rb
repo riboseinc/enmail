@@ -1,5 +1,5 @@
 require "bundler/setup"
-require "mail/secure"
+require "enmail"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -10,7 +10,3 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 end
-
-# Mail.defaults do
-#   delivery_method :test
-# end
