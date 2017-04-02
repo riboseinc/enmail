@@ -2,34 +2,34 @@ require "spec_helper"
 require "enmail/enmailable"
 
 RSpec.describe "EnMail::TestEnMailble" do
-  describe "#signing_key" do
+  describe "#key" do
     context "custom key provided" do
-      it "returns the custom key as signing key" do
+      it "returns the custom key" do
         EnMail.configuration.sign_key = "default_key"
         custom_key = EnMail::Key.new(sign_key: "custom secret key")
 
         message = EnMail::TestEnMailble.new
         message.sign(key: custom_key)
 
-        expect(message.signing_key).to eq(custom_key)
+        expect(message.key).to eq(custom_key)
       end
     end
 
     context "without any key provided" do
-      it "returns the default configuration" do
+      it "returns the default key" do
         default_key = "default secret key"
         EnMail.configuration.sign_key = default_key
 
         message = EnMail::TestEnMailble.new
         message.sign
 
-        expect(message.signing_key.sign_key).to eq(default_key)
+        expect(message.key.sign_key).to eq(default_key)
       end
     end
   end
 
   describe "#signable?" do
-    context "without a signing_key" do
+    context "without a sign key" do
       it "returns false" do
         EnMail.configuration.sign_key = nil
 

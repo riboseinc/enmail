@@ -13,20 +13,20 @@ module EnMail
       @key = key
 
       unless passphrase.empty?
-        signing_key.passphrase = passphrase
+        key.passphrase = passphrase
       end
     end
 
-    # Signing key
+    # Key
     #
-    # This returns the signing key when applicable, the default signing
+    # This returns the key instance when applicable, the default signing
     # key is configured through an initializer, but we are also allowing
     # user to provide a custom key when they are invoking an interface.
     #
     # @return [EnMail::Key] the key model instance
     #
-    def signing_key
-      @key || EnMail.configuration.defualt_key
+    def key
+      @key || EnMail.configuration.default_key
     end
 
     # Signing status
@@ -37,7 +37,7 @@ module EnMail
     # false, this can be used before trying to sing a message.
     #
     def signable?
-      signing_key.sign_key && EnMail.configuration.signable?
+      key.sign_key && EnMail.configuration.signable?
     end
   end
 end
