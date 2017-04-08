@@ -40,6 +40,7 @@ initializer with the following code
 
 ```ruby
 EnMail.configure do |config|
+  config.sign_message = true
   config.certificates_path = "CERTIFICATES_ROOT_PAH"
 end
 ```
