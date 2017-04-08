@@ -42,6 +42,8 @@ initializer with the following code
 EnMail.configure do |config|
   config.sign_message = true
   config.smime_adapter = :openssl
+  config.secret_key = "Secret Key String"
+
   config.certificates_path = "CERTIFICATES_ROOT_PAH"
 end
 ```

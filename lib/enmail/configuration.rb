@@ -1,7 +1,7 @@
 module EnMail
   class Configuration
     attr_reader :smime_adapter
-    attr_accessor :sign_message, :certificates_path
+    attr_accessor :sign_message, :certificates_path, :secret_key
 
     def initialize
       @sign_message = true
