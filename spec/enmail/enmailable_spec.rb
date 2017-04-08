@@ -2,24 +2,52 @@ require "spec_helper"
 require "enmail/enmailable"
 
 RSpec.describe "EnMail::TestEnMailble" do
-  describe "#signable?" do
-    context "without invoking #sign on message" do
-      it "usages the default configuration" do
-        EnMail.configuration.sign_message = false
-        enmailable = EnMail::TestEnMailble.new
+  describe "#signing_key" do
+    context "custom key provided" do
+      it "returns the custom key as signing key" do
+        custom_key = "custom secret key"
+        EnMail.configuration.secret_key = "default_key"
+        message = EnMail::TestEnMailble.new
 
-        expect(enmailable.signable?).to be_falsey
+        message.sign(key: custom_key)
+
+        expect(message.signing_key).to eq(custom_key)
       end
     end
 
-    context "with explicity calling sign interface" do
-      it "sets the message signing status to true" do
-        EnMail.configuration.sign_message = false
+    context "without any key provided" do
+      it "returns the default configuration" do
+        default_key = "default secret key"
+        EnMail.configuration.secret_key = default_key
+        message = EnMail::TestEnMailble.new
 
-        enmailable = EnMail::TestEnMailble.new
-        enmailable.sign
+        message.sign
 
-        expect(enmailable.signable?).to be_truthy
+        expect(message.signing_key).to eq(default_key)
+      end
+    end
+  end
+
+  describe "#signable?" do
+    context "without a signing_key" do
+      it "returns false" do
+        EnMail.configuration.secret_key = nil
+        message = EnMail::TestEnMailble.new
+
+        message.sign
+
+        expect(message.signable?).to be_falsey
+      end
+    end
+
+    context "with a valid signing key" do
+      it "returns true" do
+        EnMail.configuration.sign_message = true
+        message = EnMail::TestEnMailble.new
+
+        message.sign(key: "valid signing key")
+
+        expect(message.signable?).to be_truthy
       end
     end
   end
