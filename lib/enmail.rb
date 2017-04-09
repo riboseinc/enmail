@@ -1,3 +1,4 @@
+require "enmail/key"
 require "enmail/config"
 require "enmail/certificate_finder"
 

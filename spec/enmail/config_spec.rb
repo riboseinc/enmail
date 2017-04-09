@@ -7,12 +7,14 @@ RSpec.describe EnMail::Config do
 
       EnMail.configure do |enmail_config|
         enmail_config.sign_message = true
-        enmail_config.secret_key = "Secret key content"
+        enmail_config.sign_key = "Signing key content"
+        enmail_config.encrypt_key = "Encryping key content"
         enmail_config.certificates_path = certificates_path
       end
 
       expect(EnMail.configuration.signable?).to be_truthy
-      expect(EnMail.configuration.secret_key).not_to be_nil
+      expect(EnMail.configuration.defualt_key.sign_key).not_to be_nil
+      expect(EnMail.configuration.defualt_key.encrypt_key).not_to be_nil
       expect(EnMail.configuration.certificates_path).to eq(certificates_path)
     end
   end

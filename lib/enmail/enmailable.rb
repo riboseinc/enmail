@@ -6,11 +6,15 @@ module EnMail
     # also forecefully sets the `signable` status true, so it ensures that
     # the specific message will be signed before sending out.
     #
-    # @param passphrase passphrase to use the private key.
+    # @param passphrase [String] the passphrase for the sign key
+    # @param key [EnMail::Key] the key model instance
     #
     def sign(passphrase: "", key: nil)
       @key = key
-      @passphrase = passphrase
+
+      unless passphrase.empty?
+        signing_key.passphrase = passphrase
+      end
     end
 
     # Signing key
@@ -19,8 +23,10 @@ module EnMail
     # key is configured through an initializer, but we are also allowing
     # user to provide a custom key when they are invoking an interface.
     #
+    # @return [EnMail::Key] the key model instance
+    #
     def signing_key
-      @key || EnMail.configuration.secret_key
+      @key || EnMail.configuration.defualt_key
     end
 
     # Signing status
@@ -31,7 +37,7 @@ module EnMail
     # false, this can be used before trying to sing a message.
     #
     def signable?
-      signing_key && EnMail.configuration.signable?
+      signing_key.sign_key && EnMail.configuration.signable?
     end
   end
 end

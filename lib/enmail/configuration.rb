@@ -1,7 +1,8 @@
 module EnMail
   class Configuration
     attr_reader :smime_adapter
-    attr_accessor :sign_message, :certificates_path, :secret_key
+    attr_accessor :sign_message, :certificates_path
+    attr_accessor :sign_key, :encrypt_key
 
     def initialize
       @sign_message = true
@@ -41,6 +42,15 @@ module EnMail
     #
     def smime_adapter_klass
       smime_adapter_symbol_to_klass
+    end
+
+    # Default key
+    #
+    # This returns a Key instance with the configured keys.
+    # @return [EnMail::Key] the configured default key attributes.
+    #
+    def defualt_key
+      EnMail::Key.new(sign_key: sign_key, encrypt_key: encrypt_key)
     end
 
     private
