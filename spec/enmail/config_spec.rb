@@ -26,7 +26,9 @@ RSpec.describe EnMail::Config do
           config.smime_adapter = smime_adapter
         end
 
-        expect(EnMail.configuration.smime_adapter).to eq(smime_adapter)
+        expect(
+          EnMail.configuration.smime_adapter_klass,
+        ).to eq("EnMail::Adapters::OpenSSL")
       end
     end
 

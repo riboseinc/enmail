@@ -32,10 +32,25 @@ module EnMail
       end
     end
 
+    # Adapter klass name
+    #
+    # This returns the string class name for the configured smime
+    # adapter. We are lazely loading the adapter so this interface
+    # will return the string verion.  Please do not forget to use
+    # `Object.const_get` before invokng any method on it.
+    #
+    def smime_adapter_klass
+      smime_adapter_symbol_to_klass
+    end
+
     private
 
     def valid_smime_adapter?(adapter)
       smime_adapters.include?(adapter.to_sym)
+    end
+
+    def smime_adapter_symbol_to_klass
+      adapter_klasses.fetch(smime_adapter.to_sym)
     end
 
     # Supported smime adapters
@@ -46,6 +61,10 @@ module EnMail
     #
     def smime_adapters
       [:openssl].freeze
+    end
+
+    def adapter_klasses
+      { openssl: "EnMail::Adapters::OpenSSL" }
     end
   end
 end
