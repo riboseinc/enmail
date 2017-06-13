@@ -46,7 +46,7 @@ module EnMail
 
     def private_key_instance
       OpenSSL::PKey::RSA.new(
-        certificate_file(extension: :key)
+        certificate_file(extension: :key),
       )
     end
 

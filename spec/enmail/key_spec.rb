@@ -17,7 +17,7 @@ RSpec.describe EnMail::Key do
       sign_key: "signing key content",
       passphrase: "sign_key passphrase",
       encrypt_key: "encryping key content",
-      certificate: "signing certificate content"
+      certificate: "signing certificate content",
     }
   end
 end
