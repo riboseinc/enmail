@@ -1,6 +1,6 @@
-require "enmail/key"
-require "enmail/config"
-require "enmail/certificate_finder"
+require "mail"
+
+require "enmail/version"
 
 module EnMail
   # Your code goes here...

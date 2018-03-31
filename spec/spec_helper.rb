@@ -9,13 +9,4 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
-
-  # Configure EnMail
-  #
-  config.before(:all) do
-    EnMail.configure do |enmail_config|
-      enmail_config.certificates_path =
-        File.expand_path("../fixtures", __FILE__)
-    end
-  end
 end
