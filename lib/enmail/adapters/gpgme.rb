@@ -1,3 +1,5 @@
+require "gpgme"
+
 module EnMail
   module Adapters
     # Secures e-mails according to {RFC 3156 "MIME Security with OpenPGP"}[
@@ -49,12 +51,20 @@ module EnMail
         part
       end
 
-      def build_signature_part(_part_to_sign)
-        signature = "DUMMY_SIGNATURE"
+      def build_signature_part(part_to_sign)
+        signature = compute_signature(part_to_sign.encoded).to_s
         part = ::Mail::Part.new
         part.content_type = sign_protocol
         part.body = signature
         part
+      end
+
+      def compute_signature(text)
+        build_crypto.detach_sign(text)
+      end
+
+      def build_crypto
+        ::GPGME::Crypto.new(armor: true)
       end
 
       public
