@@ -92,12 +92,13 @@ RSpec.describe EnMail::Adapters::GPGME do
   describe "#build_signature_part" do
     subject { adapter.method(:build_signature_part) }
     let(:part) { ::Mail::Part.new(body: "Some Text.") }
+    let(:signature_rx) { %r{\A-+BEGIN PGP SIGNATURE.*END PGP SIGNATURE-+\Z}m }
 
     it "builds a MIME part with correct content type" do
       retval = subject.(part)
       expect(retval).to be_instance_of(::Mail::Part)
       expect(retval.mime_type).to eq("application/pgp-signature")
-      expect(retval.body.decoded).to eq("DUMMY_SIGNATURE")
+      expect(retval.body.decoded).to match(signature_rx)
     end
   end
 
