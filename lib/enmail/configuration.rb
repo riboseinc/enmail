@@ -7,6 +7,8 @@ module EnMail
     def initialize
       @sign_message = true
       @smime_adapter = :openssl
+
+      register_mail_intercepter
     end
 
     # Signable?
@@ -49,8 +51,19 @@ module EnMail
     # This returns a Key instance with the configured keys.
     # @return [EnMail::Key] the configured default key attributes.
     #
-    def defualt_key
+    def default_key
       EnMail::Key.new(sign_key: sign_key, encrypt_key: encrypt_key)
+    end
+
+    # Register mail intercepter
+    #
+    # This method register `EnMail::Interceptor` as an intercepter to
+    # the Mail class, so the mail class will pass the message before
+    # delivering any email. `EnMail::Interceptor` will perform any of
+    # the tasks based on the configuration and method invokation.
+    #
+    def register_mail_intercepter
+      Mail.register_interceptor(EnMail::Interceptor)
     end
 
     private

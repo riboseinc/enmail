@@ -1,7 +1,10 @@
+require "mail"
+require "enmail/mail_ext/message"
+
 require "enmail/key"
 require "enmail/config"
-require "enmail/certificate_finder"
+require "enmail/encrypter"
+require "enmail/interceptor"
 
 module EnMail
-  # Your code goes here...
 end

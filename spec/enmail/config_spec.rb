@@ -13,9 +13,8 @@ RSpec.describe EnMail::Config do
       end
 
       expect(EnMail.configuration.signable?).to be_truthy
-      expect(EnMail.configuration.defualt_key.sign_key).not_to be_nil
-      expect(EnMail.configuration.defualt_key.encrypt_key).not_to be_nil
-      expect(EnMail.configuration.certificates_path).to eq(certificates_path)
+      expect(EnMail.configuration.default_key.sign_key).not_to be_nil
+      expect(EnMail.configuration.default_key.encrypt_key).not_to be_nil
     end
   end
 
