@@ -60,11 +60,17 @@ module EnMail
       public
 
       def signed_part_content_type
-        "multipart/signed"
+        protocol = sign_protocol
+        micalg = message_integrity_algorithm
+        %[multipart/signed; protocol="#{protocol}"; micalg="#{micalg}"]
       end
 
       def sign_protocol
         "application/pgp-signature"
+      end
+
+      def message_integrity_algorithm
+        "pgp-sha1"
       end
     end
   end
