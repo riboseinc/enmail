@@ -11,6 +11,9 @@ rvm:
 before_install:
   - gem install bundler -v 1.16.1
 
+before_script:
+  - rake generate_gpg_keys
+
 matrix:
   allow_failures:
     - rvm: ruby-head
