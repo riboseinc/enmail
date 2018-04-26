@@ -54,11 +54,7 @@ RSpec.describe "Signing with GPGME" do
       to eq("application/pgp-signature")
     expect(message_or_part.parts[1].content_type_parameters).to be_empty
 
-    ::GPGME::Crypto.new.verify(
-      message_or_part.parts[1].body.decoded,
-      signed_text: message_or_part.parts[0].encoded,
-    ) do |sig|
-      expect(sig).to be_valid
-    end
+    expect(message_or_part.parts[1].body.decoded).
+      to be_a_valid_pgp_signature_of(message_or_part.parts[0].encoded)
   end
 end
