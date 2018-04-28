@@ -13,3 +13,6 @@ AllCops:
   TargetRubyVersion: 2.3
 Rails:
   Enabled: false
+
+Style/EmptyCaseCondition:
+  Enabled: false
