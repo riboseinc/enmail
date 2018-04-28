@@ -51,7 +51,8 @@ RSpec.describe EnMail::Adapters::GPGME do
 
     it "adds the signature as the 2nd MIME part" do
       subject.(mail)
-      expect(adapter).to have_received(:build_signature_part).with(msg_part_dbl)
+      expect(adapter).to have_received(:build_signature_part).
+        with(msg_part_dbl, mail_from)
       expect(mail.parts[1]).to be(sig_dbl)
     end
   end
@@ -92,13 +93,22 @@ RSpec.describe EnMail::Adapters::GPGME do
   describe "#build_signature_part" do
     subject { adapter.method(:build_signature_part) }
     let(:part) { ::Mail::Part.new(body: "Some Text.") }
+    let(:signer) { "some.signer@example.com" }
     let(:signature_rx) { %r{\A-+BEGIN PGP SIGNATURE.*END PGP SIGNATURE-+\Z}m }
 
     it "builds a MIME part with correct content type" do
-      retval = subject.(part)
+      retval = subject.(part, signer)
       expect(retval).to be_instance_of(::Mail::Part)
       expect(retval.mime_type).to eq("application/pgp-signature")
       expect(retval.body.decoded).to match(signature_rx)
+    end
+
+    it "signs with key matching given signer" do
+      crypto_dbl = double
+      allow(adapter).to receive(:build_crypto).and_return(crypto_dbl)
+      expect(crypto_dbl).to receive(:detach_sign).
+        with(kind_of(String), signer: signer)
+      subject.(part, signer)
     end
   end
 
