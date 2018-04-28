@@ -15,6 +15,16 @@ task :generate_gpg_keys => :init_gpgme do
     Key-Length: 2048
     Subkey-Type: ELG-E
     Subkey-Length: 2048
+    Name-Real: Some Arbitrary Key
+    Name-Email: whatever@example.test
+    Name-Comment: Without passphrase
+    Expire-Date: 0
+    %commit
+
+    Key-Type: DSA
+    Key-Length: 2048
+    Subkey-Type: ELG-E
+    Subkey-Length: 2048
     Name-Real: Cato Elder
     Name-Email: cato.elder@example.test
     Name-Comment: Without passphrase

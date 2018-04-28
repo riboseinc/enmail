@@ -17,7 +17,8 @@ module EnMail
 
       def sign(message)
         part_to_be_signed = body_to_part(message)
-        signature_part = build_signature_part(part_to_be_signed)
+        signer = message.from_addrs.first
+        signature_part = build_signature_part(part_to_be_signed, signer)
 
         message.body = nil
         message.content_type = signed_part_content_type
@@ -51,16 +52,16 @@ module EnMail
         part
       end
 
-      def build_signature_part(part_to_sign)
-        signature = compute_signature(part_to_sign.encoded).to_s
+      def build_signature_part(part_to_sign, signer)
+        signature = compute_signature(part_to_sign.encoded, signer).to_s
         part = ::Mail::Part.new
         part.content_type = sign_protocol
         part.body = signature
         part
       end
 
-      def compute_signature(text)
-        build_crypto.detach_sign(text)
+      def compute_signature(text, signer)
+        build_crypto.detach_sign(text, signer: signer)
       end
 
       def build_crypto

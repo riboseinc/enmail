@@ -55,6 +55,7 @@ RSpec.describe "Signing with GPGME" do
     expect(message_or_part.parts[1].content_type_parameters).to be_empty
 
     expect(message_or_part.parts[1].body.decoded).
-      to be_a_valid_pgp_signature_of(message_or_part.parts[0].encoded)
+      to be_a_valid_pgp_signature_of(message_or_part.parts[0].encoded).
+      signed_by(mail_from)
   end
 end
