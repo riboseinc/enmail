@@ -29,6 +29,16 @@ task :generate_gpg_keys => :init_gpgme do
     Name-Email: cato.elder@example.test
     Name-Comment: Without passphrase
     Expire-Date: 0
+    %commit
+
+    Key-Type: DSA
+    Key-Length: 2048
+    Subkey-Type: ELG-E
+    Subkey-Length: 2048
+    Name-Real: Roman Senate
+    Name-Email: senate@example.test
+    Name-Comment: Without passphrase
+    Expire-Date: 0
     </GnupgKeyParms>
   EOS
 end
