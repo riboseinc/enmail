@@ -8,6 +8,7 @@ task :default => :spec # rubocop:disable Style/HashSyntax
 # Available parameters for unattended GPG key generation are described here:
 # https://www.gnupg.org/documentation/manuals/gnupg/Unattended-GPG-key-generation.html
 task :generate_pgp_keys => :init_gpgme do # rubocop:disable Style/HashSyntax
+  # Key pairs without password
   ::GPGME::Ctx.new.genkey(<<~SCRIPT)
     <GnupgKeyParms format="internal">
     %no-protection
@@ -45,6 +46,23 @@ task :generate_pgp_keys => :init_gpgme do # rubocop:disable Style/HashSyntax
     Name-Email: senate@example.test
     Name-Comment: Without passphrase
     Expire-Date: 0
+    </GnupgKeyParms>
+  SCRIPT
+
+  # Password-protected key pairs
+  ::GPGME::Ctx.new.genkey(<<~SCRIPT)
+    <GnupgKeyParms format="internal">
+    Key-Type: RSA
+    Key-Usage: sign, cert
+    Key-Length: 2048
+    Subkey-Type: RSA
+    Subkey-Length: 2048
+    Subkey-Usage: encrypt
+    Name-Real: Cato Elder
+    Name-Email: cato.elder+pwd@example.test
+    Name-Comment: Password-protected
+    Expire-Date: 0
+    Passphrase: 1234
     </GnupgKeyParms>
   SCRIPT
 end
