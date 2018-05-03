@@ -15,11 +15,12 @@ RSpec::Matchers.define :be_a_valid_pgp_signature_of do |text|
     ::GPGME::Crypto.new.verify(signature, signed_text: text) do |sig|
       case
       when !sig.valid?
-        msg_mismatch(text)
+        return msg_mismatch(text)
       when expected_signer && sig.key.email != expected_signer
-        msg_wrong_signer(sig.key.email)
+        return msg_wrong_signer(sig.key.email)
       end
     end
+    nil
   rescue GPGME::Error::NoData # Signature parse error
     msg_no_gpg_sig(signature)
   end
