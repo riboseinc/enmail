@@ -16,7 +16,11 @@ module EnMail
       private
 
       def compute_signature(text, signer)
-        build_crypto.detach_sign(text, signer: signer)
+        build_crypto.detach_sign(
+          text,
+          signer: signer,
+          password: options[:key_password],
+        )
       end
 
       def encrypt_string(text, recipients)
@@ -29,6 +33,7 @@ module EnMail
           sign: true,
           signers: [signer],
           recipients: recipients,
+          password: options[:key_password],
         )
       end
 
