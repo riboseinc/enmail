@@ -43,6 +43,17 @@ RSpec.describe "Signing with GPGME" do
     decrypted_part_expectations_for_text_jpeg_mail(mail.parts[0])
   end
 
+  specify "forcing different signer key" do
+    mail = simple_mail
+    signer = "whatever@example.test"
+
+    EnMail.protect :sign, mail, signer: signer
+    mail.deliver
+    common_message_expectations(mail)
+    pgp_signed_part_expectations(mail, expected_signer: signer)
+    decrypted_part_expectations_for_simple_mail(mail.parts[0])
+  end
+
   def pgp_signed_part_expectations(message_or_part, expected_signer: mail_from)
     expect(message_or_part.mime_type).to eq("multipart/signed")
     expect(message_or_part.content_type_parameters).to include(
