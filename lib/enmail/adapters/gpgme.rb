@@ -65,7 +65,7 @@ module EnMail
       end
 
       def find_signer_for(message)
-        message.from_addrs.first
+        options[:signer] || message.from_addrs.first
       end
 
       def build_crypto
