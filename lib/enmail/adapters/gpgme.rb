@@ -17,7 +17,7 @@ module EnMail
 
       def sign(message)
         part_to_be_signed = body_to_part(message)
-        signer = message.from_addrs.first
+        signer = find_signer_for(message)
         signature_part = build_signature_part(part_to_be_signed, signer)
 
         message.body = nil
@@ -62,6 +62,10 @@ module EnMail
 
       def compute_signature(text, signer)
         build_crypto.detach_sign(text, signer: signer)
+      end
+
+      def find_signer_for(message)
+        message.from_addrs.first
       end
 
       def build_crypto
