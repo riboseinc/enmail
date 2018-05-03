@@ -43,7 +43,7 @@ RSpec.describe "Signing with GPGME" do
     decrypted_part_expectations_for_text_jpeg_mail(mail.parts[0])
   end
 
-  def pgp_signed_part_expectations(message_or_part)
+  def pgp_signed_part_expectations(message_or_part, expected_signer: mail_from)
     expect(message_or_part.mime_type).to eq("multipart/signed")
     expect(message_or_part.content_type_parameters).to include(
       "micalg" => "pgp-sha1",
@@ -56,6 +56,6 @@ RSpec.describe "Signing with GPGME" do
 
     expect(message_or_part.parts[1].body.decoded).
       to be_a_valid_pgp_signature_of(message_or_part.parts[0].encoded).
-      signed_by(mail_from)
+      signed_by(expected_signer)
   end
 end
