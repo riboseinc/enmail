@@ -10,9 +10,16 @@ RSpec::Matchers.define :be_a_valid_pgp_signature_of do |text|
     @msg
   end
 
-  # Returns +nil+ if signature is valid, or an error message otherwise.
+  # Returns +nil+ if first signature is valid, or an error message otherwise.
   def validate_signature(signature, text)
-    ::GPGME::Crypto.new.verify(signature, signed_text: text) do |sig|
+    cleartext_data = GPGME::Data.new(text)
+    signature_data = GPGME::Data.new(signature)
+
+    GPGME::Ctx.new(armor: true) do |ctx|
+      # That final +nil+ is obligatory
+      ctx.verify(signature_data, cleartext_data, nil)
+      sig = ctx.verify_result.signatures.first
+
       case
       when !sig.valid?
         return msg_mismatch(text)
@@ -20,6 +27,7 @@ RSpec::Matchers.define :be_a_valid_pgp_signature_of do |text|
         return msg_wrong_signer(sig.key.email)
       end
     end
+
     nil
   rescue GPGME::Error::NoData # Signature parse error
     msg_no_gpg_sig(signature)
