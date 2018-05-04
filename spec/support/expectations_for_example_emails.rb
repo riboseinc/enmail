@@ -68,5 +68,16 @@ shared_context "expectations for example emails" do
       to be_a_pgp_encrypted_message.
       encrypted_for(mail_to)
   end
+
+  def pgp_signed_and_encrypted_part_expectations(message_or_part,
+    expected_signer: mail_from)
+    # General encrypted message expectations do apply as it is generally
+    # an encrypted message, it just has some signatures added.
+    pgp_encrypted_part_expectations(message_or_part)
+
+    expect(message_or_part.parts[1].body.decoded).
+      to be_a_pgp_encrypted_message.
+      signed_by(expected_signer)
+  end
 end
 # rubocop:enable Metrics/AbcSize
