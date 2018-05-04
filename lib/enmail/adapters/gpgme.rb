@@ -90,8 +90,8 @@ module EnMail
         build_crypto.detach_sign(text, signer: signer)
       end
 
-      def encrypt_string
-        "DUMMY"
+      def encrypt_string(text, recipients)
+        build_crypto.encrypt(text, recipients: recipients)
       end
 
       def find_signer_for(message)
