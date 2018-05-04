@@ -28,7 +28,8 @@ module EnMail
 
       def encrypt(message)
         part_to_be_encrypted = body_to_part(message)
-        encrypted_part = build_encrypted_part(part_to_be_encrypted)
+        recipients = message.to_addrs
+        encrypted_part = build_encrypted_part(part_to_be_encrypted, recipients)
         control_part = build_encryption_control_part
 
         message.body = nil
@@ -71,8 +72,8 @@ module EnMail
         part
       end
 
-      def build_encrypted_part(part_to_encrypt)
-        encrypted = encrypt_string
+      def build_encrypted_part(part_to_encrypt, recipients)
+        encrypted = encrypt_string(part_to_encrypt.encoded, recipients).to_s
         part = ::Mail::Part.new
         part.content_type = "application/octet-stream"
         part.body = encrypted
