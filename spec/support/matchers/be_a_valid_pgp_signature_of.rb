@@ -1,4 +1,6 @@
 RSpec::Matchers.define :be_a_valid_pgp_signature_of do |text|
+  attr_reader :err
+
   match do |signature_string|
     @err = parse_and_validate_signature(signature_string, text)
     @err.nil?
@@ -7,7 +9,7 @@ RSpec::Matchers.define :be_a_valid_pgp_signature_of do |text|
   chain :signed_by, :expected_signer
 
   failure_message do
-    @err
+    err
   end
 
   # Returns +nil+ if first signature is valid, or an error message otherwise.
