@@ -7,6 +7,7 @@ RSpec::Matchers.define :be_a_pgp_encrypted_message do
   end
 
   chain :containing, :expected_cleartext
+  chain :signed_by, :expected_signer
 
   chain :encrypted_for do |*recipients|
     @expected_recipients = [*recipients]
@@ -27,7 +28,8 @@ RSpec::Matchers.define :be_a_pgp_encrypted_message do
       cipher_info = ctx.decrypt_result
       recipient_key_ids = cipher_info.recipients.map(&:keyid)
       recipients = recipient_key_ids.map { |kid| GPGME::Key.get(kid).email }
-      match_cleartext_and_recipients(cleartext, recipients)
+      match_cleartext_and_recipients(cleartext, recipients) ||
+        match_signature(ctx.verify_result.signatures.first)
     end
   rescue GPGME::Error::NoData # Signature parse error
     msg_no_gpg_sig(encrypted)
@@ -39,6 +41,15 @@ RSpec::Matchers.define :be_a_pgp_encrypted_message do
       msg_mismatch(cleartext)
     when expected_recipients && expected_recipients.sort != recipients.sort
       msg_wrong_recipients(recipients)
+    else # rubocop:disable Style/EmptyElse - redundant but explicit
+      nil
+    end
+  end
+
+  def match_signature(sig)
+    case
+    when expected_signer && sig.key.email != expected_signer
+      msg_wrong_signer(sig.key.email)
     else # rubocop:disable Style/EmptyElse - redundant but explicit
       nil
     end
@@ -60,5 +71,10 @@ RSpec::Matchers.define :be_a_pgp_encrypted_message do
 
     "expected given Open PGP message to be encrypted for following " +
       "recipients: #{expected_recipients_list}, but was for: #{recipients_list}"
+  end
+
+  def msg_wrong_signer(actual_signer)
+    "expected singature to be signed by #{expected_signer}, " +
+      "but was actually signed by #{actual_signer}"
   end
 end
