@@ -48,7 +48,6 @@ shared_context "example emails" do
   end
 
   def decrypted_part_expectations_for_text_html_mail(message_or_part)
-    expect(message_or_part.body.raw_source).to be_empty
     expect(message_or_part.parts[0].mime_type).to eq("text/plain")
     expect(message_or_part.parts[0].body.decoded).to eq(mail_text)
     expect(message_or_part.parts[1].mime_type).to eq("text/html")
@@ -67,7 +66,6 @@ shared_context "example emails" do
   end
 
   def decrypted_part_expectations_for_text_jpeg_mail(message_or_part)
-    expect(message_or_part.body.raw_source).to be_empty
     expect(message_or_part.parts[0].mime_type).to eq("text/plain")
     expect(message_or_part.parts[0].body.decoded).to eq(mail_text)
     expect(message_or_part.parts[1].mime_type).to eq("image/jpeg")
