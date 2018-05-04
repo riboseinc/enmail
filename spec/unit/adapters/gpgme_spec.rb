@@ -57,6 +57,62 @@ RSpec.describe EnMail::Adapters::GPGME do
     end
   end
 
+  describe "#encrypt" do
+    subject { adapter.method(:encrypt) }
+
+    let(:mail) { simple_mail }
+    let(:blank_string_rx) { /\A\s*\Z/ }
+    let(:msg_part_dbl) { double.as_null_object }
+    let(:msg_ctrl_dbl) { double.as_null_object }
+    let(:enc_part_dbl) { double.as_null_object }
+
+    before do
+      allow(adapter).to receive(:body_to_part).and_return(msg_part_dbl)
+      allow(adapter).
+        to receive(:build_encryption_control_part).and_return(msg_ctrl_dbl)
+      allow(adapter).
+        to receive(:build_encrypted_part).and_return(enc_part_dbl)
+    end
+
+    it "changes message mime type to multipart/encrypted" do
+      expect { subject.(mail) }.to(
+        change { mail.mime_type }.to("multipart/encrypted")
+      )
+    end
+
+    it "preserves from, to, subject, date, message id, and custom headers" do
+      mail.ready_to_send! # Set some default message_id
+      expect { subject.(mail) }.to(
+        preserve { mail.date } &
+        preserve { mail.from } &
+        preserve { mail.to } &
+        preserve { mail.subject } &
+        preserve { mail.message_id } &
+        preserve { mail.headers["custom"] }
+      )
+    end
+
+    it "clears the old message body" do
+      expect { subject.(mail) }.
+        to change { mail.body.decoded }.to(blank_string_rx)
+    end
+
+    it "adds the control information as the 1st MIME part" do
+      subject.(mail)
+      expect(adapter).
+        to have_received(:build_encryption_control_part).with(no_args)
+      expect(mail.parts[0]).to be(msg_ctrl_dbl)
+    end
+
+    it "converts the old message body to a a MIME part, encrypts, " +
+      "and re-appends it to self as the 2nd MIME part" do
+      subject.(mail)
+      expect(adapter).to have_received(:body_to_part).with(mail)
+      expect(adapter).to have_received(:build_encrypted_part).with(msg_part_dbl)
+      expect(mail.parts[1]).to be(enc_part_dbl)
+    end
+  end
+
   describe "#body_to_part" do
     subject { adapter.method(:body_to_part) }
 
@@ -112,6 +168,23 @@ RSpec.describe EnMail::Adapters::GPGME do
     end
   end
 
+  describe "#build_encrypted_part" do
+    subject { adapter.method(:build_encrypted_part) }
+    let(:part) { ::Mail::Part.new(body: "Some Text.") }
+    let(:pgp_msg_rx) { %r{\A-+BEGIN PGP MESSAGE.*END PGP MESSAGE-+\Z}m }
+
+    it "builds a MIME part with correct content type" do
+      retval = subject.(part)
+      expect(retval).to be_instance_of(::Mail::Part)
+      expect(retval.mime_type).to eq("application/octet-stream")
+      expect(retval.body.decoded).to eq("DUMMY")
+      pending "Insert actual PGP message into part body"
+      expect(retval.body.decoded).to match(pgp_msg_rx)
+    end
+
+    it "encrypts with keys matching given recipients"
+  end
+
   describe "#signed_part_content_type" do
     subject { adapter.method(:signed_part_content_type) }
 
@@ -133,6 +206,25 @@ RSpec.describe EnMail::Adapters::GPGME do
     it "tells about PGP protocol" do
       retval_segments = subject.call.split(/\s*;\s*/)
       protocol_def = %[protocol="application/pgp-signature"]
+      expect(retval_segments[1..-1]).to include(protocol_def)
+    end
+  end
+
+  describe "#encrypted_part_content_type" do
+    subject { adapter.method(:encrypted_part_content_type) }
+
+    it "returns a string" do
+      expect(subject.call).to be_a(String)
+    end
+
+    it "has a MIME type multipart/encrypted" do
+      retval_segments = subject.call.split(/\s*;\s*/)
+      expect(retval_segments[0]).to eq("multipart/encrypted")
+    end
+
+    it "tells about PGP protocol" do
+      retval_segments = subject.call.split(/\s*;\s*/)
+      protocol_def = %[protocol="application/pgp-encrypted"]
       expect(retval_segments[1..-1]).to include(protocol_def)
     end
   end

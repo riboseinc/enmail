@@ -26,6 +26,17 @@ module EnMail
         message.add_part signature_part
       end
 
+      def encrypt(message)
+        part_to_be_encrypted = body_to_part(message)
+        encrypted_part = build_encrypted_part(part_to_be_encrypted)
+        control_part = build_encryption_control_part
+
+        message.body = nil
+        message.content_type = encrypted_part_content_type
+        message.add_part control_part
+        message.add_part encrypted_part
+      end
+
       private
 
       # Returns a new +Mail::Part+ with the same content and MIME headers
@@ -60,8 +71,27 @@ module EnMail
         part
       end
 
+      def build_encrypted_part(part_to_encrypt)
+        encrypted = encrypt_string
+        part = ::Mail::Part.new
+        part.content_type = "application/octet-stream"
+        part.body = encrypted
+        part
+      end
+
+      def build_encryption_control_part
+        part = ::Mail::Part.new
+        part.content_type = encryption_protocol
+        part.body = "Version: 1" # As defined in RFC 3156
+        part
+      end
+
       def compute_signature(text, signer)
         build_crypto.detach_sign(text, signer: signer)
+      end
+
+      def encrypt_string
+        "DUMMY"
       end
 
       def find_signer_for(message)
@@ -80,8 +110,17 @@ module EnMail
         %[multipart/signed; protocol="#{protocol}"; micalg="#{micalg}"]
       end
 
+      def encrypted_part_content_type
+        protocol = encryption_protocol
+        %[multipart/encrypted; protocol="#{protocol}"]
+      end
+
       def sign_protocol
         "application/pgp-signature"
+      end
+
+      def encryption_protocol
+        "application/pgp-encrypted"
       end
 
       def message_integrity_algorithm
