@@ -2,6 +2,7 @@ require "spec_helper"
 
 RSpec.describe "Sending without protection (unaltered by EnMail)" do
   include_context "example emails"
+  include_context "expectations for example emails"
 
   specify "a non-multipart text-only message" do
     mail = simple_mail
