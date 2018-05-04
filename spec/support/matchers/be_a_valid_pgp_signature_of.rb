@@ -1,6 +1,6 @@
 RSpec::Matchers.define :be_a_valid_pgp_signature_of do |text|
-  match do |signature|
-    @err = parse_and_validate_signature(signature, text)
+  match do |signature_string|
+    @err = parse_and_validate_signature(signature_string, text)
     @err.nil?
   end
 
@@ -11,9 +11,9 @@ RSpec::Matchers.define :be_a_valid_pgp_signature_of do |text|
   end
 
   # Returns +nil+ if first signature is valid, or an error message otherwise.
-  def parse_and_validate_signature(signature, text)
+  def parse_and_validate_signature(signature_string, text)
     cleartext_data = GPGME::Data.new(text)
-    signature_data = GPGME::Data.new(signature)
+    signature_data = GPGME::Data.new(signature_string)
 
     GPGME::Ctx.new(armor: true) do |ctx|
       # That final +nil+ is obligatory
@@ -21,7 +21,7 @@ RSpec::Matchers.define :be_a_valid_pgp_signature_of do |text|
       match_signature(ctx.verify_result.signatures.first)
     end
   rescue GPGME::Error::NoData # Signature parse error
-    msg_no_gpg_sig(signature)
+    msg_no_gpg_sig(signature_string)
   end
 
   def match_signature(sig)
