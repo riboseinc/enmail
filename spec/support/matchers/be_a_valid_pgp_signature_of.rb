@@ -1,13 +1,13 @@
 RSpec::Matchers.define :be_a_valid_pgp_signature_of do |text|
   match do |signature|
-    @msg = validate_signature(signature, text)
-    @msg.nil?
+    @err = validate_signature(signature, text)
+    @err.nil?
   end
 
   chain :signed_by, :expected_signer
 
   failure_message do
-    @msg
+    @err
   end
 
   # Returns +nil+ if first signature is valid, or an error message otherwise.
