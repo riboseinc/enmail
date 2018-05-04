@@ -3,6 +3,7 @@ require "spec_helper"
 RSpec.describe "Encrypting with GPGME" do
   include_context "example emails"
   include_context "expectations for example emails"
+  include_context "gpgme spec helpers"
 
   specify "a non-multipart text-only message" do
     mail = simple_mail
@@ -42,11 +43,5 @@ RSpec.describe "Encrypting with GPGME" do
     common_message_expectations(mail)
     pgp_encrypted_part_expectations(mail)
     decrypted_part_expectations_for_text_jpeg_mail(decrypt_mail(mail))
-  end
-
-  def decrypt_mail(message)
-    encrypted_message = message.parts[1].body.decoded
-    decrypted_raw_message = GPGME::Crypto.new.decrypt(encrypted_message)
-    Mail::Part.new(decrypted_raw_message)
   end
 end
