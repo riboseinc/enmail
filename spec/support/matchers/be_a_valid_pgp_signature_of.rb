@@ -1,6 +1,6 @@
 RSpec::Matchers.define :be_a_valid_pgp_signature_of do |text|
   match do |signature|
-    @err = validate_signature(signature, text)
+    @err = parse_and_validate_signature(signature, text)
     @err.nil?
   end
 
@@ -11,26 +11,28 @@ RSpec::Matchers.define :be_a_valid_pgp_signature_of do |text|
   end
 
   # Returns +nil+ if first signature is valid, or an error message otherwise.
-  def validate_signature(signature, text)
+  def parse_and_validate_signature(signature, text)
     cleartext_data = GPGME::Data.new(text)
     signature_data = GPGME::Data.new(signature)
 
     GPGME::Ctx.new(armor: true) do |ctx|
       # That final +nil+ is obligatory
       ctx.verify(signature_data, cleartext_data, nil)
-      sig = ctx.verify_result.signatures.first
-
-      case
-      when !sig.valid?
-        return msg_mismatch(text)
-      when expected_signer && sig.key.email != expected_signer
-        return msg_wrong_signer(sig.key.email)
-      end
+      match_signature(ctx.verify_result.signatures.first)
     end
-
-    nil
   rescue GPGME::Error::NoData # Signature parse error
     msg_no_gpg_sig(signature)
+  end
+
+  def match_signature(sig)
+    case
+    when !sig.valid?
+      msg_mismatch(text)
+    when expected_signer && sig.key.email != expected_signer
+      msg_wrong_signer(sig.key.email)
+    else # rubocop:disable Style/EmptyElse - redundant but explicit
+      nil
+    end
   end
 
   def msg_mismatch(text)
