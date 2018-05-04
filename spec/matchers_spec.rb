@@ -4,11 +4,15 @@ RSpec.describe :be_a_pgp_encrypted_message do
   subject { method(:be_a_pgp_encrypted_message) }
   let(:failure_exception) { RSpec::Expectations::ExpectationNotMetError }
   let(:crypto) { ::GPGME::Crypto.new(crypto_opts) }
-  let(:crypto_opts) { { armor: true, recipients: [recipient] } }
   let(:enc) { crypto.encrypt(text).to_s }
   let(:text) { "text" }
   let(:misspelled) { "teXt" }
   let(:recipient) { "whatever@example.test" }
+  let(:signer) { "whatever@example.test" }
+
+  let(:crypto_opts) do
+    { armor: true, recipients: [recipient], signers: signer, sign: true }
+  end
 
   it "assures that string contains PGP data" do
     m = subject.call.containing(text)
@@ -31,6 +35,17 @@ RSpec.describe :be_a_pgp_encrypted_message do
     expect(m.matches?(enc)).to be(false)
 
     m = subject.call.containing(misspelled).encrypted_for(recipient)
+    expect(m.matches?(enc)).to be(false)
+  end
+
+  it "assures that string is an encrypted message signed with correct key" do
+    m = subject.call.containing(text).signed_by(signer)
+    expect(m.matches?(enc)).to be(true)
+
+    m = subject.call.containing(text).signed_by("a@example.test")
+    expect(m.matches?(enc)).to be(false)
+
+    m = subject.call.containing(misspelled).signed_by(signer)
     expect(m.matches?(enc)).to be(false)
   end
 
