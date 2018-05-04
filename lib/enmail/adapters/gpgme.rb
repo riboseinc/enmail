@@ -38,6 +38,13 @@ module EnMail
         message.add_part encrypted_part
       end
 
+      # The RFC 3156 requires that the message is first signed, then encrypted.
+      # See: https://tools.ietf.org/html/rfc3156#section-6.1
+      def sign_and_encrypt_encapsulated(message)
+        sign(message)
+        encrypt(message)
+      end
+
       private
 
       # Returns a new +Mail::Part+ with the same content and MIME headers
