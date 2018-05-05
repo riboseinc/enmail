@@ -29,6 +29,16 @@ module EnMail
         part
       end
 
+      # Detects a list of e-mails which should be used to define a list of
+      # recipients of encrypted message.  All is simply taken from the message
+      # +To:+ field.
+      #
+      # @param [Mail::Message] message
+      # @return [Array] an array of e-mails
+      def find_recipients_for(message)
+        message.to_addrs
+      end
+
       # Detects e-mail which should be used to find a message signer key.
       # Basically, it is taken from the message +From:+ field, but may be
       # overwritten by +:signer+ adapter option.

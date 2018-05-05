@@ -39,6 +39,15 @@ RSpec.describe EnMail::Helpers::MessageManipulation do
     end
   end
 
+  describe "#find_recipients_for" do
+    subject { adapter.method(:find_recipients_for) }
+    let(:mail) { simple_mail }
+
+    it "returns all addresses from e-mail To: field" do
+      expect(subject.(mail)).to eq([mail_to])
+    end
+  end
+
   describe "#find_signer_for" do
     subject { adapter.method(:find_signer_for) }
     let(:mail) { simple_mail }
