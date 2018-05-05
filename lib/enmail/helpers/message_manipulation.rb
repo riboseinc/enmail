@@ -29,6 +29,16 @@ module EnMail
         part
       end
 
+      # Detects e-mail which should be used to find a message signer key.
+      # Basically, it is taken from the message +From:+ field, but may be
+      # overwritten by +:signer+ adapter option.
+      #
+      # @param [Mail::Message] message
+      # @return [String] an e-mail
+      def find_signer_for(message)
+        options[:signer] || message.from_addrs.first
+      end
+
       # Replaces a message body.  Clears all the existing body, be it multipart
       # or not, and then appends parts passed as an argument.
       #
