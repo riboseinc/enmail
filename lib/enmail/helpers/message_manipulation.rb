@@ -28,6 +28,23 @@ module EnMail
         end
         part
       end
+
+      # Replaces a message body.  Clears all the existing body, be it multipart
+      # or not, and then appends parts passed as an argument.
+      #
+      # @param [Mail::Message] message
+      #   Message which body is expected to be replaced.
+      # @param [String] content_type
+      #   A new content type for message, required, must be kinda multipart.
+      # @param [Array] parts
+      #   List of parts which the new message body is expected to be composed
+      #   from.
+      # @return undefined
+      def rewrite_body(message, content_type:, parts: [])
+        message.body = nil
+        message.content_type = content_type
+        parts.each { |p| message.add_part(p) }
+      end
     end
   end
 end
