@@ -2,6 +2,7 @@ require "mail"
 
 require "enmail/version"
 
+require "enmail/adapters/base"
 require "enmail/adapters/gpgme"
 
 module EnMail
