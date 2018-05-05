@@ -18,10 +18,11 @@ module EnMail
         signer = find_signer_for(message)
         signature_part = build_signature_part(part_to_be_signed, signer)
 
-        message.body = nil
-        message.content_type = signed_part_content_type
-        message.add_part part_to_be_signed
-        message.add_part signature_part
+        rewrite_body(
+          message,
+          content_type: signed_part_content_type,
+          parts: [part_to_be_signed, signature_part],
+        )
       end
 
       def encrypt(message)
@@ -30,10 +31,11 @@ module EnMail
         encrypted_part = build_encrypted_part(part_to_be_encrypted, recipients)
         control_part = build_encryption_control_part
 
-        message.body = nil
-        message.content_type = encrypted_part_content_type
-        message.add_part control_part
-        message.add_part encrypted_part
+        rewrite_body(
+          message,
+          content_type: encrypted_part_content_type,
+          parts: [control_part, encrypted_part],
+        )
       end
 
       # The RFC 3156 requires that the message is first signed, then encrypted.

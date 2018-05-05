@@ -38,4 +38,58 @@ RSpec.describe EnMail::Helpers::MessageManipulation do
       expect(retval.parts[1]).to eq(mail.parts[1])
     end
   end
+
+  describe "#rewrite_body" do
+    subject { adapter.method(:rewrite_body) }
+    let(:part1) { ::Mail::Part.new(body: "Some Text.") }
+    let(:part2) { ::Mail::Part.new(body: "More Text.") }
+    let(:new_parts) { [part1, part2] }
+    let(:args) { [mail, content_type: "multipart/whatever", parts: new_parts] }
+
+    shared_examples "shared examples for #rewrite_body" do
+      it "replaces existing body with given parts" do
+        subject.(*args)
+        expect(mail.parts).to eq(new_parts)
+      end
+
+      it "preserves from, to, subject, date, message id, and custom headers" do
+        mail.ready_to_send! # Set some default message_id
+        expect { subject.(*args) }.to(
+          preserve { mail.date } &
+          preserve { mail.from } &
+          preserve { mail.to } &
+          preserve { mail.subject } &
+          preserve { mail.message_id } &
+          preserve { mail.headers["custom"] }
+        )
+      end
+    end
+
+    context "for a non-multipart message" do
+      let(:mail) { simple_html_mail }
+
+      include_examples "shared examples for #rewrite_body"
+
+      it "removes previous body" do
+        expect { subject.(*args) }.to(
+          change { mail.body.decoded.include?(mail_html) }.to(false)
+        )
+      end
+    end
+
+    context "for a multipart message" do
+      let(:mail) { text_jpeg_mail }
+
+      include_examples "shared examples for #rewrite_body"
+
+      it "removes previous body parts" do
+        old_parts = mail.parts.dup
+
+        expect { subject.(*args) }.to(
+          change { mail.body.parts.include?(old_parts[0]) }.to(false) &
+          change { mail.body.parts.include?(old_parts[1]) }.to(false)
+        )
+      end
+    end
+  end
 end
