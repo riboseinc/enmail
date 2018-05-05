@@ -9,6 +9,10 @@ module EnMail
     # https://www.gnupg.org/software/gpgme/index.html] library via interface
     # provided by {gpgme gem}[https://github.com/ueno/ruby-gpgme].
     class GPGME < Base
+      include Helpers::MessageManipulation
+      include Helpers::RFC1847
+      include Helpers::RFC3156
+
       def sign(message)
         part_to_be_signed = body_to_part(message)
         signer = find_signer_for(message)

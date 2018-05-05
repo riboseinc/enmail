@@ -2,6 +2,10 @@ require "mail"
 
 require "enmail/version"
 
+require "enmail/helpers/message_manipulation"
+require "enmail/helpers/rfc1847"
+require "enmail/helpers/rfc3156"
+
 require "enmail/adapters/base"
 require "enmail/adapters/gpgme"
 
