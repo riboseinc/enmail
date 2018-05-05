@@ -39,6 +39,20 @@ RSpec.describe EnMail::Helpers::MessageManipulation do
     end
   end
 
+  describe "#find_signer_for" do
+    subject { adapter.method(:find_signer_for) }
+    let(:mail) { simple_mail }
+
+    it "returns first address from e-mail From: field unless adapter's " +
+      ":signer option is set" do
+      expect(subject.(mail)).to eq(mail_from)
+    end
+    it "returns adapter's :signer option if such option is set" do
+      options[:signer] = "overwritten@example.test"
+      expect(subject.(mail)).to eq("overwritten@example.test")
+    end
+  end
+
   describe "#rewrite_body" do
     subject { adapter.method(:rewrite_body) }
     let(:part1) { ::Mail::Part.new(body: "Some Text.") }

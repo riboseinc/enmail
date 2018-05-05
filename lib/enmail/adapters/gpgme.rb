@@ -78,10 +78,6 @@ module EnMail
         build_crypto.encrypt(text, recipients: recipients)
       end
 
-      def find_signer_for(message)
-        options[:signer] || message.from_addrs.first
-      end
-
       def build_crypto
         ::GPGME::Crypto.new(armor: true)
       end
