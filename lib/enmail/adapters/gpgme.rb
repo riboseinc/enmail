@@ -27,7 +27,7 @@ module EnMail
 
       def encrypt(message)
         part_to_be_encrypted = body_to_part(message)
-        recipients = message.to_addrs
+        recipients = find_recipients_for(message)
         encrypted_part = build_encrypted_part(part_to_be_encrypted, recipients)
         control_part = build_encryption_control_part
 
