@@ -20,7 +20,7 @@ module EnMail
 
         rewrite_body(
           message,
-          content_type: signed_part_content_type,
+          content_type: multipart_signed_content_type,
           parts: [part_to_be_signed, signature_part],
         )
       end
@@ -33,7 +33,7 @@ module EnMail
 
         rewrite_body(
           message,
-          content_type: encrypted_part_content_type,
+          content_type: multipart_encrypted_content_type,
           parts: [control_part, encrypted_part],
         )
       end
@@ -84,13 +84,13 @@ module EnMail
 
       public
 
-      def signed_part_content_type
+      def multipart_signed_content_type
         protocol = sign_protocol
         micalg = message_integrity_algorithm
         %[multipart/signed; protocol="#{protocol}"; micalg="#{micalg}"]
       end
 
-      def encrypted_part_content_type
+      def multipart_encrypted_content_type
         protocol = encryption_protocol
         %[multipart/encrypted; protocol="#{protocol}"]
       end

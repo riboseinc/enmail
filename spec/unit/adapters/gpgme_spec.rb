@@ -174,8 +174,8 @@ RSpec.describe EnMail::Adapters::GPGME do
     end
   end
 
-  describe "#signed_part_content_type" do
-    subject { adapter.method(:signed_part_content_type) }
+  describe "#multipart_signed_content_type" do
+    subject { adapter.method(:multipart_signed_content_type) }
 
     it "returns a string" do
       expect(subject.call).to be_a(String)
@@ -199,8 +199,8 @@ RSpec.describe EnMail::Adapters::GPGME do
     end
   end
 
-  describe "#encrypted_part_content_type" do
-    subject { adapter.method(:encrypted_part_content_type) }
+  describe "#multipart_encrypted_content_type" do
+    subject { adapter.method(:multipart_encrypted_content_type) }
 
     it "returns a string" do
       expect(subject.call).to be_a(String)
