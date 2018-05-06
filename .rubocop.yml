@@ -16,3 +16,11 @@ Rails:
 
 Style/EmptyCaseCondition:
   Enabled: false
+
+Style/TrailingCommaInArguments:
+  Exclude:
+    # RSpec expectations can easily go multiline.  And sometimes, it's all not
+    # about multiple arguments, but more about & or | operators.  Comma placed
+    # after a single method argument which spans across many lines is confusing,
+    # not helpful.  Hence, I'm disabling this cop for all specs.
+    - "spec/**/*"
