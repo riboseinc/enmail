@@ -47,29 +47,6 @@ module EnMail
 
       private
 
-      def build_signature_part(part_to_sign, signer)
-        signature = compute_signature(part_to_sign.encoded, signer).to_s
-        part = ::Mail::Part.new
-        part.content_type = sign_protocol
-        part.body = signature
-        part
-      end
-
-      def build_encrypted_part(part_to_encrypt, recipients)
-        encrypted = encrypt_string(part_to_encrypt.encoded, recipients).to_s
-        part = ::Mail::Part.new
-        part.content_type = encrypted_message_content_type
-        part.body = encrypted
-        part
-      end
-
-      def build_encryption_control_part
-        part = ::Mail::Part.new
-        part.content_type = encryption_protocol
-        part.body = encryption_control_information
-        part
-      end
-
       def compute_signature(text, signer)
         build_crypto.detach_sign(text, signer: signer)
       end
