@@ -13,13 +13,6 @@ module EnMail
       include Helpers::RFC1847
       include Helpers::RFC3156
 
-      # The RFC 3156 requires that the message is first signed, then encrypted.
-      # See: https://tools.ietf.org/html/rfc3156#section-6.1
-      def sign_and_encrypt_encapsulated(message)
-        sign(message)
-        encrypt(message)
-      end
-
       private
 
       def compute_signature(text, signer)
