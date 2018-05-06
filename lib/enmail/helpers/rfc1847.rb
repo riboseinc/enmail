@@ -4,6 +4,42 @@ module EnMail
     # Multiparts for MIME: Multipart/Signed and Multipart/Encrypted".
     # It provides +sign+ and +encrypt+ public methods.
     module RFC1847
+      include MessageManipulation
+
+      # Signs a message in a +multipart/signed+ fashion as defined in RFC 1847.
+      #
+      # @param [Mail::Message] message
+      #   Message which is expected to be signed.
+      def sign(message)
+        part_to_be_signed = body_to_part(message)
+        signer = find_signer_for(message)
+        signature_part = build_signature_part(part_to_be_signed, signer)
+
+        rewrite_body(
+          message,
+          content_type: multipart_signed_content_type,
+          parts: [part_to_be_signed, signature_part],
+        )
+      end
+
+      # Encrypts a message in a +multipart/encrypted+ fashion as defined
+      # in RFC 1847.
+      #
+      # @param [Mail::Message] message
+      #   Message which is expected to be encrypted.
+      def encrypt(message)
+        part_to_be_encrypted = body_to_part(message)
+        recipients = find_recipients_for(message)
+        encrypted_part = build_encrypted_part(part_to_be_encrypted, recipients)
+        control_part = build_encryption_control_part
+
+        rewrite_body(
+          message,
+          content_type: multipart_encrypted_content_type,
+          parts: [control_part, encrypted_part],
+        )
+      end
+
       protected
 
       # Builds a mail part containing the encrypted message, that is
