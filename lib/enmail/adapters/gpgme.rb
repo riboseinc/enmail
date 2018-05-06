@@ -13,31 +13,6 @@ module EnMail
       include Helpers::RFC1847
       include Helpers::RFC3156
 
-      def sign(message)
-        part_to_be_signed = body_to_part(message)
-        signer = find_signer_for(message)
-        signature_part = build_signature_part(part_to_be_signed, signer)
-
-        rewrite_body(
-          message,
-          content_type: multipart_signed_content_type,
-          parts: [part_to_be_signed, signature_part],
-        )
-      end
-
-      def encrypt(message)
-        part_to_be_encrypted = body_to_part(message)
-        recipients = find_recipients_for(message)
-        encrypted_part = build_encrypted_part(part_to_be_encrypted, recipients)
-        control_part = build_encryption_control_part
-
-        rewrite_body(
-          message,
-          content_type: multipart_encrypted_content_type,
-          parts: [control_part, encrypted_part],
-        )
-      end
-
       # The RFC 3156 requires that the message is first signed, then encrypted.
       # See: https://tools.ietf.org/html/rfc3156#section-6.1
       def sign_and_encrypt_encapsulated(message)
