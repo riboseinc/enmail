@@ -160,6 +160,21 @@ RSpec.describe EnMail::Adapters::GPGME do
     end
   end
 
+  describe "#build_encryption_control_part" do
+    subject { adapter.method(:build_encryption_control_part) }
+
+    before do
+      allow(adapter).to receive(:encryption_control_message).and_return("DUMMY")
+    end
+
+    it "builds a MIME part with correct content type" do
+      retval = subject.call
+      expect(retval).to be_instance_of(::Mail::Part)
+      expect(retval.mime_type).to eq("application/pgp-encrypted")
+      expect(retval.body.decoded).to eq("DUMMY")
+    end
+  end
+
   describe "#encrypt_string" do
     subject { adapter.method(:encrypt_string) }
     let(:text) { "Some Text." }
