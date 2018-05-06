@@ -118,21 +118,22 @@ RSpec.describe EnMail::Adapters::GPGME do
     subject { adapter.method(:build_signature_part) }
     let(:part) { ::Mail::Part.new(body: "Some Text.") }
     let(:signer) { "some.signer@example.com" }
-    let(:signature_rx) { %r{\A-+BEGIN PGP SIGNATURE.*END PGP SIGNATURE-+\Z}m }
+
+    before do
+      allow(adapter).to receive(:compute_signature).and_return("DUMMY")
+    end
 
     it "builds a MIME part with correct content type" do
       retval = subject.(part, signer)
       expect(retval).to be_instance_of(::Mail::Part)
       expect(retval.mime_type).to eq("application/pgp-signature")
-      expect(retval.body.decoded).to match(signature_rx)
+      expect(retval.body.decoded).to eq("DUMMY")
     end
 
     it "signs with key matching given signer" do
-      crypto_dbl = double
-      allow(adapter).to receive(:build_crypto).and_return(crypto_dbl)
-      expect(crypto_dbl).to receive(:detach_sign).
-        with(kind_of(String), signer: signer)
       subject.(part, signer)
+      expect(adapter).to have_received(:compute_signature).
+        with(kind_of(String), signer)
     end
   end
 
@@ -140,21 +141,22 @@ RSpec.describe EnMail::Adapters::GPGME do
     subject { adapter.method(:build_encrypted_part) }
     let(:part) { ::Mail::Part.new(body: "Some Text.") }
     let(:recipients) { %w[senate@example.test] }
-    let(:pgp_msg_rx) { %r{\A-+BEGIN PGP MESSAGE.*END PGP MESSAGE-+\Z}m }
+
+    before do
+      allow(adapter).to receive(:encrypt_string).and_return("DUMMY")
+    end
 
     it "builds a MIME part with correct content type" do
       retval = subject.(part, recipients)
       expect(retval).to be_instance_of(::Mail::Part)
       expect(retval.mime_type).to eq("application/octet-stream")
-      expect(retval.body.decoded).to match(pgp_msg_rx)
+      expect(retval.body.decoded).to eq("DUMMY")
     end
 
     it "encrypts with keys matching given recipients" do
-      crypto_dbl = double
-      allow(adapter).to receive(:build_crypto).and_return(crypto_dbl)
-      expect(crypto_dbl).to receive(:encrypt).
-        with(kind_of(String), recipients: recipients)
       subject.(part, recipients)
+      expect(adapter).to have_received(:encrypt_string).
+        with(kind_of(String), recipients)
     end
   end
 
