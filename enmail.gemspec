@@ -10,8 +10,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Ronald Tse"]
   spec.email         = ["ronald.tse@ribose.com"]
 
-  spec.summary       = %q{Encrypted Email in Ruby}
-  spec.description   = %q{Encrypted Email in Ruby}
+  spec.summary       = "Encrypted Email in Ruby"
+  spec.description   = "Encrypted Email in Ruby"
   spec.homepage      = "https://github.com/riboseinc/enmail"
   spec.license       = "MIT"
 
