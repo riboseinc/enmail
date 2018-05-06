@@ -58,7 +58,7 @@ module EnMail
       def build_encrypted_part(part_to_encrypt, recipients)
         encrypted = encrypt_string(part_to_encrypt.encoded, recipients).to_s
         part = ::Mail::Part.new
-        part.content_type = "application/octet-stream"
+        part.content_type = encrypted_message_content_type
         part.body = encrypted
         part
       end
@@ -93,6 +93,12 @@ module EnMail
       def multipart_encrypted_content_type
         protocol = encryption_protocol
         %[multipart/encrypted; protocol="#{protocol}"]
+      end
+
+      # The encrypted message must have content type +application/octet-stream+,
+      # as defined in RFC 1847 p. 6.
+      def encrypted_message_content_type
+        "application/octet-stream"
       end
 
       def sign_protocol
