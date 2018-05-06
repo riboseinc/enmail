@@ -66,7 +66,7 @@ module EnMail
       def build_encryption_control_part
         part = ::Mail::Part.new
         part.content_type = encryption_protocol
-        part.body = "Version: 1" # As defined in RFC 3156
+        part.body = encryption_control_information
         part
       end
 
@@ -111,6 +111,11 @@ module EnMail
 
       def message_integrity_algorithm
         "pgp-sha1"
+      end
+
+      # As defined in RFC 3156
+      def encryption_control_information
+        "Version: 1"
       end
     end
   end
