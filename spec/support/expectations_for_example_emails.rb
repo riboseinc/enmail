@@ -1,3 +1,11 @@
+# No kidding that four lines long methods without any control flow constructs
+# are "too long".  Yes, there are plenty of method calls, and that maxes
+# out Branch score in "Assignment Branch Condition" metrics, but it's all
+# natural, readable, and clean.  Any attempt to "fix" that would rather do mess
+# than improve anything.  And actually, only method bodies are measured,
+# hence if following methods were inlined into some RSpec examples, no style
+# offence would be reported, which is ridiculous.
+# rubocop:disable Metrics/AbcSize
 shared_context "expectations for example emails" do
   def decrypted_part_expectations_for_simple_mail(message_or_part)
     expect(message_or_part.mime_type).to eq("text/plain")
@@ -61,3 +69,4 @@ shared_context "expectations for example emails" do
       encrypted_for(mail_to)
   end
 end
+# rubocop:enable Metrics/AbcSize
