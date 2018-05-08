@@ -6,6 +6,17 @@ RSpec.describe EnMail::Adapters::GPGME do
 
   include_context "example emails"
 
+  describe "#compute_signature" do
+    subject { adapter.method(:compute_signature) }
+    let(:text) { "Some Text." }
+    let(:signer) { "cato.elder@example.test" }
+
+    it "computes a detached signature for given text signed by given user" do
+      retval = subject.(text, signer)
+      expect(retval).to be_a_valid_pgp_signature_of(text).signed_by(signer)
+    end
+  end
+
   describe "#encrypt_string" do
     subject { adapter.method(:encrypt_string) }
     let(:text) { "Some Text." }
