@@ -27,6 +27,7 @@ RSpec.describe EnMail::Helpers::RFC1847 do
     let(:msg_part_dbl) { double.as_null_object }
     let(:msg_ctrl_dbl) { double.as_null_object }
     let(:enc_part_dbl) { double.as_null_object }
+    let(:enc_dummy) { "DUMMY-PGP-MESSAGE" }
 
     before do
       allow(adapter).to receive(:body_to_part).and_return(msg_part_dbl)
@@ -34,6 +35,8 @@ RSpec.describe EnMail::Helpers::RFC1847 do
         to receive(:build_encryption_control_part).and_return(msg_ctrl_dbl)
       allow(adapter).
         to receive(:build_encrypted_part).and_return(enc_part_dbl)
+      allow(adapter).
+        to receive(:encrypt_string).and_return(enc_dummy)
     end
 
     it "changes message mime type to multipart/encrypted" do
@@ -66,12 +69,16 @@ RSpec.describe EnMail::Helpers::RFC1847 do
       expect(mail.parts[0]).to be(msg_ctrl_dbl)
     end
 
-    it "converts the old message body to a a MIME part, encrypts, " +
-      "and re-appends it to self as the 2nd MIME part" do
+    it "converts the old message body to a a MIME part, and encrypts it" do
       subject.(mail)
       expect(adapter).to have_received(:body_to_part).with(mail)
-      expect(adapter).to have_received(:build_encrypted_part).
+      expect(adapter).to have_received(:encrypt_string).
         with(msg_part_dbl, [mail_to])
+    end
+
+    it "adds the encrypted message as the 2nd MIME part" do
+      subject.(mail)
+      expect(adapter).to have_received(:build_encrypted_part).with(enc_dummy)
       expect(mail.parts[1]).to be(enc_part_dbl)
     end
   end
@@ -83,10 +90,12 @@ RSpec.describe EnMail::Helpers::RFC1847 do
     let(:blank_string_rx) { /\A\s*\Z/ }
     let(:msg_part_dbl) { double.as_null_object }
     let(:sig_dbl) { double.as_null_object }
+    let(:sig_dummy) { "DUMMY-PGP-SIGNATURE" }
 
     before do
       allow(adapter).to receive(:body_to_part).and_return(msg_part_dbl)
       allow(adapter).to receive(:build_signature_part).and_return(sig_dbl)
+      allow(adapter).to receive(:compute_signature).and_return(sig_dummy)
     end
 
     it "changes message mime type to multipart/signed" do
@@ -119,34 +128,29 @@ RSpec.describe EnMail::Helpers::RFC1847 do
       expect(mail.parts[0]).to be(msg_part_dbl)
     end
 
+    it "computes the signature for the 1st MIME part" do
+      subject.(mail)
+      expect(adapter).to have_received(:compute_signature).
+        with(mail.parts[0].encoded, mail_from)
+    end
+
     it "adds the signature as the 2nd MIME part" do
       subject.(mail)
-      expect(adapter).to have_received(:build_signature_part).
-        with(msg_part_dbl, mail_from)
+      expect(adapter).to have_received(:build_signature_part).with(sig_dummy)
       expect(mail.parts[1]).to be(sig_dbl)
     end
   end
 
   describe "#build_encrypted_part" do
     subject { adapter.method(:build_encrypted_part) }
-    let(:part) { ::Mail::Part.new(body: "Some Text.") }
-    let(:recipients) { %w[senate@example.test] }
-
-    before do
-      allow(adapter).to receive(:encrypt_string).and_return("DUMMY")
-    end
+    let(:encrypted) { enc_dummy }
+    let(:enc_dummy) { "DUMMY-PGP-MESSAGE" }
 
     it "builds a MIME part with correct content type" do
-      retval = subject.(part, recipients)
+      retval = subject.(encrypted)
       expect(retval).to be_instance_of(::Mail::Part)
       expect(retval.mime_type).to eq("application/octet-stream")
-      expect(retval.body.decoded).to eq("DUMMY")
-    end
-
-    it "encrypts with keys matching given recipients" do
-      subject.(part, recipients)
-      expect(adapter).to have_received(:encrypt_string).
-        with(kind_of(String), recipients)
+      expect(retval.body.decoded).to eq(enc_dummy)
     end
   end
 
@@ -168,24 +172,14 @@ RSpec.describe EnMail::Helpers::RFC1847 do
 
   describe "#build_signature_part" do
     subject { adapter.method(:build_signature_part) }
-    let(:part) { ::Mail::Part.new(body: "Some Text.") }
-    let(:signer) { "some.signer@example.com" }
-
-    before do
-      allow(adapter).to receive(:compute_signature).and_return("DUMMY")
-    end
+    let(:signature) { sig_dummy }
+    let(:sig_dummy) { "DUMMY-PGP-SIGNATURE" }
 
     it "builds a MIME part with correct content type" do
-      retval = subject.(part, signer)
+      retval = subject.(signature)
       expect(retval).to be_instance_of(::Mail::Part)
       expect(retval.mime_type).to eq(custom_sign_protocol)
-      expect(retval.body.decoded).to eq("DUMMY")
-    end
-
-    it "signs with key matching given signer" do
-      subject.(part, signer)
-      expect(adapter).to have_received(:compute_signature).
-        with(kind_of(String), signer)
+      expect(retval.body.decoded).to eq(sig_dummy)
     end
   end
 
