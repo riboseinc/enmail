@@ -1,6 +1,11 @@
 require "simplecov"
 SimpleCov.start
 
+if ENV.key?("CI")
+  require "codecov"
+  SimpleCov.formatter = SimpleCov::Formatter::Codecov
+end
+
 require "bundler/setup"
 require "enmail"
 require "pry"
