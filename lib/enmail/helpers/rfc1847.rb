@@ -14,7 +14,8 @@ module EnMail
       def encrypt(message)
         part_to_be_encrypted = body_to_part(message)
         recipients = find_recipients_for(message)
-        encrypted_part = build_encrypted_part(part_to_be_encrypted, recipients)
+        encrypted = encrypt_string(part_to_be_encrypted.encoded, recipients).to_s
+        encrypted_part = build_encrypted_part(encrypted)
         control_part = build_encryption_control_part
 
         rewrite_body(
@@ -31,7 +32,8 @@ module EnMail
       def sign(message)
         part_to_be_signed = body_to_part(message)
         signer = find_signer_for(message)
-        signature_part = build_signature_part(part_to_be_signed, signer)
+        signature = compute_signature(part_to_be_signed.encoded, signer).to_s
+        signature_part = build_signature_part(signature)
 
         rewrite_body(
           message,
@@ -44,8 +46,7 @@ module EnMail
 
       # Builds a mail part containing the encrypted message, that is
       # the 2nd subpart of +multipart/encrypted+ as defined in RFC 1847.
-      def build_encrypted_part(part_to_encrypt, recipients)
-        encrypted = encrypt_string(part_to_encrypt.encoded, recipients).to_s
+      def build_encrypted_part(encrypted)
         part = ::Mail::Part.new
         part.content_type = encrypted_message_content_type
         part.body = encrypted
@@ -64,8 +65,7 @@ module EnMail
 
       # Builds a mail part containing the digital signature, that is
       # the 2nd subpart of +multipart/signed+ as defined in RFC 1847.
-      def build_signature_part(part_to_sign, signer)
-        signature = compute_signature(part_to_sign.encoded, signer).to_s
+      def build_signature_part(signature)
         part = ::Mail::Part.new
         part.content_type = sign_protocol
         part.body = signature
