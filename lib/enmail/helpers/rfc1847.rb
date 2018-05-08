@@ -12,9 +12,9 @@ module EnMail
       # @param [Mail::Message] message
       #   Message which is expected to be encrypted.
       def encrypt(message)
-        part_to_be_encrypted = body_to_part(message)
+        source_part = body_to_part(message)
         recipients = find_recipients_for(message)
-        encrypted = encrypt_string(part_to_be_encrypted.encoded, recipients).to_s
+        encrypted = encrypt_string(source_part.encoded, recipients).to_s
         encrypted_part = build_encrypted_part(encrypted)
         control_part = build_encryption_control_part
 
@@ -30,15 +30,15 @@ module EnMail
       # @param [Mail::Message] message
       #   Message which is expected to be signed.
       def sign(message)
-        part_to_be_signed = body_to_part(message)
+        source_part = body_to_part(message)
         signer = find_signer_for(message)
-        signature = compute_signature(part_to_be_signed.encoded, signer).to_s
+        signature = compute_signature(source_part.encoded, signer).to_s
         signature_part = build_signature_part(signature)
 
         rewrite_body(
           message,
           content_type: multipart_signed_content_type,
-          parts: [part_to_be_signed, signature_part],
+          parts: [source_part, signature_part],
         )
       end
 
