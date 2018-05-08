@@ -23,6 +23,15 @@ module EnMail
         build_crypto.encrypt(text, recipients: recipients)
       end
 
+      def sign_and_encrypt_string(text, signer, recipients)
+        build_crypto.encrypt(
+          text,
+          sign: true,
+          signers: [signer],
+          recipients: recipients,
+        )
+      end
+
       def build_crypto
         ::GPGME::Crypto.new(armor: true)
       end

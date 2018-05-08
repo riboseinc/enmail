@@ -6,6 +6,28 @@ module EnMail
     #
     # See: https://tools.ietf.org/html/rfc3156
     module RFC3156
+      # The RFC 3156 explicitly allows for signing and encrypting data in
+      # a single OpenPGP message.
+      # See: https://tools.ietf.org/html/rfc3156#section-6.2
+      #
+      # rubocop:disable Metrics/MethodLength
+      def sign_and_encrypt_combined(message)
+        source_part = body_to_part(message)
+        signer = find_signer_for(message)
+        recipients = find_recipients_for(message)
+        encrypted =
+          sign_and_encrypt_string(source_part.encoded, signer, recipients).to_s
+        encrypted_part = build_encrypted_part(encrypted)
+        control_part = build_encryption_control_part
+
+        rewrite_body(
+          message,
+          content_type: multipart_encrypted_content_type,
+          parts: [control_part, encrypted_part],
+        )
+      end
+      # rubocop:enable Metrics/MethodLength
+
       # The RFC 3156 requires that the message is first signed, then encrypted.
       # See: https://tools.ietf.org/html/rfc3156#section-6.1
       def sign_and_encrypt_encapsulated(message)
