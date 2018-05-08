@@ -19,57 +19,6 @@ RSpec.describe EnMail::Helpers::RFC1847 do
       to receive(:message_integrity_algorithm).and_return(custom_micalg)
   end
 
-  describe "#sign" do
-    subject { adapter.method(:sign) }
-
-    let(:mail) { simple_mail }
-    let(:blank_string_rx) { /\A\s*\Z/ }
-    let(:msg_part_dbl) { double.as_null_object }
-    let(:sig_dbl) { double.as_null_object }
-
-    before do
-      allow(adapter).to receive(:body_to_part).and_return(msg_part_dbl)
-      allow(adapter).to receive(:build_signature_part).and_return(sig_dbl)
-    end
-
-    it "changes message mime type to multipart/signed" do
-      expect { subject.(mail) }.to(
-        change { mail.mime_type }.to("multipart/signed")
-      )
-    end
-
-    it "preserves from, to, subject, date, message id, and custom headers" do
-      mail.ready_to_send! # Set some default message_id
-      expect { subject.(mail) }.to(
-        preserve { mail.date } &
-        preserve { mail.from } &
-        preserve { mail.to } &
-        preserve { mail.subject } &
-        preserve { mail.message_id } &
-        preserve { mail.headers["custom"] }
-      )
-    end
-
-    it "clears the old message body" do
-      expect { subject.(mail) }.
-        to change { mail.body.decoded }.to(blank_string_rx)
-    end
-
-    it "converts the old message body to a a MIME part, and re-appends it " +
-      "to self" do
-      subject.(mail)
-      expect(adapter).to have_received(:body_to_part).with(mail)
-      expect(mail.parts[0]).to be(msg_part_dbl)
-    end
-
-    it "adds the signature as the 2nd MIME part" do
-      subject.(mail)
-      expect(adapter).to have_received(:build_signature_part).
-        with(msg_part_dbl, mail_from)
-      expect(mail.parts[1]).to be(sig_dbl)
-    end
-  end
-
   describe "#encrypt" do
     subject { adapter.method(:encrypt) }
 
@@ -124,6 +73,57 @@ RSpec.describe EnMail::Helpers::RFC1847 do
       expect(adapter).to have_received(:build_encrypted_part).
         with(msg_part_dbl, [mail_to])
       expect(mail.parts[1]).to be(enc_part_dbl)
+    end
+  end
+
+  describe "#sign" do
+    subject { adapter.method(:sign) }
+
+    let(:mail) { simple_mail }
+    let(:blank_string_rx) { /\A\s*\Z/ }
+    let(:msg_part_dbl) { double.as_null_object }
+    let(:sig_dbl) { double.as_null_object }
+
+    before do
+      allow(adapter).to receive(:body_to_part).and_return(msg_part_dbl)
+      allow(adapter).to receive(:build_signature_part).and_return(sig_dbl)
+    end
+
+    it "changes message mime type to multipart/signed" do
+      expect { subject.(mail) }.to(
+        change { mail.mime_type }.to("multipart/signed")
+      )
+    end
+
+    it "preserves from, to, subject, date, message id, and custom headers" do
+      mail.ready_to_send! # Set some default message_id
+      expect { subject.(mail) }.to(
+        preserve { mail.date } &
+        preserve { mail.from } &
+        preserve { mail.to } &
+        preserve { mail.subject } &
+        preserve { mail.message_id } &
+        preserve { mail.headers["custom"] }
+      )
+    end
+
+    it "clears the old message body" do
+      expect { subject.(mail) }.
+        to change { mail.body.decoded }.to(blank_string_rx)
+    end
+
+    it "converts the old message body to a a MIME part, and re-appends it " +
+      "to self" do
+      subject.(mail)
+      expect(adapter).to have_received(:body_to_part).with(mail)
+      expect(mail.parts[0]).to be(msg_part_dbl)
+    end
+
+    it "adds the signature as the 2nd MIME part" do
+      subject.(mail)
+      expect(adapter).to have_received(:build_signature_part).
+        with(msg_part_dbl, mail_from)
+      expect(mail.parts[1]).to be(sig_dbl)
     end
   end
 

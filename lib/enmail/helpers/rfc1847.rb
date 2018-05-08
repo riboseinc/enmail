@@ -6,22 +6,6 @@ module EnMail
     module RFC1847
       include MessageManipulation
 
-      # Signs a message in a +multipart/signed+ fashion as defined in RFC 1847.
-      #
-      # @param [Mail::Message] message
-      #   Message which is expected to be signed.
-      def sign(message)
-        part_to_be_signed = body_to_part(message)
-        signer = find_signer_for(message)
-        signature_part = build_signature_part(part_to_be_signed, signer)
-
-        rewrite_body(
-          message,
-          content_type: multipart_signed_content_type,
-          parts: [part_to_be_signed, signature_part],
-        )
-      end
-
       # Encrypts a message in a +multipart/encrypted+ fashion as defined
       # in RFC 1847.
       #
@@ -37,6 +21,22 @@ module EnMail
           message,
           content_type: multipart_encrypted_content_type,
           parts: [control_part, encrypted_part],
+        )
+      end
+
+      # Signs a message in a +multipart/signed+ fashion as defined in RFC 1847.
+      #
+      # @param [Mail::Message] message
+      #   Message which is expected to be signed.
+      def sign(message)
+        part_to_be_signed = body_to_part(message)
+        signer = find_signer_for(message)
+        signature_part = build_signature_part(part_to_be_signed, signer)
+
+        rewrite_body(
+          message,
+          content_type: multipart_signed_content_type,
+          parts: [part_to_be_signed, signature_part],
         )
       end
 
