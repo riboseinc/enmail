@@ -1,5 +1,5 @@
 dist: trusty
-sudo: false
+sudo: required
 language: ruby
 
 rvm:
@@ -8,12 +8,28 @@ rvm:
   - 2.3
   - ruby-head
 
+env:
+  global:
+    - GPG_VERSION="latest"
+    - GPG_BUILD_DIR="$TRAVIS_BUILD_DIR/build_gpg"
+    - >
+      GPG_CONFIGURE_OPTS="--disable-doc --enable-pinentry-curses
+      --disable-pinentry-emacs --disable-pinentry-gtk2 --disable-pinentry-gnome3
+      --disable-pinentry-qt --disable-pinentry-qt4 --disable-pinentry-qt5
+      --disable-pinentry-tqt --disable-pinentry-fltk"
+
 before_install:
+  - ./install_gpg_all.sh "$GPG_VERSION" --build-dir "$GPG_BUILD_DIR" --configure-opts "$GPG_CONFIGURE_OPTS" --folding-style travis
   - gem install bundler -v 1.16.1
 
 before_script:
   - rake generate_gpg_keys
 
 matrix:
+  include:
+    # Test against older GPG versions
+    - rvm: 2.5
+      env: GPG_VERSION="2.1"
+
   allow_failures:
     - rvm: ruby-head
