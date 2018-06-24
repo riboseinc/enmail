@@ -31,6 +31,9 @@ matrix:
     # Test against older GPG versions
     - rvm: 2.5
       env: GPG_VERSION="2.1" EXPECT_GPG_VERSION="2.1"
+    - rvm: 2.5
+      env: GPG_VERSION="master" EXPECT_GPG_VERSION="2.2"
 
   allow_failures:
     - rvm: ruby-head
+    - env: GPG_VERSION="master"
