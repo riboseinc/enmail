@@ -22,7 +22,7 @@ RSpec::Matchers.define :be_a_valid_pgp_signature_of do |text|
       ctx.verify(signature_data, cleartext_data, nil)
       match_signature(ctx.verify_result.signatures.first)
     end
-  rescue GPGME::Error::NoData # Signature parse error
+  rescue GPGME::Error::NoData, GPGME::Error::General # Signature parse error
     msg_no_gpg_sig(signature_string)
   end
 
