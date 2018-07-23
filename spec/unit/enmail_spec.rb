@@ -13,7 +13,7 @@ RSpec.describe EnMail do
       expect(adapter_class).to have_received(:new).with(proper: :options)
     end
 
-    it "calls indicated method, passing a message as an argument" do
+    it "calls indicated method on adapter, passing a message as an argument" do
       subject.call :sign, message
       expect(adapter_dbl).to have_received(:sign).with(message)
     end
