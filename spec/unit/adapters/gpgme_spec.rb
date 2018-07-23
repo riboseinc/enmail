@@ -32,4 +32,26 @@ RSpec.describe EnMail::Adapters::GPGME do
       expect(retval).to be_a_pgp_encrypted_message.encrypted_for(*recipients)
     end
   end
+
+  describe "#sign_and_encrypt_string" do
+    subject { adapter.method(:sign_and_encrypt_string) }
+    let(:text) { "Some Text." }
+    let(:recipients) { %w[whatever@example.test senate@example.test] }
+    let(:signer) { "cato.elder@example.test" }
+
+    it "encrypts given text" do
+      retval = subject.(text, signer, recipients)
+      expect(retval).to be_a_pgp_encrypted_message.containing(text)
+    end
+
+    it "makes the encrypted text readable for given recipients" do
+      retval = subject.(text, signer, recipients)
+      expect(retval).to be_a_pgp_encrypted_message.encrypted_for(*recipients)
+    end
+
+    it "adds a signature by given user to the encrypted text" do
+      retval = subject.(text, signer, recipients)
+      expect(retval).to be_a_pgp_encrypted_message.signed_by(signer)
+    end
+  end
 end
