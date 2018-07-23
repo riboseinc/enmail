@@ -11,30 +11,36 @@ task :generate_gpg_keys => :init_gpgme do # rubocop:disable Style/HashSyntax
   ::GPGME::Ctx.new.genkey(<<~SCRIPT)
     <GnupgKeyParms format="internal">
     %no-protection
-    Key-Type: DSA
+    Key-Type: RSA
+    Key-Usage: sign, cert
     Key-Length: 2048
-    Subkey-Type: ELG-E
+    Subkey-Type: RSA
     Subkey-Length: 2048
+    Subkey-Usage: encrypt
     Name-Real: Some Arbitrary Key
     Name-Email: whatever@example.test
     Name-Comment: Without passphrase
     Expire-Date: 0
     %commit
 
-    Key-Type: DSA
+    Key-Type: RSA
+    Key-Usage: sign, cert
     Key-Length: 2048
-    Subkey-Type: ELG-E
+    Subkey-Type: RSA
     Subkey-Length: 2048
+    Subkey-Usage: encrypt
     Name-Real: Cato Elder
     Name-Email: cato.elder@example.test
     Name-Comment: Without passphrase
     Expire-Date: 0
     %commit
 
-    Key-Type: DSA
+    Key-Type: RSA
+    Key-Usage: sign, cert
     Key-Length: 2048
-    Subkey-Type: ELG-E
+    Subkey-Type: RSA
     Subkey-Length: 2048
+    Subkey-Usage: encrypt
     Name-Real: Roman Senate
     Name-Email: senate@example.test
     Name-Comment: Without passphrase
