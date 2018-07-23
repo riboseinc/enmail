@@ -3,11 +3,12 @@ require "spec_helper"
 RSpec.describe "Signing with GPGME" do
   include_context "example emails"
   include_context "expectations for example emails"
+  include_context "gpgme spec helpers"
 
   specify "a non-multipart text-only message" do
     mail = simple_mail
 
-    EnMail.protect :sign, mail
+    EnMail.protect :sign, mail, adapter: adapter_class
     mail.deliver
     common_message_expectations(mail)
     pgp_signed_part_expectations(mail)
@@ -17,7 +18,7 @@ RSpec.describe "Signing with GPGME" do
   specify "a non-multipart HTML message" do
     mail = simple_html_mail
 
-    EnMail.protect :sign, mail
+    EnMail.protect :sign, mail, adapter: adapter_class
     mail.deliver
     common_message_expectations(mail)
     pgp_signed_part_expectations(mail)
@@ -27,7 +28,7 @@ RSpec.describe "Signing with GPGME" do
   specify "a multipart text+HTML message" do
     mail = text_html_mail
 
-    EnMail.protect :sign, mail
+    EnMail.protect :sign, mail, adapter: adapter_class
     mail.deliver
     common_message_expectations(mail)
     pgp_signed_part_expectations(mail)
@@ -37,7 +38,7 @@ RSpec.describe "Signing with GPGME" do
   specify "a multipart message with binary attachments" do
     mail = text_jpeg_mail
 
-    EnMail.protect :sign, mail
+    EnMail.protect :sign, mail, adapter: adapter_class
     mail.deliver
     common_message_expectations(mail)
     pgp_signed_part_expectations(mail)
@@ -48,7 +49,7 @@ RSpec.describe "Signing with GPGME" do
     mail = simple_mail
     signer = "whatever@example.test"
 
-    EnMail.protect :sign, mail, signer: signer
+    EnMail.protect :sign, mail, adapter: adapter_class, signer: signer
     mail.deliver
     common_message_expectations(mail)
     pgp_signed_part_expectations(mail, expected_signer: signer)
