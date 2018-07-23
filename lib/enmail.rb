@@ -8,6 +8,7 @@ require "enmail/helpers/rfc3156"
 
 require "enmail/adapters/base"
 require "enmail/adapters/gpgme"
+require "enmail/adapters/rnp"
 
 module EnMail
   module_function
