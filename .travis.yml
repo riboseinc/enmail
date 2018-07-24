@@ -10,6 +10,7 @@ rvm:
 
 env:
   global:
+    - EXPECT_GPG_VERSION="2.2"
     - GPG_VERSION="latest"
     - GPG_BUILD_DIR="$TRAVIS_BUILD_DIR/build_gpg"
     - >
