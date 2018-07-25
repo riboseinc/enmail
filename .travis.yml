@@ -29,8 +29,10 @@ env:
     - LD_LIBRARY_PATH="$TRAVIS_BUILD_DIR/opt/lib"
 
 before_install:
+  - pushd ci
   - ./install_gpg_all.sh "$GPG_VERSION" --build-dir "$GPG_BUILD_DIR" --configure-opts "$GPG_CONFIGURE_OPTS" --folding-style travis
   - ./install_rnp.sh
+  - popd
   - gem install bundler -v 1.16.1
 
 before_script:
