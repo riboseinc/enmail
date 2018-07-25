@@ -19,8 +19,18 @@ env:
       --disable-pinentry-qt --disable-pinentry-qt4 --disable-pinentry-qt5
       --disable-pinentry-tqt --disable-pinentry-fltk"
 
+    - RNP_VERSION="master"
+    - LOCAL_BUILDS="$TRAVIS_BUILD_DIR/build_rnp"
+    - BOTAN_INSTALL="$TRAVIS_BUILD_DIR/opt"
+    - CMOCKA_INSTALL="$TRAVIS_BUILD_DIR/opt"
+    - JSONC_INSTALL="$TRAVIS_BUILD_DIR/opt"
+    - RNP_INSTALL="$TRAVIS_BUILD_DIR/opt"
+
+    - LD_LIBRARY_PATH="$TRAVIS_BUILD_DIR/opt/lib"
+
 before_install:
   - ./install_gpg_all.sh "$GPG_VERSION" --build-dir "$GPG_BUILD_DIR" --configure-opts "$GPG_CONFIGURE_OPTS" --folding-style travis
+  - ./install_rnp.sh
   - gem install bundler -v 1.16.1
 
 before_script:
