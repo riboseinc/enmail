@@ -8,7 +8,8 @@ set -eux
 : "${CORES:=2}"
 : "${MAKE:=make}"
 
-rnp_build=${LOCAL_BUILDS}/rnp
+rnp_build="${DEPS_BUILD_DIR}/rnp"
+
 if [ ! -e "${RNP_INSTALL}/lib/librnp.so" ] && \
 	 [ ! -e "${RNP_INSTALL}/lib/librnp.dylib" ]; then
 

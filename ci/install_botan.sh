@@ -8,7 +8,8 @@ set -eux
 : "${CORES:=2}"
 : "${MAKE:=make}"
 
-botan_build=${LOCAL_BUILDS}/botan
+botan_build="${DEPS_BUILD_DIR}/botan"
+
 if [ ! -e "${BOTAN_INSTALL}/lib/libbotan-2.so" ] && \
 	 [ ! -e "${BOTAN_INSTALL}/lib/libbotan-2.dylib" ]; then
 
