@@ -8,7 +8,8 @@ set -eux
 : "${CORES:=2}"
 : "${MAKE:=make}"
 
-jsonc_build=${LOCAL_BUILDS}/json-c
+jsonc_build="${DEPS_BUILD_DIR}/json-c"
+
 if [ ! -e "${JSONC_INSTALL}/lib/libjson-c.so" ] && \
 	 [ ! -e "${JSONC_INSTALL}/lib/libjson-c.dylib" ]; then
 
