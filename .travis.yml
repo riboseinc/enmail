@@ -31,6 +31,8 @@ env:
 before_install:
   - pushd ci
   - ./install_gpg_all.sh "$GPG_VERSION" --build-dir "$GPG_BUILD_DIR" --configure-opts "$GPG_CONFIGURE_OPTS" --folding-style travis
+  - ./install_botan.sh
+  - ./install_json_c.sh
   - ./install_rnp.sh
   - popd
   - gem install bundler -v 1.16.1
