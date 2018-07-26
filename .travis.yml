@@ -29,7 +29,11 @@ env:
 
 before_install:
   - pushd ci
-  - ./install_gpg_all.sh "${GPG_VERSION}" --build-dir "${DEPS_BUILD_DIR}/gpg" --configure-opts "${GPG_CONFIGURE_OPTS}" --folding-style travis
+  - >
+    ./install_gpg_all.sh "${GPG_VERSION}"
+    --build-dir "${DEPS_BUILD_DIR}/gpg"
+    --configure-opts "${GPG_CONFIGURE_OPTS}"
+    --folding-style travis
   - ./install_botan.sh
   - ./install_json_c.sh
   - ./install_rnp.sh
