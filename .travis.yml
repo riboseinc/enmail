@@ -21,7 +21,6 @@ env:
 
     - RNP_VERSION="master"
     - BOTAN_INSTALL="${TRAVIS_BUILD_DIR}/opt"
-    - CMOCKA_INSTALL="${TRAVIS_BUILD_DIR}/opt"
     - JSONC_INSTALL="${TRAVIS_BUILD_DIR}/opt"
     - RNP_INSTALL="${TRAVIS_BUILD_DIR}/opt"
 
