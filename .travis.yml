@@ -15,11 +15,11 @@ env:
     - RNP_VERSION="master"
 
     - DEPS_BUILD_DIR="${TRAVIS_BUILD_DIR}/build"
-    - BOTAN_PREFIX="${TRAVIS_BUILD_DIR}/opt"
-    - JSONC_PREFIX="${TRAVIS_BUILD_DIR}/opt"
-    - RNP_PREFIX="${TRAVIS_BUILD_DIR}/opt"
+    - BOTAN_PREFIX="${TRAVIS_BUILD_DIR}/opt/botan"
+    - JSONC_PREFIX="${TRAVIS_BUILD_DIR}/opt/json-c"
+    - RNP_PREFIX="${TRAVIS_BUILD_DIR}/opt/rnp"
 
-    - LD_LIBRARY_PATH="${TRAVIS_BUILD_DIR}/opt/lib"
+    - LD_LIBRARY_PATH="${BOTAN_PREFIX}/lib:${JSONC_PREFIX}/lib:${RNP_PREFIX}/lib"
 
     - >
       GPG_CONFIGURE_OPTS="--disable-doc --enable-pinentry-curses
