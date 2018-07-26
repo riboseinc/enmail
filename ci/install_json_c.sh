@@ -10,8 +10,8 @@ set -eux
 
 jsonc_build="${DEPS_BUILD_DIR}/json-c"
 
-if [ ! -e "${JSONC_INSTALL}/lib/libjson-c.so" ] && \
-	 [ ! -e "${JSONC_INSTALL}/lib/libjson-c.dylib" ]; then
+if [ ! -e "${JSONC_PREFIX}/lib/libjson-c.so" ] && \
+	 [ ! -e "${JSONC_PREFIX}/lib/libjson-c.dylib" ]; then
 
 	 if [ -d "${jsonc_build}" ]; then
 		 rm -rf "${jsonc_build}"
@@ -23,7 +23,7 @@ if [ ! -e "${JSONC_INSTALL}/lib/libjson-c.so" ] && \
 	tar xzf json-c.tar.gz --strip 1
 
 	autoreconf -ivf
-	env CFLAGS="-fno-omit-frame-pointer -g" ./configure --prefix="${JSONC_INSTALL}"
+	env CFLAGS="-fno-omit-frame-pointer -g" ./configure --prefix="${JSONC_PREFIX}"
 	${MAKE} -j${CORES} install
 	popd
 fi
