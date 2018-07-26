@@ -10,8 +10,8 @@ set -eux
 
 botan_build="${DEPS_BUILD_DIR}/botan"
 
-if [ ! -e "${BOTAN_INSTALL}/lib/libbotan-2.so" ] && \
-	 [ ! -e "${BOTAN_INSTALL}/lib/libbotan-2.dylib" ]; then
+if [ ! -e "${BOTAN_PREFIX}/lib/libbotan-2.so" ] && \
+	 [ ! -e "${BOTAN_PREFIX}/lib/libbotan-2.dylib" ]; then
 
 	if [ -d "${botan_build}" ]; then
 		rm -rf "${botan_build}"
@@ -19,7 +19,7 @@ if [ ! -e "${BOTAN_INSTALL}/lib/libbotan-2.so" ] && \
 
 	git clone --depth 1 https://github.com/randombit/botan "${botan_build}"
 	pushd "${botan_build}"
-	./configure.py --prefix="${BOTAN_INSTALL}" --with-debug-info --cxxflags="-fno-omit-frame-pointer"
+	./configure.py --prefix="${BOTAN_PREFIX}" --with-debug-info --cxxflags="-fno-omit-frame-pointer"
 	${MAKE} -j${CORES} install
 	popd
 fi

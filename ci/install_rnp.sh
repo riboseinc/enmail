@@ -10,8 +10,8 @@ set -eux
 
 rnp_build="${DEPS_BUILD_DIR}/rnp"
 
-if [ ! -e "${RNP_INSTALL}/lib/librnp.so" ] && \
-	 [ ! -e "${RNP_INSTALL}/lib/librnp.dylib" ]; then
+if [ ! -e "${RNP_PREFIX}/lib/librnp.so" ] && \
+	 [ ! -e "${RNP_PREFIX}/lib/librnp.dylib" ]; then
 
 	git clone https://github.com/riboseinc/rnp ${rnp_build}
 	pushd "${rnp_build}"
@@ -20,8 +20,8 @@ if [ ! -e "${RNP_INSTALL}/lib/librnp.so" ] && \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DBUILD_SHARED_LIBS=yes \
 		-DBUILD_TESTING=no \
-		-DCMAKE_PREFIX_PATH="${BOTAN_INSTALL};${JSONC_INSTALL}" \
-		-DCMAKE_INSTALL_PREFIX="${RNP_INSTALL}" \
+		-DCMAKE_PREFIX_PATH="${BOTAN_PREFIX};${JSONC_PREFIX}" \
+		-DCMAKE_INSTALL_PREFIX="${RNP_PREFIX}" \
 		.
 	${MAKE} -j${CORES} install
 	popd
