@@ -12,19 +12,20 @@ env:
   global:
     - EXPECT_GPG_VERSION="2.2"
     - GPG_VERSION="latest"
-    - DEPS_BUILD_DIR="${TRAVIS_BUILD_DIR}/build"
-    - >
-      GPG_CONFIGURE_OPTS="--disable-doc --enable-pinentry-curses
-      --disable-pinentry-emacs --disable-pinentry-gtk2 --disable-pinentry-gnome3
-      --disable-pinentry-qt --disable-pinentry-qt4 --disable-pinentry-qt5
-      --disable-pinentry-tqt --disable-pinentry-fltk"
-
     - RNP_VERSION="master"
+
+    - DEPS_BUILD_DIR="${TRAVIS_BUILD_DIR}/build"
     - BOTAN_INSTALL="${TRAVIS_BUILD_DIR}/opt"
     - JSONC_INSTALL="${TRAVIS_BUILD_DIR}/opt"
     - RNP_INSTALL="${TRAVIS_BUILD_DIR}/opt"
 
     - LD_LIBRARY_PATH="${TRAVIS_BUILD_DIR}/opt/lib"
+
+    - >
+      GPG_CONFIGURE_OPTS="--disable-doc --enable-pinentry-curses
+      --disable-pinentry-emacs --disable-pinentry-gtk2 --disable-pinentry-gnome3
+      --disable-pinentry-qt --disable-pinentry-qt4 --disable-pinentry-qt5
+      --disable-pinentry-tqt --disable-pinentry-fltk"
 
 before_install:
   - pushd ci
