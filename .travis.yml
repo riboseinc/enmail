@@ -12,7 +12,7 @@ env:
   global:
     - EXPECT_GPG_VERSION="2.2"
     - GPG_VERSION="latest"
-    - GPG_BUILD_DIR="$TRAVIS_BUILD_DIR/build_gpg"
+    - GPG_BUILD_DIR="${TRAVIS_BUILD_DIR}/build_gpg"
     - >
       GPG_CONFIGURE_OPTS="--disable-doc --enable-pinentry-curses
       --disable-pinentry-emacs --disable-pinentry-gtk2 --disable-pinentry-gnome3
@@ -20,17 +20,17 @@ env:
       --disable-pinentry-tqt --disable-pinentry-fltk"
 
     - RNP_VERSION="master"
-    - LOCAL_BUILDS="$TRAVIS_BUILD_DIR/build_rnp"
-    - BOTAN_INSTALL="$TRAVIS_BUILD_DIR/opt"
-    - CMOCKA_INSTALL="$TRAVIS_BUILD_DIR/opt"
-    - JSONC_INSTALL="$TRAVIS_BUILD_DIR/opt"
-    - RNP_INSTALL="$TRAVIS_BUILD_DIR/opt"
+    - LOCAL_BUILDS="${TRAVIS_BUILD_DIR}/build_rnp"
+    - BOTAN_INSTALL="${TRAVIS_BUILD_DIR}/opt"
+    - CMOCKA_INSTALL="${TRAVIS_BUILD_DIR}/opt"
+    - JSONC_INSTALL="${TRAVIS_BUILD_DIR}/opt"
+    - RNP_INSTALL="${TRAVIS_BUILD_DIR}/opt"
 
-    - LD_LIBRARY_PATH="$TRAVIS_BUILD_DIR/opt/lib"
+    - LD_LIBRARY_PATH="${TRAVIS_BUILD_DIR}/opt/lib"
 
 before_install:
   - pushd ci
-  - ./install_gpg_all.sh "$GPG_VERSION" --build-dir "$GPG_BUILD_DIR" --configure-opts "$GPG_CONFIGURE_OPTS" --folding-style travis
+  - ./install_gpg_all.sh "${GPG_VERSION}" --build-dir "${GPG_BUILD_DIR}" --configure-opts "${GPG_CONFIGURE_OPTS}" --folding-style travis
   - ./install_botan.sh
   - ./install_json_c.sh
   - ./install_rnp.sh
