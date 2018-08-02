@@ -26,7 +26,11 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "mail", "~> 2.6.4"
+  # There is no known reason for >= 2.6.4, except for one that gem was never
+  # tested against older versions.  That said, 2.6.4 has been released on
+  # March 23, 2016, hence should be considered old enough.  Compatibility with
+  # older versions may be introduced over time.
+  spec.add_dependency "mail", ">= 2.6.4", "< 3"
 
   spec.add_development_dependency "bundler", "~> 1.14"
   spec.add_development_dependency "pry", ">= 0.10.3", "< 0.12"

@@ -2,6 +2,8 @@ dist: trusty
 sudo: required
 language: ruby
 
+gemfile: "gemfiles/common.gemfile"
+
 rvm:
   - 2.5
   - 2.4
@@ -81,6 +83,14 @@ matrix:
       env: TEST_WITHOUT_RNP="1"
     - rvm: "2.5"
       env: TEST_WITHOUT_GPGME="1"
-
+    - rvm: "2.5"
+      gemfile: "gemfiles/mail-2.6.4.gemfile"
+    - rvm: "2.5"
+      gemfile: "gemfiles/mail-2.6.gemfile"
+    - rvm: "2.5"
+      gemfile: "gemfiles/mail-2.7.gemfile"
+    - rvm: "2.5"
+      gemfile: "gemfiles/mail-head.gemfile"
   allow_failures:
     - rvm: ruby-head
+    - gemfile: "gemfiles/mail-head.gemfile"

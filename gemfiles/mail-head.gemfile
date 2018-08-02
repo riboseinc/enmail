@@ -1,0 +1,5 @@
+# rubocop:disable Security/Eval
+eval File.read(File.expand_path("common.gemfile", __dir__))
+# rubocop:enable Security/Eval
+
+gem "mail", github: "mikel/mail"
