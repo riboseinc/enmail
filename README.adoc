@@ -1,0 +1,125 @@
+= EnMail
+
+image:https://travis-ci.org/riboseinc/enmail.svg?branch=master[
+	Build Status, link="https://travis-ci.org/riboseinc/enmail"]
+image:https://img.shields.io/codecov/c/github/riboseinc/enmail.svg[
+	Test Coverage, link="https://codecov.io/gh/riboseinc/enmail"]
+
+EnMail (Encrypted mail) helps the Ruby mail gem send secure encrypted
+messages.
+
+The two ways for secure mail are: * OpenPGP * S/MIME
+
+This gem allows you to select different OpenPGP implementations
+including NetPGP and GnuPG as different OpenPGP adapters, and also
+S/MIME.
+
+== Installation
+
+Add this line to your application’s Gemfile:
+
+[source,ruby]
+----
+gem "enmail"
+----
+
+And then execute:
+
+[source,sh]
+----
+bundle install
+----
+
+Or install it yourself as:
+
+[source,sh]
+----
+gem install enmail
+----
+
+== Configure
+
+The `EnMail` gem provides a very easier interface to set custom
+configurations or configure the underlying dependencies, we can
+configure it by adding an initializer with the following code
+
+[source,ruby]
+----
+EnMail.configure do |config|
+  config.sign_message = true
+  config.smime_adapter = :openssl
+  config.secret_key = "Secret Key String"
+
+  config.certificates_path = "CERTIFICATES_ROOT_PAH"
+end
+----
+
+Or
+
+[source,ruby]
+----
+EnMail.configuration.certificates_path = "CERTIFICATES_ROOT_PAH"
+----
+
+== Usage
+
+[source,sh]
+----
+bin/console
+----
+
+== Development
+
+We are following Sandi Metz’s Rules for this gem, you can read the
+http://robots.thoughtbot.com/post/50655960596/sandi-metz-rules-for-developers[description
+of the rules here]. All new code should follow these rules. If you make
+changes in a pre-existing file that violates these rules you should fix
+the violations as part of your contribution.
+
+=== Setup
+
+Clone the repository.
+
+[source,sh]
+----
+git clone https://github.com/riboseinc/enmail
+----
+
+Setup your environment.
+
+[source,sh]
+----
+bin/setup
+----
+
+Run the test suite
+
+[source,sh]
+----
+bin/rspec
+----
+
+== Contributing
+
+First, thank you for contributing! We love pull requests from everyone.
+By participating in this project, you hereby grant
+https://www.ribose.com[Ribose Inc.] the right to grant or transfer an
+unlimited number of non exclusive licenses or sub-licenses to third
+parties, under the copyright covering the contribution to use the
+contribution by all means.
+
+Here are a few technical guidelines to follow:
+
+1.  Open an https://github.com/abunashir/enmail/issues[issue] to discuss
+a new feature.
+2.  Write tests to support your new feature.
+3.  Make sure the entire test suite passes locally and on CI.
+4.  Open a Pull Request.
+5.  https://github.com/thoughtbot/guides/tree/master/protocol/git#write-a-feature[Squash
+your commits] after receiving feedback.
+6.  Party!
+
+== Credits
+
+This gem is developed, maintained and funded by
+https://www.ribose.com[Ribose Inc.]
