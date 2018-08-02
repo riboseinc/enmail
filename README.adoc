@@ -18,29 +18,6 @@ This gem allows you to select different OpenPGP implementations
 including NetPGP and GnuPG as different OpenPGP adapters, and also
 S/MIME.
 
-== Installation
-
-Add this line to your application’s Gemfile:
-
-[source,ruby]
-----
-gem "enmail"
-----
-
-And then execute:
-
-[source,sh]
-----
-bundle install
-----
-
-Or install it yourself as:
-
-[source,sh]
-----
-gem install enmail
-----
-
 == Configure
 
 The `EnMail` gem provides a very easier interface to set custom
