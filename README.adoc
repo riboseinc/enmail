@@ -9,44 +9,35 @@ image:https://img.shields.io/codecov/c/github/riboseinc/enmail.svg[
 image:https://img.shields.io/codeclimate/github/riboseinc/enmail.svg[
 	"Code Climate", link="https://codeclimate.com/github/riboseinc/enmail"]
 
-EnMail (Encrypted mail) helps the Ruby mail gem send secure encrypted
-messages.
+EnMail (Encrypted mail) helps the Ruby mail gem send secure encrypted messages.
 
-The two ways for secure mail are: * OpenPGP * S/MIME
+Currently, only OpenPGP is supported, either via GPGME or RNP.
 
-This gem allows you to select different OpenPGP implementations
-including NetPGP and GnuPG as different OpenPGP adapters, and also
-S/MIME.
+== Basic usage
 
-== Configure
-
-The `EnMail` gem provides a very easier interface to set custom
-configurations or configure the underlying dependencies, we can
-configure it by adding an initializer with the following code
+Given some e-mail:
 
 [source,ruby]
 ----
-EnMail.configure do |config|
-  config.sign_message = true
-  config.smime_adapter = :openssl
-  config.secret_key = "Secret Key String"
+mail = Mail.new
+mail.from = "Very Myself <me@example.com>"
+mail.to = "Someone Else <someone@example.com>"
+mail.subject = "It is very important"
+mail.body = "Or, whatever"
 
-  config.certificates_path = "CERTIFICATES_ROOT_PAH"
-end
-----
+adapter = ::EnMail::Adapters::RNP
 
-Or
+# sign message
+EnMail.protect :sign, mail, adapter: adapter
 
-[source,ruby]
-----
-EnMail.configuration.certificates_path = "CERTIFICATES_ROOT_PAH"
-----
+# encrypt message
+EnMail.protect :encrypt, mail, adapter: adapter
 
-== Usage
+# sign and encrypt message
+EnMail.protect :sign_and_encrypt_encapsulated, mail, adapter: adapter
 
-[source,sh]
-----
-bin/console
+# or
+EnMail.protect :sign_and_encrypt_combined, mail, adapter: adapter
 ----
 
 == Development
