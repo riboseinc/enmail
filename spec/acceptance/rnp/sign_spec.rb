@@ -13,6 +13,7 @@ RSpec.describe "Signing with RNP" do
     common_message_expectations(mail)
     pgp_signed_part_expectations(mail)
     decrypted_part_expectations_for_simple_mail(mail.parts[0])
+    resilent_transport_encoding_expectations(mail.parts[0])
   end
 
   specify "a non-multipart HTML message" do
@@ -23,6 +24,7 @@ RSpec.describe "Signing with RNP" do
     common_message_expectations(mail)
     pgp_signed_part_expectations(mail)
     decrypted_part_expectations_for_simple_html_mail(mail.parts[0])
+    resilent_transport_encoding_expectations(mail.parts[0])
   end
 
   specify "a multipart text+HTML message" do
@@ -33,6 +35,8 @@ RSpec.describe "Signing with RNP" do
     common_message_expectations(mail)
     pgp_signed_part_expectations(mail)
     decrypted_part_expectations_for_text_html_mail(mail.parts[0])
+    resilent_transport_encoding_expectations(mail.parts[0].parts[0])
+    resilent_transport_encoding_expectations(mail.parts[0].parts[1])
   end
 
   specify "a multipart message with binary attachments" do
@@ -43,6 +47,8 @@ RSpec.describe "Signing with RNP" do
     common_message_expectations(mail)
     pgp_signed_part_expectations(mail)
     decrypted_part_expectations_for_text_jpeg_mail(mail.parts[0])
+    resilent_transport_encoding_expectations(mail.parts[0].parts[0])
+    resilent_transport_encoding_expectations(mail.parts[0].parts[1])
   end
 
   specify "forcing different signer key" do

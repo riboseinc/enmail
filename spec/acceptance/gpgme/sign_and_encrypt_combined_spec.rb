@@ -14,6 +14,7 @@ RSpec.describe "Signing and encrypting in combined fashion with GPGME" do
     pgp_signed_and_encrypted_part_expectations(mail)
     decrypted_mail = decrypt_mail(mail)
     decrypted_part_expectations_for_simple_mail(decrypted_mail)
+    resilent_transport_encoding_expectations(decrypted_mail)
   end
 
   specify "a non-multipart HTML message" do
@@ -25,6 +26,7 @@ RSpec.describe "Signing and encrypting in combined fashion with GPGME" do
     pgp_signed_and_encrypted_part_expectations(mail)
     decrypted_mail = decrypt_mail(mail)
     decrypted_part_expectations_for_simple_html_mail(decrypted_mail)
+    resilent_transport_encoding_expectations(decrypted_mail)
   end
 
   specify "a multipart text+HTML message" do
@@ -36,6 +38,8 @@ RSpec.describe "Signing and encrypting in combined fashion with GPGME" do
     pgp_signed_and_encrypted_part_expectations(mail)
     decrypted_mail = decrypt_mail(mail)
     decrypted_part_expectations_for_text_html_mail(decrypted_mail)
+    resilent_transport_encoding_expectations(decrypted_mail.parts[0])
+    resilent_transport_encoding_expectations(decrypted_mail.parts[1])
   end
 
   specify "a multipart message with binary attachments" do
@@ -47,5 +51,7 @@ RSpec.describe "Signing and encrypting in combined fashion with GPGME" do
     pgp_signed_and_encrypted_part_expectations(mail)
     decrypted_mail = decrypt_mail(mail)
     decrypted_part_expectations_for_text_jpeg_mail(decrypted_mail)
+    resilent_transport_encoding_expectations(decrypted_mail.parts[0])
+    resilent_transport_encoding_expectations(decrypted_mail.parts[1])
   end
 end

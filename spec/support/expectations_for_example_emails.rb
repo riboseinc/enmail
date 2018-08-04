@@ -79,5 +79,11 @@ shared_context "expectations for example emails" do
       to be_a_pgp_encrypted_message.
       signed_by(expected_signer)
   end
+
+  def resilent_transport_encoding_expectations(message_or_part)
+    expect(
+      message_or_part.content_transfer_encoding
+    ).to eq("base64") | eq("quoted-printable")
+  end
 end
 # rubocop:enable Metrics/AbcSize

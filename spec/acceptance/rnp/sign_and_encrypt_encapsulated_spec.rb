@@ -15,6 +15,7 @@ RSpec.describe "Signing and encrypting in encapsulated fashion with RNP" do
     decrypted_mail = decrypt_mail(mail)
     pgp_signed_part_expectations(decrypted_mail)
     decrypted_part_expectations_for_simple_mail(decrypted_mail.parts[0])
+    resilent_transport_encoding_expectations(decrypted_mail.parts[0])
   end
 
   specify "a non-multipart HTML message" do
@@ -27,6 +28,7 @@ RSpec.describe "Signing and encrypting in encapsulated fashion with RNP" do
     decrypted_mail = decrypt_mail(mail)
     pgp_signed_part_expectations(decrypted_mail)
     decrypted_part_expectations_for_simple_html_mail(decrypted_mail.parts[0])
+    resilent_transport_encoding_expectations(decrypted_mail.parts[0])
   end
 
   specify "a multipart text+HTML message" do
@@ -39,6 +41,8 @@ RSpec.describe "Signing and encrypting in encapsulated fashion with RNP" do
     decrypted_mail = decrypt_mail(mail)
     pgp_signed_part_expectations(decrypted_mail)
     decrypted_part_expectations_for_text_html_mail(decrypted_mail.parts[0])
+    resilent_transport_encoding_expectations(decrypted_mail.parts[0].parts[0])
+    resilent_transport_encoding_expectations(decrypted_mail.parts[0].parts[1])
   end
 
   specify "a multipart message with binary attachments" do
@@ -51,5 +55,7 @@ RSpec.describe "Signing and encrypting in encapsulated fashion with RNP" do
     decrypted_mail = decrypt_mail(mail)
     pgp_signed_part_expectations(decrypted_mail)
     decrypted_part_expectations_for_text_jpeg_mail(decrypted_mail.parts[0])
+    resilent_transport_encoding_expectations(decrypted_mail.parts[0].parts[0])
+    resilent_transport_encoding_expectations(decrypted_mail.parts[0].parts[1])
   end
 end
