@@ -6,6 +6,8 @@ module EnMail
     #
     # See: https://tools.ietf.org/html/rfc3156
     module RFC3156
+      include RFC1847
+
       # The RFC 3156 explicitly allows for signing and encrypting data in
       # a single OpenPGP message.
       # See: https://tools.ietf.org/html/rfc3156#section-6.2
