@@ -44,6 +44,15 @@ module EnMail
 
       protected
 
+      def restrict_encoding(part)
+        if part.multipart?
+          part.parts.each { |p| restrict_encoding(p) }
+        else
+          ivar = "@enmail_rfc18467_encoding_restrictions"
+          part.instance_variable_set(ivar, true)
+        end
+      end
+
       # Builds a mail part containing the encrypted message, that is
       # the 2nd subpart of +multipart/encrypted+ as defined in RFC 1847.
       def build_encrypted_part(encrypted)

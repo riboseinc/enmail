@@ -141,6 +141,60 @@ RSpec.describe EnMail::Helpers::RFC1847 do
     end
   end
 
+  describe "#restrict_encoding" do
+    subject { adapter.method(:restrict_encoding) }
+
+    let(:ivar_name) { "@enmail_rfc18467_encoding_restrictions" }
+
+    it "sets @enmail_rfc18467_encoding_restrictions ivar for given " +
+      "non-multipart mail part" do
+      part = ::Mail::Part.new
+      part.content_type = "text/plain"
+      expect { subject.call(part) }.to(
+        change { part.instance_variable_get(ivar_name) }.to(true)
+      )
+    end
+
+    it "does not change @enmail_rfc18467_encoding_restrictions ivar for " +
+      "given multipart mail part" do
+      part = ::Mail::Part.new
+      part.content_type = "multipart/mixed"
+      expect { subject.call(part) }.to(
+        preserve { part.instance_variable_get(ivar_name) }
+      )
+    end
+
+    it "sets @enmail_rfc18467_encoding_restrictions ivar for all deeply " +
+      "nested non-multipart subparts of given part" do
+      part = ::Mail::Part.new
+      part.content_type = "multipart/mixed"
+
+      subpart1 = ::Mail::Part.new
+      subpart1.content_type = "text/plain"
+      part.add_part(subpart1)
+
+      subpart2 = ::Mail::Part.new
+      subpart2.content_type = "multipart/mixed"
+      part.add_part(subpart2)
+
+      subpart3, subpart4, subpart5 = Array.new(3) do
+        p = ::Mail::Part.new
+        p.content_type = "text/plain"
+        subpart2.add_part(p)
+        p
+      end
+
+      expect { subject.call(part) }.to(
+        preserve { part.instance_variable_get(ivar_name) } &
+        change { subpart1.instance_variable_get(ivar_name) }.to(true) &
+        preserve { subpart2.instance_variable_get(ivar_name) } &
+        change { subpart3.instance_variable_get(ivar_name) }.to(true) &
+        change { subpart4.instance_variable_get(ivar_name) }.to(true) &
+        change { subpart5.instance_variable_get(ivar_name) }.to(true)
+      )
+    end
+  end
+
   describe "#build_encrypted_part" do
     subject { adapter.method(:build_encrypted_part) }
     let(:encrypted) { enc_dummy }

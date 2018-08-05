@@ -10,6 +10,8 @@ require "enmail/adapters/base"
 require "enmail/adapters/gpgme"
 require "enmail/adapters/rnp"
 
+require "enmail/extensions/message_transport_encoding_restrictions"
+
 module EnMail
   module_function
 
@@ -18,3 +20,5 @@ module EnMail
     adapter_obj.public_send mode, message
   end
 end
+
+Mail::Message.prepend EnMail::Extensions::MessageTransportEncodingRestrictions
