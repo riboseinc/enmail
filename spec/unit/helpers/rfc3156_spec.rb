@@ -24,6 +24,7 @@ RSpec.describe EnMail::Helpers::RFC3156 do
         to receive(:build_encrypted_part).and_return(enc_part_dbl)
       allow(adapter).
         to receive(:sign_and_encrypt_string).and_return(enc_dummy)
+      allow(adapter).to receive(:restrict_encoding)
     end
 
     it "changes message mime type to multipart/encrypted" do
@@ -68,6 +69,13 @@ RSpec.describe EnMail::Helpers::RFC3156 do
       subject.(mail)
       expect(adapter).to have_received(:build_encrypted_part).with(enc_dummy)
       expect(mail.parts[1]).to be(enc_part_dbl)
+    end
+
+    it "enforces quoted-printable or base64 transport encoding for part " +
+      "containing original message (before encryption), but for nothing else" do
+      subject.(mail)
+      expect(adapter).to have_received(:restrict_encoding).once
+      expect(adapter).to have_received(:restrict_encoding).with(msg_part_dbl)
     end
   end
 
