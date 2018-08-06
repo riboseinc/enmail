@@ -7,7 +7,7 @@ task :default => :spec # rubocop:disable Style/HashSyntax
 
 # Available parameters for unattended GPG key generation are described here:
 # https://www.gnupg.org/documentation/manuals/gnupg/Unattended-GPG-key-generation.html
-task :generate_gpg_keys => :init_gpgme do # rubocop:disable Style/HashSyntax
+task :generate_pgp_keys => :init_gpgme do # rubocop:disable Style/HashSyntax
   ::GPGME::Ctx.new.genkey(<<~SCRIPT)
     <GnupgKeyParms format="internal">
     %no-protection
