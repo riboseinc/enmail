@@ -51,6 +51,12 @@ Clone the repository.
 git clone https://github.com/riboseinc/enmail
 ----
 
+NOTE: GnuPG will create UNIX sockets in the `<project_root>/tmp/pgp_home`
+directory.  Be advised that paths to UNIX sockets have limited length (about 100
+characters).  Therefore, please ensure that path to directory you are cloning
+repository into is less than 50 characters long, or you may experience weird
+errors.
+
 Setup your environment.
 
 [source,sh]
