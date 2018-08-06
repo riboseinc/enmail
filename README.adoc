@@ -77,7 +77,7 @@ If you ever need to regenerate your development OpenPGP keys:
 NOTE: Always run tests after pulling new changes from the upstream.  If they
 fail, it's likely that OpenPGP keys should be regenerated.
 
-== Contributing
+=== Contributing
 
 First, thank you for contributing! We love pull requests from everyone.
 By participating in this project, you hereby grant
@@ -89,12 +89,14 @@ contribution by all means.
 Here are a few technical guidelines to follow:
 
 1.  Open an https://github.com/abunashir/enmail/issues[issue] to discuss
-a new feature.
+    a new feature.
 2.  Write tests to support your new feature.
 3.  Make sure the entire test suite passes locally and on CI.
 4.  Open a Pull Request.
-5.  https://github.com/thoughtbot/guides/tree/master/protocol/git#write-a-feature[Squash
-your commits] after receiving feedback.
+5.  After receiving feedback, perform
+    https://help.github.com/articles/about-git-rebase/[an interactive rebase]
+    on your branch, in order to create a series of cohesive commits with
+    descriptive messages.
 6.  Party!
 
 == Credits
