@@ -64,12 +64,8 @@ Setup your environment.
 bin/setup
 ----
 
-Run the test suite
-
-[source,sh]
-----
-bin/rspec
-----
+Above one will take a short while.  As the final step, tests will be run
+in order to prove your setup's correctness.
 
 === Regenerating OpenPGP keys
 
