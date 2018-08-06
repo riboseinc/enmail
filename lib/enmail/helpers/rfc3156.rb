@@ -15,6 +15,7 @@ module EnMail
       # rubocop:disable Metrics/MethodLength
       def sign_and_encrypt_combined(message)
         source_part = body_to_part(message)
+        restrict_encoding(source_part)
         signer = find_signer_for(message)
         recipients = find_recipients_for(message)
         encrypted =

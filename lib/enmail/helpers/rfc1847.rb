@@ -31,6 +31,7 @@ module EnMail
       #   Message which is expected to be signed.
       def sign(message)
         source_part = body_to_part(message)
+        restrict_encoding(source_part)
         signer = find_signer_for(message)
         signature = compute_signature(source_part.encoded, signer).to_s
         signature_part = build_signature_part(signature)

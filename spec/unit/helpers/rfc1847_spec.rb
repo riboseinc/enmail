@@ -37,6 +37,7 @@ RSpec.describe EnMail::Helpers::RFC1847 do
         to receive(:build_encrypted_part).and_return(enc_part_dbl)
       allow(adapter).
         to receive(:encrypt_string).and_return(enc_dummy)
+      allow(adapter).to receive(:restrict_encoding)
     end
 
     it "changes message mime type to multipart/encrypted" do
@@ -96,6 +97,7 @@ RSpec.describe EnMail::Helpers::RFC1847 do
       allow(adapter).to receive(:body_to_part).and_return(msg_part_dbl)
       allow(adapter).to receive(:build_signature_part).and_return(sig_dbl)
       allow(adapter).to receive(:compute_signature).and_return(sig_dummy)
+      allow(adapter).to receive(:restrict_encoding)
     end
 
     it "changes message mime type to multipart/signed" do
@@ -138,6 +140,13 @@ RSpec.describe EnMail::Helpers::RFC1847 do
       subject.(mail)
       expect(adapter).to have_received(:build_signature_part).with(sig_dummy)
       expect(mail.parts[1]).to be(sig_dbl)
+    end
+
+    it "enforces quoted-printable or base64 transport encoding for signed " +
+      "part, but for nothing else" do
+      subject.(mail)
+      expect(adapter).to have_received(:restrict_encoding).once
+      expect(adapter).to have_received(:restrict_encoding).with(msg_part_dbl)
     end
   end
 
