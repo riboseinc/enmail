@@ -9,9 +9,12 @@ image:https://img.shields.io/codecov/c/github/riboseinc/enmail.svg[
 image:https://img.shields.io/codeclimate/github/riboseinc/enmail.svg[
 	"Code Climate", link="https://codeclimate.com/github/riboseinc/enmail"]
 
-EnMail (Encrypted mail) helps the Ruby mail gem send secure encrypted messages.
+EnMail (encrypted mail) signs or encrypts correspondence sent via the Ruby
+https://rubygems.org/gems/mail[mail] gem.
 
-Currently, only OpenPGP is supported, either via GPGME or RNP.
+EnMail has open architecture.  Multiple adapters are supported, and new ones
+can be implemented with ease.  Currently, GPGME and RNP adapters are available
+out of the box.  Both implement OpenPGP standard.
 
 == Basic usage
 
