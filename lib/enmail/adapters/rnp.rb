@@ -87,6 +87,8 @@ module EnMail
           rnp.load_keys(format: keyring_info[:format], input: input)
         end
 
+        rnp.password_provider = options[:key_password]
+
         rnp
       end
     end
