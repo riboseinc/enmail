@@ -51,7 +51,7 @@ RSpec.describe "Signing with GPGME" do
     resilent_transport_encoding_expectations(mail.parts[0].parts[1])
   end
 
-  specify "forcing different signer key" do
+  specify "with specific signer key" do
     mail = simple_mail
     signer = "whatever@example.test"
 
