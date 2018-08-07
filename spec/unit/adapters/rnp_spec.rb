@@ -6,6 +6,27 @@ RSpec.describe EnMail::Adapters::RNP do
 
   include_context "example emails"
 
+  describe ":homedir option" do
+    before do
+      allow(Rnp).to receive(:new).
+        and_return(double.as_null_object)
+      allow(Rnp).to receive(:homedir_info).
+        and_return(public: { path: "." }, secret: { path: "." })
+      allow(Rnp).to receive(:default_homedir).
+        and_return("default/rnp/home")
+    end
+
+    it "allows to override homedir" do
+      described_class.new homedir: "some/path"
+      expect(Rnp).to have_received(:homedir_info).with("some/path")
+    end
+
+    it "defaults to Rnp.default_homedir" do
+      described_class.new Hash.new
+      expect(Rnp).to have_received(:homedir_info).with("default/rnp/home")
+    end
+  end
+
   describe "#compute_signature" do
     subject { adapter.method(:compute_signature) }
     let(:text) { "Some Text." }
