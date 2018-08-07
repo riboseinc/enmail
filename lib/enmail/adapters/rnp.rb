@@ -76,7 +76,7 @@ module EnMail
       end
 
       def build_rnp_and_load_keys
-        homedir = Rnp.default_homedir
+        homedir = options[:homedir] || Rnp.default_homedir
         homedir_info = ::Rnp.homedir_info(homedir)
         public_info, secret_info = homedir_info.values_at(:public, :secret)
 
