@@ -58,4 +58,18 @@ RSpec.describe "Signing and encrypting in encapsulated fashion with GPGME" do
     resilent_transport_encoding_expectations(decrypted_mail.parts[0].parts[0])
     resilent_transport_encoding_expectations(decrypted_mail.parts[0].parts[1])
   end
+
+  specify "with specific signer key" do
+    mail = simple_mail
+    signer = "whatever@example.test"
+
+    EnMail.protect :sign_and_encrypt_encapsulated, mail, adapter: adapter_class,
+                                                         signer: signer
+    mail.deliver
+    common_message_expectations(mail)
+    pgp_encrypted_part_expectations(mail)
+    decrypted_mail = decrypt_mail(mail)
+    pgp_signed_part_expectations(decrypted_mail, expected_signer: signer)
+    decrypted_part_expectations_for_simple_mail(decrypted_mail.parts[0])
+  end
 end

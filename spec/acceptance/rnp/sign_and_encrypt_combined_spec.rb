@@ -54,4 +54,17 @@ RSpec.describe "Signing and encrypting in combined fashion with RNP" do
     resilent_transport_encoding_expectations(decrypted_mail.parts[0])
     resilent_transport_encoding_expectations(decrypted_mail.parts[1])
   end
+
+  specify "with specific signer key" do
+    mail = simple_mail
+    signer = "whatever@example.test"
+
+    EnMail.protect :sign_and_encrypt_combined, mail, adapter: adapter_class,
+                                                     signer: signer
+    mail.deliver
+    common_message_expectations(mail)
+    pgp_signed_and_encrypted_part_expectations(mail, expected_signer: signer)
+    decrypted_mail = decrypt_mail(mail)
+    decrypted_part_expectations_for_simple_mail(decrypted_mail)
+  end
 end
