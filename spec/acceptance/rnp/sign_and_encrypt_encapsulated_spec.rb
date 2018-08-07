@@ -72,4 +72,19 @@ RSpec.describe "Signing and encrypting in encapsulated fashion with RNP" do
     pgp_signed_part_expectations(decrypted_mail, expected_signer: signer)
     decrypted_part_expectations_for_simple_mail(decrypted_mail.parts[0])
   end
+
+  specify "with a password-protected signer key" do
+    mail = simple_mail
+    signer = "cato.elder+pwd@example.test"
+
+    EnMail.protect :sign_and_encrypt_encapsulated, mail, adapter: adapter_class,
+                                                         signer: signer,
+                                                         key_password: "1234"
+    mail.deliver
+    common_message_expectations(mail)
+    pgp_encrypted_part_expectations(mail)
+    decrypted_mail = decrypt_mail(mail)
+    pgp_signed_part_expectations(decrypted_mail, expected_signer: signer)
+    decrypted_part_expectations_for_simple_mail(decrypted_mail.parts[0])
+  end
 end
