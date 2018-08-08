@@ -89,3 +89,7 @@ your commits] after receiving feedback.
 
 This gem is developed, maintained and funded by
 https://www.ribose.com[Ribose Inc.]
+
+== License
+
+This gem is licensed under MIT license.
