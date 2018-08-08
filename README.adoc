@@ -6,7 +6,7 @@ image:https://travis-ci.org/riboseinc/enmail.svg?branch=master[
 	Build Status, link="https://travis-ci.org/riboseinc/enmail"]
 image:https://img.shields.io/codecov/c/github/riboseinc/enmail.svg[
 	Test Coverage, link="https://codecov.io/gh/riboseinc/enmail"]
-image:https://img.shields.io/codeclimate/github/riboseinc/enmail.svg[
+image:https://img.shields.io/codeclimate/maintainability/riboseinc/enmail.svg[
 	"Code Climate", link="https://codeclimate.com/github/riboseinc/enmail"]
 
 EnMail (encrypted mail) signs or encrypts correspondence sent via the Ruby
