@@ -41,8 +41,8 @@ before_install:
   - gem install bundler -v 1.16.1
 
 before_script:
-  - rake pgp_keys:generate
-  - rake pgp_keys:list
+  - bundle exec rake pgp_keys:generate
+  - bundle exec rake pgp_keys:list
 
 script:
   - bundle exec rspec --format documentation
