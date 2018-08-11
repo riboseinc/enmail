@@ -2,7 +2,7 @@
 
 image:https://img.shields.io/gem/v/enmail.svg[
 	Gem Version, link="https://rubygems.org/gems/enmail"]
-image:https://travis-ci.org/riboseinc/enmail.svg?branch=master[
+image:https://travis-ci.org/riboseinc/enmail/master.svg[
 	Build Status, link="https://travis-ci.org/riboseinc/enmail"]
 image:https://img.shields.io/codecov/c/github/riboseinc/enmail.svg[
 	Test Coverage, link="https://codecov.io/gh/riboseinc/enmail"]
