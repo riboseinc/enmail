@@ -1,7 +1,10 @@
 # (c) Copyright 2018 Ribose Inc.
 #
 
-require "gpgme"
+begin
+  require "gpgme"
+rescue LoadError
+end
 
 module EnMail
   module Adapters
