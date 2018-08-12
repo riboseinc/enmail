@@ -3,7 +3,7 @@
 
 require "spec_helper"
 
-RSpec.describe EnMail::Adapters::RNP do
+RSpec.describe EnMail::Adapters::RNP, requires: :rnp do
   let(:adapter) { described_class.new(options) }
   let(:options) { {} }
 

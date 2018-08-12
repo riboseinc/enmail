@@ -3,7 +3,7 @@
 
 require "spec_helper"
 
-RSpec.describe "Encrypting with RNP" do
+RSpec.describe "Encrypting with RNP", requires: :rnp do
   include_context "example emails"
   include_context "expectations for example emails"
   include_context "rnp spec helpers"
