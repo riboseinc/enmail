@@ -8,3 +8,6 @@ gemspec
 
 gem "codecov", require: false, group: :test
 gem "simplecov", require: false, group: :test
+
+gem "gpgme"
+gem "rnp", ">= 1.0.1", "< 2"
