@@ -3,7 +3,7 @@
 
 require "spec_helper"
 
-RSpec.describe "Encrypting with GPGME" do
+RSpec.describe "Encrypting with GPGME", requires: :gpgme do
   include_context "example emails"
   include_context "expectations for example emails"
   include_context "gpgme spec helpers"

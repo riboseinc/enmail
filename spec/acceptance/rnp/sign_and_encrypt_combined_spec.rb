@@ -3,7 +3,9 @@
 
 require "spec_helper"
 
-RSpec.describe "Signing and encrypting in combined fashion with RNP" do
+RSpec.describe "Signing and encrypting in combined fashion with RNP",
+  requires: :rnp do
+
   include_context "example emails"
   include_context "expectations for example emails"
   include_context "rnp spec helpers"

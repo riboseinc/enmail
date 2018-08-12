@@ -3,7 +3,7 @@
 
 require "spec_helper"
 
-RSpec.describe EnMail::Adapters::GPGME do
+RSpec.describe EnMail::Adapters::GPGME, requires: :gpgme do
   let(:adapter) { described_class.new(options) }
   let(:options) { {} }
 
