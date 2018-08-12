@@ -13,6 +13,8 @@ RSpec.describe EnMail::Adapters::GPGME, requires: :gpgme do
     subject { adapter.method(:compute_signature) }
     let(:text) { "Some Text." }
     let(:signer) { "cato.elder@example.test" }
+    let(:signer_with_password) { "cato.elder+pwd@example.test" }
+    let(:valid_password) { "1234" }
 
     it "returns a two element array" do
       retval = subject.(text, signer)
@@ -29,6 +31,26 @@ RSpec.describe EnMail::Adapters::GPGME, requires: :gpgme do
     it "returns a digest algorithm as 1st element of the returned array" do
       retval = subject.(text, signer)
       expect(retval[0]).to match(/\Apgp-[a-z0-9]+\z/)
+    end
+
+    it "can sign with a password-protected key" do
+      options[:key_password] = valid_password
+      retval = subject.(text, signer_with_password)
+      expect(retval[1]).
+        to be_a_valid_pgp_signature_of(text).signed_by(signer_with_password)
+    end
+
+    it "raises exception when key password is missing for " +
+      "a password-protected key" do
+      expect { subject.(text, signer_with_password) }.
+        to raise_exception(::GPGME::Error::General)
+    end
+
+    it "raises exception when key password is invalid" do
+      invalid_password = valid_password + "5"
+      options[:key_password] = invalid_password
+      expect { subject.(text, signer_with_password) }.
+        to raise_exception(::GPGME::Error::BadPassphrase)
     end
   end
 
@@ -53,6 +75,8 @@ RSpec.describe EnMail::Adapters::GPGME, requires: :gpgme do
     let(:text) { "Some Text." }
     let(:recipients) { %w[whatever@example.test senate@example.test] }
     let(:signer) { "cato.elder@example.test" }
+    let(:signer_with_password) { "cato.elder+pwd@example.test" }
+    let(:valid_password) { "1234" }
 
     it "encrypts given text" do
       retval = subject.(text, signer, recipients)
@@ -67,6 +91,26 @@ RSpec.describe EnMail::Adapters::GPGME, requires: :gpgme do
     it "adds a signature by given user to the encrypted text" do
       retval = subject.(text, signer, recipients)
       expect(retval).to be_a_pgp_encrypted_message.signed_by(signer)
+    end
+
+    it "can sign with a password-protected key" do
+      options[:key_password] = valid_password
+      retval = subject.(text, signer_with_password, recipients)
+      expect(retval).
+        to be_a_pgp_encrypted_message.signed_by(signer_with_password)
+    end
+
+    it "raises exception when key password is missing for " +
+      "a password-protected key" do
+      expect { subject.(text, signer_with_password, recipients) }.
+        to raise_exception(::GPGME::Error::General)
+    end
+
+    it "raises exception when key password is invalid" do
+      invalid_password = valid_password + "5"
+      options[:key_password] = invalid_password
+      expect { subject.(text, signer_with_password, recipients) }.
+        to raise_exception(::GPGME::Error::BadPassphrase)
     end
   end
 end
