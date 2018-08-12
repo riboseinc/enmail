@@ -1,7 +1,10 @@
 # (c) Copyright 2018 Ribose Inc.
 #
 
-require "rnp"
+begin
+  require "rnp"
+rescue LoadError
+end
 
 module EnMail
   module Adapters
