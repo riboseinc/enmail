@@ -60,7 +60,7 @@ RSpec::Matchers.define :be_a_valid_pgp_signature_of do |text|
   end
 
   def gpg_verify_command(sig_file, data_file)
-    homedir_path = Shellwords.escape(TMP_GPGME_HOME)
+    homedir_path = Shellwords.escape(TMP_PGP_HOME)
     sig_path = Shellwords.escape(sig_file.path)
     data_path = Shellwords.escape(data_file.path)
 
