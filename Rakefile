@@ -30,12 +30,12 @@ namespace :pgp_keys do
   end
 
   desc "Lists keys in tmp/pgp_home"
-  task :list => :init_gpgme do
+  task :list => :prepare do
     execute_gpg "--list-keys"
   end
 
   desc "Stops all GPG daemons, and deletes tmp/pgp_home"
-  task :clear => :init_gpgme do
+  task :clear => :prepare do
     if File.exists?(TMP_PGP_HOME)
       system "gpgconf", "--homedir", TMP_PGP_HOME, "--kill", "all"
       FileUtils.remove_entry_secure TMP_PGP_HOME
@@ -46,7 +46,7 @@ namespace :pgp_keys do
   task :regenerate => %i[clear generate]
 
   desc "Generates keys in tmp/pgp_home"
-  task :generate => :init_gpgme do
+  task :generate => :prepare do
     # Key pairs without password
     generate_pgp_keys(<<~KEY_PARAMS)
       %no-protection
@@ -107,6 +107,6 @@ namespace :pgp_keys do
   end
 end
 
-task :init_gpgme do
+task :prepare do
   require_relative "./spec/support/0_tmp_pgp_home"
 end
