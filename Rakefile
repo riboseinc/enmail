@@ -5,74 +5,77 @@ RSpec::Core::RakeTask.new(:spec)
 
 task :default => :spec
 
-# Available parameters for unattended GPG key generation are described here:
-# https://www.gnupg.org/documentation/manuals/gnupg/Unattended-GPG-key-generation.html
-task :generate_pgp_keys => :init_gpgme do
-  # Key pairs without password
-  ::GPGME::Ctx.new.genkey(<<~SCRIPT)
-    <GnupgKeyParms format="internal">
-    %no-protection
-    Key-Type: RSA
-    Key-Usage: sign, cert
-    Key-Length: 2048
-    Subkey-Type: RSA
-    Subkey-Length: 2048
-    Subkey-Usage: encrypt
-    Name-Real: Some Arbitrary Key
-    Name-Email: whatever@example.test
-    Name-Comment: Without passphrase
-    Expire-Date: 0
-    </GnupgKeyParms>
-  SCRIPT
+namespace :pgp_keys do
+  # Available parameters for unattended GPG key generation are described here:
+  # https://www.gnupg.org/documentation/manuals/gnupg/Unattended-GPG-key-generation.html
+  desc "Generates keys in tmp/pgp_home"
+  task :generate => :init_gpgme do
+    # Key pairs without password
+    ::GPGME::Ctx.new.genkey(<<~SCRIPT)
+      <GnupgKeyParms format="internal">
+      %no-protection
+      Key-Type: RSA
+      Key-Usage: sign, cert
+      Key-Length: 2048
+      Subkey-Type: RSA
+      Subkey-Length: 2048
+      Subkey-Usage: encrypt
+      Name-Real: Some Arbitrary Key
+      Name-Email: whatever@example.test
+      Name-Comment: Without passphrase
+      Expire-Date: 0
+      </GnupgKeyParms>
+    SCRIPT
 
-  ::GPGME::Ctx.new.genkey(<<~SCRIPT)
-    <GnupgKeyParms format="internal">
-    %no-protection
-    Key-Type: RSA
-    Key-Usage: sign, cert
-    Key-Length: 2048
-    Subkey-Type: RSA
-    Subkey-Length: 2048
-    Subkey-Usage: encrypt
-    Name-Real: Cato Elder
-    Name-Email: cato.elder@example.test
-    Name-Comment: Without passphrase
-    Expire-Date: 0
-    </GnupgKeyParms>
-  SCRIPT
+    ::GPGME::Ctx.new.genkey(<<~SCRIPT)
+      <GnupgKeyParms format="internal">
+      %no-protection
+      Key-Type: RSA
+      Key-Usage: sign, cert
+      Key-Length: 2048
+      Subkey-Type: RSA
+      Subkey-Length: 2048
+      Subkey-Usage: encrypt
+      Name-Real: Cato Elder
+      Name-Email: cato.elder@example.test
+      Name-Comment: Without passphrase
+      Expire-Date: 0
+      </GnupgKeyParms>
+    SCRIPT
 
-  ::GPGME::Ctx.new.genkey(<<~SCRIPT)
-    <GnupgKeyParms format="internal">
-    %no-protection
-    Key-Type: RSA
-    Key-Usage: sign, cert
-    Key-Length: 2048
-    Subkey-Type: RSA
-    Subkey-Length: 2048
-    Subkey-Usage: encrypt
-    Name-Real: Roman Senate
-    Name-Email: senate@example.test
-    Name-Comment: Without passphrase
-    Expire-Date: 0
-    </GnupgKeyParms>
-  SCRIPT
+    ::GPGME::Ctx.new.genkey(<<~SCRIPT)
+      <GnupgKeyParms format="internal">
+      %no-protection
+      Key-Type: RSA
+      Key-Usage: sign, cert
+      Key-Length: 2048
+      Subkey-Type: RSA
+      Subkey-Length: 2048
+      Subkey-Usage: encrypt
+      Name-Real: Roman Senate
+      Name-Email: senate@example.test
+      Name-Comment: Without passphrase
+      Expire-Date: 0
+      </GnupgKeyParms>
+    SCRIPT
 
-  # Password-protected key pairs
-  ::GPGME::Ctx.new.genkey(<<~SCRIPT)
-    <GnupgKeyParms format="internal">
-    Key-Type: RSA
-    Key-Usage: sign, cert
-    Key-Length: 2048
-    Subkey-Type: RSA
-    Subkey-Length: 2048
-    Subkey-Usage: encrypt
-    Name-Real: Cato Elder
-    Name-Email: cato.elder+pwd@example.test
-    Name-Comment: Password-protected
-    Expire-Date: 0
-    Passphrase: 1234
-    </GnupgKeyParms>
-  SCRIPT
+    # Password-protected key pairs
+    ::GPGME::Ctx.new.genkey(<<~SCRIPT)
+      <GnupgKeyParms format="internal">
+      Key-Type: RSA
+      Key-Usage: sign, cert
+      Key-Length: 2048
+      Subkey-Type: RSA
+      Subkey-Length: 2048
+      Subkey-Usage: encrypt
+      Name-Real: Cato Elder
+      Name-Email: cato.elder+pwd@example.test
+      Name-Comment: Password-protected
+      Expire-Date: 0
+      Passphrase: 1234
+      </GnupgKeyParms>
+    SCRIPT
+  end
 end
 
 task :init_gpgme do
