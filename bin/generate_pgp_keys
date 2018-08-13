@@ -6,6 +6,12 @@ PGP_HOME="${ROOT_DIR}/tmp/pgp_home"
 
 set -vx
 
+if [ -d "$PGP_HOME" ]; then
+	# Stop GnuPG Agent and other daemons gracefully
+	gpgconf --homedir "$PGP_HOME" --kill all
+	rm -r "$PGP_HOME"
+fi
+
 mkdir -p "${PGP_HOME}"
 
 # Available parameters for unattended GPG key generation are described here:
