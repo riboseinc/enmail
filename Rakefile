@@ -37,6 +37,9 @@ namespace :pgp_keys do
     end
   end
 
+  desc "Clears tmp/pgp_home, and generates new set of keys"
+  task :regenerate => %i[clear generate]
+
   desc "Generates keys in tmp/pgp_home"
   task :generate => :init_gpgme do
     # Key pairs without password
