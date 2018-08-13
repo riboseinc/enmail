@@ -14,7 +14,7 @@ bundle install
 #             with GnuPG...            #
 ########################################
 
-bundle exec rake generate_pgp_keys
+bundle exec rake pgp_keys:generate pgp_keys:list
 
 ########################################
 #          Validating setup...         #
