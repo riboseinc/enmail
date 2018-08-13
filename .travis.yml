@@ -41,7 +41,8 @@ before_install:
   - gem install bundler -v 1.16.1
 
 before_script:
-  - rake generate_pgp_keys
+  - rake pgp_keys:generate
+  - rake pgp_keys:list
 
 matrix:
   allow_failures:
