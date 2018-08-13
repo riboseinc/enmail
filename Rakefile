@@ -29,6 +29,14 @@ namespace :pgp_keys do
     execute_gpg "--list-keys"
   end
 
+  desc "Stops all GPG daemons, and deletes tmp/pgp_home"
+  task :clear => :init_gpgme do
+    if File.exists?(TMP_GPGME_HOME)
+      system "gpgconf", "--homedir", TMP_GPGME_HOME, "--kill", "all"
+      FileUtils.remove_entry_secure TMP_GPGME_HOME
+    end
+  end
+
   desc "Generates keys in tmp/pgp_home"
   task :generate => :init_gpgme do
     # Key pairs without password
