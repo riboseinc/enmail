@@ -129,10 +129,15 @@ in order to prove your setup's correctness.
 
 === Regenerating OpenPGP keys
 
-If you ever need to regenerate your development OpenPGP keys:
+If you ever need to regenerate your development OpenPGP keys, execute:
 
-1. `rm -rf <project_root>/tmp`
-2. `bundle exec rake generate_pgp_keys`
+[source,sh]
+----
+bin/generate_pgp_keys
+----
+
+It deletes existing PGP home directory, if exists, in order to ensure clean
+state.  Never do this when tests are running.
 
 NOTE: Always run tests after pulling new changes from the upstream.  If they
 fail, it's likely that OpenPGP keys should be regenerated.
