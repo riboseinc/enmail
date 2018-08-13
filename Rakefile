@@ -1,18 +1,33 @@
 require "bundler/gem_tasks"
 require "rspec/core/rake_task"
 
+require "tempfile"
+
 RSpec::Core::RakeTask.new(:spec)
 
 task :default => :spec
 
 namespace :pgp_keys do
+  def execute_gpg(*options)
+    common_options = ["--no-permission-warning", "--homedir", TMP_GPGME_HOME]
+    cmd = ["gpg", *common_options, *options]
+    system(*cmd)
+  end
+
   # Available parameters for unattended GPG key generation are described here:
   # https://www.gnupg.org/documentation/manuals/gnupg/Unattended-GPG-key-generation.html
+  def generate_pgp_keys(key_params)
+    Tempfile.create do |key_params_file|
+      key_params_file.write(key_params)
+      key_params_file.close
+      execute_gpg("--batch", "--gen-key", in: key_params_file.path)
+    end
+  end
+
   desc "Generates keys in tmp/pgp_home"
   task :generate => :init_gpgme do
     # Key pairs without password
-    ::GPGME::Ctx.new.genkey(<<~SCRIPT)
-      <GnupgKeyParms format="internal">
+    generate_pgp_keys(<<~KEY_PARAMS)
       %no-protection
       Key-Type: RSA
       Key-Usage: sign, cert
@@ -24,11 +39,9 @@ namespace :pgp_keys do
       Name-Email: whatever@example.test
       Name-Comment: Without passphrase
       Expire-Date: 0
-      </GnupgKeyParms>
-    SCRIPT
+    KEY_PARAMS
 
-    ::GPGME::Ctx.new.genkey(<<~SCRIPT)
-      <GnupgKeyParms format="internal">
+    generate_pgp_keys(<<~KEY_PARAMS)
       %no-protection
       Key-Type: RSA
       Key-Usage: sign, cert
@@ -40,11 +53,9 @@ namespace :pgp_keys do
       Name-Email: cato.elder@example.test
       Name-Comment: Without passphrase
       Expire-Date: 0
-      </GnupgKeyParms>
-    SCRIPT
+    KEY_PARAMS
 
-    ::GPGME::Ctx.new.genkey(<<~SCRIPT)
-      <GnupgKeyParms format="internal">
+    generate_pgp_keys(<<~KEY_PARAMS)
       %no-protection
       Key-Type: RSA
       Key-Usage: sign, cert
@@ -56,12 +67,10 @@ namespace :pgp_keys do
       Name-Email: senate@example.test
       Name-Comment: Without passphrase
       Expire-Date: 0
-      </GnupgKeyParms>
-    SCRIPT
+    KEY_PARAMS
 
     # Password-protected key pairs
-    ::GPGME::Ctx.new.genkey(<<~SCRIPT)
-      <GnupgKeyParms format="internal">
+    generate_pgp_keys(<<~KEY_PARAMS)
       Key-Type: RSA
       Key-Usage: sign, cert
       Key-Length: 2048
@@ -73,8 +82,7 @@ namespace :pgp_keys do
       Name-Comment: Password-protected
       Expire-Date: 0
       Passphrase: 1234
-      </GnupgKeyParms>
-    SCRIPT
+    KEY_PARAMS
   end
 end
 
