@@ -22,8 +22,12 @@ task :generate_pgp_keys => :init_gpgme do
     Name-Email: whatever@example.test
     Name-Comment: Without passphrase
     Expire-Date: 0
-    %commit
+    </GnupgKeyParms>
+  SCRIPT
 
+  ::GPGME::Ctx.new.genkey(<<~SCRIPT)
+    <GnupgKeyParms format="internal">
+    %no-protection
     Key-Type: RSA
     Key-Usage: sign, cert
     Key-Length: 2048
@@ -34,8 +38,12 @@ task :generate_pgp_keys => :init_gpgme do
     Name-Email: cato.elder@example.test
     Name-Comment: Without passphrase
     Expire-Date: 0
-    %commit
+    </GnupgKeyParms>
+  SCRIPT
 
+  ::GPGME::Ctx.new.genkey(<<~SCRIPT)
+    <GnupgKeyParms format="internal">
+    %no-protection
     Key-Type: RSA
     Key-Usage: sign, cert
     Key-Length: 2048
