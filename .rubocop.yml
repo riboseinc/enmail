@@ -24,3 +24,13 @@ Style/TrailingCommaInArguments:
     # after a single method argument which spans across many lines is confusing,
     # not helpful.  Hence, I'm disabling this cop for all specs.
     - "spec/**/*"
+
+Metrics/BlockLength:
+  Exclude:
+    - "spec/**/*"
+    - "**/*.rake"
+    - "Rakefile"
+
+Style/HashSyntax:
+  Exclude:
+    - "Rakefile"

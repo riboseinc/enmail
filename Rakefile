@@ -3,12 +3,10 @@ require "rspec/core/rake_task"
 
 RSpec::Core::RakeTask.new(:spec)
 
-task :default => :spec # rubocop:disable Style/HashSyntax
+task :default => :spec
 
 # Available parameters for unattended GPG key generation are described here:
 # https://www.gnupg.org/documentation/manuals/gnupg/Unattended-GPG-key-generation.html
-# rubocop:disable Style/HashSyntax
-# rubocop:disable Metrics/BlockLength
 task :generate_pgp_keys => :init_gpgme do
   # Key pairs without password
   ::GPGME::Ctx.new.genkey(<<~SCRIPT)
@@ -68,8 +66,6 @@ task :generate_pgp_keys => :init_gpgme do
     </GnupgKeyParms>
   SCRIPT
 end
-# rubocop:enable Style/HashSyntax
-# rubocop:enable Metrics/BlockLength
 
 task :init_gpgme do
   require "gpgme"
