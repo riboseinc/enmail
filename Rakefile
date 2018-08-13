@@ -16,6 +16,10 @@ namespace :pgp_keys do
     File.write(File.join(TMP_PGP_HOME, "gpg.conf"), <<~GPGCONF)
       personal-digest-preferences SHA512
     GPGCONF
+
+    File.write(File.join(TMP_PGP_HOME, "gpg-agent.conf"), <<~AGENTCONF)
+      default-cache-ttl 0
+    AGENTCONF
   end
 
   def execute_gpg(*options)
