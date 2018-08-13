@@ -24,6 +24,11 @@ namespace :pgp_keys do
     end
   end
 
+  desc "Lists keys in tmp/pgp_home"
+  task :list => :init_gpgme do
+    execute_gpg "--list-keys"
+  end
+
   desc "Generates keys in tmp/pgp_home"
   task :generate => :init_gpgme do
     # Key pairs without password
