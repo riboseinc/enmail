@@ -66,3 +66,7 @@ gpg --no-permission-warning --homedir "${PGP_HOME}" --batch --gen-key <<-HERE_PA
 	Expire-Date: 0
 	Passphrase: 1234
 HERE_PARAMS
+
+# Existing keys are now:
+
+gpg --no-permission-warning --homedir "${PGP_HOME}" --list-keys
