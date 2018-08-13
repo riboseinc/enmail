@@ -8,7 +8,12 @@ RSpec::Core::RakeTask.new(:spec)
 task :default => :spec
 
 namespace :pgp_keys do
+  def init_homedir_if_missing
+    FileUtils.mkdir_p(TMP_GPGME_HOME)
+  end
+
   def execute_gpg(*options)
+    init_homedir_if_missing
     common_options = ["--no-permission-warning", "--homedir", TMP_GPGME_HOME]
     cmd = ["gpg", *common_options, *options]
     system(*cmd)
