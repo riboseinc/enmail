@@ -22,7 +22,7 @@ namespace :pgp_keys do
   # Available parameters for unattended GPG key generation are described here:
   # https://www.gnupg.org/documentation/manuals/gnupg/Unattended-GPG-key-generation.html
   def generate_pgp_keys(key_params)
-    Tempfile.create do |key_params_file|
+    Tempfile.create("gnupg-key-params") do |key_params_file|
       key_params_file.write(key_params)
       key_params_file.close
       execute_gpg("--batch", "--gen-key", in: key_params_file.path)
