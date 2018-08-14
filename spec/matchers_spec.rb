@@ -1,3 +1,6 @@
+# (c) Copyright 2018 Ribose Inc.
+#
+
 require "spec_helper"
 
 RSpec.describe :be_a_pgp_encrypted_message do

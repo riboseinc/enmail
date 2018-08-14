@@ -1,3 +1,6 @@
+# (c) Copyright 2018 Ribose Inc.
+#
+
 module EnMail
   module Helpers
     # Common interface for building adapters conforming to RFC 1847 "Security

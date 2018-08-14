@@ -1,3 +1,6 @@
+# (c) Copyright 2018 Ribose Inc.
+#
+
 require "open3"
 
 module GpgMatcherHelper

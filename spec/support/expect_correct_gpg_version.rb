@@ -1,3 +1,6 @@
+# (c) Copyright 2018 Ribose Inc.
+#
+
 expected_gpg_version = ENV.fetch("EXPECT_GPG_VERSION", nil)
 
 if expected_gpg_version

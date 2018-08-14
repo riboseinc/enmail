@@ -1,3 +1,6 @@
+# (c) Copyright 2018 Ribose Inc.
+#
+
 shared_context "example emails" do
   let(:mail_from) { "cato.elder@example.test" }
   let(:mail_to) { "senate@example.test" }

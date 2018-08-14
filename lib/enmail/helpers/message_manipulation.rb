@@ -1,3 +1,6 @@
+# (c) Copyright 2018 Ribose Inc.
+#
+
 module EnMail
   module Helpers
     # A toolbox with common operations for manipulating and reading message

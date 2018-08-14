@@ -1,3 +1,6 @@
+# (c) Copyright 2018 Ribose Inc.
+#
+
 shared_context "rnp spec helpers" do
   # This method is an exact copy of one from "gpgme spec helpers" context.
   # It's okay for now because both RNP and GPGME use the same homedir.

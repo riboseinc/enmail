@@ -1,3 +1,6 @@
+# (c) Copyright 2018 Ribose Inc.
+#
+
 shared_context "gpgme spec helpers" do
   def decrypt_mail(message)
     encrypted_message = message.parts[1].body.decoded

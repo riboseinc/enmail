@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# (c) Copyright 2018 Ribose Inc.
+#
+
 # Based on:
 # https://github.com/riboseinc/ruby-rnp/blob/52d6113458cb095cf7811/ci/install.sh
 

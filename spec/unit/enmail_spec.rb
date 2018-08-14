@@ -1,3 +1,6 @@
+# (c) Copyright 2018 Ribose Inc.
+#
+
 RSpec.describe EnMail do
   describe "::protect" do
     subject { EnMail.method(:protect) }
