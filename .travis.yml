@@ -47,4 +47,3 @@ before_script:
 matrix:
   allow_failures:
     - rvm: ruby-head
-    - rvm: 2.3
