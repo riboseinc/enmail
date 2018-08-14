@@ -38,7 +38,7 @@ before_install:
   - ./install_json_c.sh
   - ./install_rnp.sh
   - popd
-  - gem install bundler -v 1.16.1
+  - gem install bundler -v 1.16.3
 
 before_script:
   - rake pgp_keys:generate

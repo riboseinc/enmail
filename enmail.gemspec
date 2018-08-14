@@ -29,8 +29,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency "mail", "~> 2.6.4"
 
   spec.add_development_dependency "bundler", "~> 1.14"
-  spec.add_development_dependency "pry", "~>0.10.3"
-  spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_development_dependency "pry", ">= 0.10.3", "< 0.12"
+  spec.add_development_dependency "rake", ">= 10", "< 13"
   spec.add_development_dependency "rspec", "~> 3.0"
 
   spec.add_development_dependency "gpgme"
