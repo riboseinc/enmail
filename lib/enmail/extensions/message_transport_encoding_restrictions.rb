@@ -1,3 +1,6 @@
+# (c) Copyright 2018 Ribose Inc.
+#
+
 module EnMail
   module Extensions
     module MessageTransportEncodingRestrictions

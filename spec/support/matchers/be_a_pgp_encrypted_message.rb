@@ -1,3 +1,6 @@
+# (c) Copyright 2018 Ribose Inc.
+#
+
 # A following PGP matcher calls the GPG executable in a subshell, then
 # parses command output.  This is a poor pattern in general, because output
 # messages may subtly change over GPG evolution, and some maintenance work

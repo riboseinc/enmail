@@ -1,3 +1,6 @@
+# (c) Copyright 2018 Ribose Inc.
+#
+
 require "spec_helper"
 
 RSpec.describe "Signing and encrypting in combined fashion with RNP" do

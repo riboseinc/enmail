@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# (c) Copyright 2018 Ribose Inc.
+#
+
 # Popular combinations of GPG software versions.
 #
 # For v2.2: https://gist.github.com/vt0r/a2f8c0bcb1400131ff51

@@ -1,3 +1,6 @@
+# (c) Copyright 2018 Ribose Inc.
+#
+
 require "spec_helper"
 
 RSpec.describe "Sending without protection (unaltered by EnMail)" do

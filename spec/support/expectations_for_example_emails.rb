@@ -1,3 +1,6 @@
+# (c) Copyright 2018 Ribose Inc.
+#
+
 # No kidding that four lines long methods without any control flow constructs
 # are "too long".  Yes, there are plenty of method calls, and that maxes
 # out Branch score in "Assignment Branch Condition" metrics, but it's all

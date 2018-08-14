@@ -1,3 +1,6 @@
+# (c) Copyright 2018 Ribose Inc.
+#
+
 # The smallest possible JPEG.
 # From: https://github.com/mathiasbynens/small
 SMALLEST_JPEG = (

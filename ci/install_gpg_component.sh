@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 #
 
+# (c) Copyright 2018 Ribose Inc.
+#
+
 ######################
 # ARGUMENTS HANDLING #
 ######################
