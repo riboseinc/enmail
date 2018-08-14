@@ -7,8 +7,8 @@ require "enmail/version"
 Gem::Specification.new do |spec|
   spec.name          = "enmail"
   spec.version       = EnMail::VERSION
-  spec.authors       = ["Ronald Tse"]
-  spec.email         = ["ronald.tse@ribose.com"]
+  spec.authors       = ["Ribose Inc."]
+  spec.email         = ["open.source@ribose.com"]
 
   spec.summary       = "Encrypted Email in Ruby"
   spec.description   = "Encrypted Email in Ruby"
