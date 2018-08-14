@@ -5,7 +5,9 @@ expected_gpg_version = ENV.fetch("EXPECT_GPG_VERSION", nil)
 
 if expected_gpg_version
   gpg_version_info = ::GPGME::Engine.info.detect do |ei|
-    %r"/bin/gpg\d*\Z" =~ ei.file_name
+    # GPG supports that protocol by definition, see:
+    # https://www.gnupg.org/documentation/manuals/gnupg/Invoking-GPG.html
+    ei.protocol == ::GPGME::PROTOCOL_OpenPGP
   end
 
   actual_gpg_version = gpg_version_info.version
