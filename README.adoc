@@ -150,7 +150,7 @@ contribution by all means.
 
 Here are a few technical guidelines to follow:
 
-1.  Open an https://github.com/abunashir/enmail/issues[issue] to discuss
+1.  Open an https://github.com/riboseinc/enmail/issues[issue] to discuss
     a new feature.
 2.  Write tests to support your new feature.
 3.  Make sure the entire test suite passes locally and on CI.
