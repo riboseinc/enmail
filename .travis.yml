@@ -24,7 +24,7 @@ env:
     - LD_LIBRARY_PATH="${BOTAN_PREFIX}/lib:${JSONC_PREFIX}/lib:${RNP_PREFIX}/lib"
     - LD_RUN_PATH="${GPG_PREFIX}/lib"
 
-    - PATH="${GPG_PREFIX}/bin:${PATH}"
+    - PATH="${RNP_PREFIX}/bin:${GPG_PREFIX}/bin:${PATH}"
 
     # Many of these are supported only in few GPG components, hence bunch of
     # harmless warnings typically shows up.
