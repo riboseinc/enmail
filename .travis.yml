@@ -21,6 +21,18 @@ env:
     - RNP_PREFIX="${DEPS_PREFIX}/rnp"
     - GPG_PREFIX="${DEPS_PREFIX}/gpg"
 
+    # Be aware of differences between LD_LIBRARY_PATH and LD_RUN_PATH.
+    # - http://osr507doc.sco.com/en/tools/ccs_linkedit_dynamic_dirsearch.html
+    # - https://www.hpc.dtu.dk/?page_id=1180
+    #
+    # You should be careful when attempting to replicate following in your
+    # setup, because setting LD_LIBRARY_PATH is often a bad idea.  Nevertheless,
+    # it is okay here in Travis, and actually any attempt to change these led me
+    # to linking failures.  Side note: I am not a Linux expert, and you may be
+    # more lucky.
+    #
+    # I'd be happy to get rid of LD_LIBRARY_PATH eventually in some future
+    # pull request.
     - LD_LIBRARY_PATH="${BOTAN_PREFIX}/lib:${JSONC_PREFIX}/lib:${RNP_PREFIX}/lib"
     - LD_RUN_PATH="${GPG_PREFIX}/lib"
 
