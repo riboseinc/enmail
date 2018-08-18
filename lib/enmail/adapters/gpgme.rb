@@ -47,10 +47,14 @@ module EnMail
       end
 
       def build_crypto
-        ::GPGME::Crypto.new(
+        ::GPGME::Crypto.new(default_gpgme_options)
+      end
+
+      def default_gpgme_options
+        {
           armor: true,
           pinentry_mode: ::GPGME::PINENTRY_MODE_LOOPBACK,
-        )
+        }
       end
     end
   end
