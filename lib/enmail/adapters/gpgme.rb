@@ -23,13 +23,25 @@ module EnMail
 
       # TODO return actual digest algorithm name instead of pgp-sha1.
       def compute_signature(text, signer)
-        signature = build_crypto.detach_sign(
-          text,
-          signer: signer,
-          password: options[:key_password],
-        )
+        plain = ::GPGME::Data.new(text)
+        output = ::GPGME::Data.new
+        mode = ::GPGME::SIG_MODE_DETACH
 
-        ["pgp-sha1", signature.to_s]
+        with_ctx(password: options[:key_password]) do |ctx|
+          signer_keys = ::GPGME::Key.find(:secret, signer, :sign)
+          ctx.add_signer(*signer_keys)
+
+          begin
+            ctx.sign(plain, output, mode)
+          rescue ::GPGME::Error::UnusableSecretKey => exc
+            exc.keys = ctx.sign_result.invalid_signers
+            raise exc
+          end
+        end
+
+        output.seek(0)
+
+        ["pgp-sha1", output.to_s]
       end
 
       def encrypt_string(text, recipients)
@@ -48,6 +60,11 @@ module EnMail
 
       def build_crypto
         ::GPGME::Crypto.new(default_gpgme_options)
+      end
+
+      def with_ctx(options, &block)
+        ctx_options = default_gpgme_options.merge(options)
+        ::GPGME::Ctx.new(ctx_options, &block)
       end
 
       def default_gpgme_options
