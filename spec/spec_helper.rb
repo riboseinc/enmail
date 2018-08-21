@@ -13,6 +13,8 @@ require "bundler/setup"
 require "enmail"
 require "pry"
 
+require "rspec/pgp_matchers"
+
 Dir[File.expand_path "support/**/*.rb", __dir__].sort.each { |f| require f }
 
 RSpec.configure do |config|
