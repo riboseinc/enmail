@@ -2,15 +2,13 @@
 #
 
 shared_context "rnp spec helpers" do
-  # This method is an exact copy of one from "gpgme spec helpers" context.
-  # It's okay for now because both RNP and GPGME use the same homedir.
-  # However it will become a problem when we start testing against different
-  # software combinations, in which GPGME availability will not be guaranteed.
-  #
-  # TODO Make it using RNP
+  # TODO This method is an exact copy of one from "gpgme spec helpers" context.
+  # It was quite legitimate some time ago, but now is a good candidate for
+  # refactoring.
   def decrypt_mail(message)
+    gpg_runner = RSpec::PGPMatchers::GPGRunner
     encrypted_message = message.parts[1].body.decoded
-    decrypted_raw_message = GPGME::Crypto.new.decrypt(encrypted_message)
+    decrypted_raw_message, = gpg_runner.run_decrypt(encrypted_message)
     Mail::Part.new(decrypted_raw_message)
   end
 
