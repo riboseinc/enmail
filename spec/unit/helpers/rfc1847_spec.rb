@@ -251,44 +251,77 @@ RSpec.describe EnMail::Helpers::RFC1847 do
 
   describe "#multipart_signed_content_type" do
     subject { adapter.method(:multipart_signed_content_type) }
+    let(:args) { { micalg: "micalg", protocol: "protocol" } }
 
     it "returns a string" do
-      expect(subject.call).to be_a(String)
+      expect(subject.call(args)).to be_a(String)
     end
 
     it "has a MIME type multipart/signed" do
-      retval_segments = subject.call.split(/\s*;\s*/)
+      retval_segments = subject.call(args).split(/\s*;\s*/)
       expect(retval_segments[0]).to eq("multipart/signed")
     end
 
-    it "tells about SHA1 message integrity algorithm" do
-      retval_segments = subject.call.split(/\s*;\s*/)
-      micalg_def = %[micalg="#{custom_micalg}"]
+    it "tells about SHA1 message integrity algorithm given as argument" do
+      # To guarantee it is different from other value defined in helper
+      micalg = "#{custom_micalg}-1"
+      args[:micalg] = micalg
+      retval_segments = subject.call(args).split(/\s*;\s*/)
+      micalg_def = %[micalg="#{micalg}"]
       expect(retval_segments[1..-1]).to include(micalg_def)
     end
 
-    it "tells about PGP protocol" do
-      retval_segments = subject.call.split(/\s*;\s*/)
-      protocol_def = %[protocol="#{custom_sign_protocol}"]
+    it "defaults micalg argument to value returned by " +
+      "#message_integrity_algorithm" do
+      args.delete :micalg
+      retval_segments = subject.call(args).split(/\s*;\s*/)
+      micalg_def = %[micalg="#{adapter.message_integrity_algorithm}"]
+      expect(retval_segments[1..-1]).to include(micalg_def)
+    end
+
+    it "tells about PGP protocol given as argument" do
+      # To guarantee it is different from other value defined in helper
+      sign_protocol = "#{custom_sign_protocol}-1"
+      args[:protocol] = sign_protocol
+      retval_segments = subject.call(args).split(/\s*;\s*/)
+      protocol_def = %[protocol="#{sign_protocol}"]
+      expect(retval_segments[1..-1]).to include(protocol_def)
+    end
+
+    it "defaults protocol argument to value returned by #sign_protocol" do
+      args.delete :protocol
+      retval_segments = subject.call(args).split(/\s*;\s*/)
+      protocol_def = %[protocol="#{adapter.sign_protocol}"]
       expect(retval_segments[1..-1]).to include(protocol_def)
     end
   end
 
   describe "#multipart_encrypted_content_type" do
     subject { adapter.method(:multipart_encrypted_content_type) }
+    let(:args) { { protocol: "protocol" } }
 
     it "returns a string" do
-      expect(subject.call).to be_a(String)
+      expect(subject.call(args)).to be_a(String)
     end
 
     it "has a MIME type multipart/encrypted" do
-      retval_segments = subject.call.split(/\s*;\s*/)
+      retval_segments = subject.call(args).split(/\s*;\s*/)
       expect(retval_segments[0]).to eq("multipart/encrypted")
     end
 
-    it "tells about PGP protocol" do
-      retval_segments = subject.call.split(/\s*;\s*/)
-      protocol_def = %[protocol="#{custom_enc_protocol}"]
+    it "tells about PGP protocol given as argument" do
+      # To guarantee it is different from other value defined in helper
+      encryption_protocol = "#{custom_enc_protocol}-1"
+      args[:protocol] = encryption_protocol
+      retval_segments = subject.call(args).split(/\s*;\s*/)
+      protocol_def = %[protocol="#{encryption_protocol}"]
+      expect(retval_segments[1..-1]).to include(protocol_def)
+    end
+
+    it "defaults protocol argument to value returned by #encryption_protocol" do
+      args.delete :protocol
+      retval_segments = subject.call(args).split(/\s*;\s*/)
+      protocol_def = %[protocol="#{adapter.encryption_protocol}"]
       expect(retval_segments[1..-1]).to include(protocol_def)
     end
   end
