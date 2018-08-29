@@ -21,12 +21,15 @@ module EnMail
 
       private
 
+      # TODO return actual digest algorithm name instead of pgp-sha1.
       def compute_signature(text, signer)
-        build_crypto.detach_sign(
+        signature = build_crypto.detach_sign(
           text,
           signer: signer,
           password: options[:key_password],
         )
+
+        ["pgp-sha1", signature.to_s]
       end
 
       def encrypt_string(text, recipients)
