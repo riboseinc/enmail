@@ -35,9 +35,21 @@ RSpec.describe EnMail::Adapters::RNP, requires: :rnp do
     let(:text) { "Some Text." }
     let(:signer) { "cato.elder@example.test" }
 
-    it "computes a detached signature for given text signed by given user" do
+    it "returns a two element array" do
       retval = subject.(text, signer)
-      expect(retval).to be_a_valid_pgp_signature_of(text).signed_by(signer)
+      expect(retval).to be_an(Array)
+      expect(retval.size).to eq(2)
+    end
+
+    it "computes a detached signature for given text signed by given " +
+      "user, and returns it as 2nd element of the returned array" do
+      retval = subject.(text, signer)
+      expect(retval[1]).to be_a_valid_pgp_signature_of(text).signed_by(signer)
+    end
+
+    it "returns a digest algorithm as 1st element of the returned array" do
+      retval = subject.(text, signer)
+      expect(retval[0]).to match(/\Apgp-[a-z0-9]+\z/)
     end
   end
 

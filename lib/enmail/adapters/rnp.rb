@@ -30,14 +30,17 @@ module EnMail
 
       private
 
+      # TODO return actual digest algorithm name instead of pgp-sha1.
       def compute_signature(text, signer)
         signer_key = find_key_for(signer, need_secret: true)
 
-        rnp.detached_sign(
+        signature = rnp.detached_sign(
           signers: [signer_key],
           input: build_input(text),
           armored: true,
         )
+
+        ["pgp-sha1", signature]
       end
 
       def encrypt_string(text, recipients)
