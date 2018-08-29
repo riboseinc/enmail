@@ -36,12 +36,12 @@ module EnMail
         source_part = body_to_part(message)
         restrict_encoding(source_part)
         signer = find_signer_for(message)
-        signature = compute_signature(source_part.encoded, signer).to_s
+        micalg, signature = compute_signature(source_part.encoded, signer)
         signature_part = build_signature_part(signature)
 
         rewrite_body(
           message,
-          content_type: multipart_signed_content_type,
+          content_type: multipart_signed_content_type(micalg: micalg),
           parts: [source_part, signature_part],
         )
       end
