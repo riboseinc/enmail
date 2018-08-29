@@ -95,11 +95,13 @@ RSpec.describe EnMail::Helpers::RFC1847 do
     let(:msg_part_dbl) { double.as_null_object }
     let(:sig_dbl) { double.as_null_object }
     let(:sig_dummy) { "DUMMY-PGP-SIGNATURE" }
+    let(:mic_dummy) { "pgp-dummy" }
 
     before do
       allow(adapter).to receive(:body_to_part).and_return(msg_part_dbl)
       allow(adapter).to receive(:build_signature_part).and_return(sig_dbl)
-      allow(adapter).to receive(:compute_signature).and_return(sig_dummy)
+      allow(adapter).to receive(:compute_signature).
+        and_return([mic_dummy, sig_dummy])
       allow(adapter).to receive(:restrict_encoding)
     end
 
