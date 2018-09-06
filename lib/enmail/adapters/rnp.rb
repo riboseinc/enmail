@@ -107,7 +107,7 @@ module EnMail
       end
 
       def hash_algorithm
-        "SHA1"
+        "SHA512"
       end
     end
   end
