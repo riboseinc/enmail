@@ -51,10 +51,6 @@ module EnMail
         "application/pgp-encrypted"
       end
 
-      def message_integrity_algorithm
-        "pgp-sha1"
-      end
-
       # As defined in RFC 3156
       def encryption_control_information
         "Version: 1"

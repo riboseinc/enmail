@@ -273,12 +273,9 @@ RSpec.describe EnMail::Helpers::RFC1847 do
       expect(retval_segments[1..-1]).to include(micalg_def)
     end
 
-    it "defaults micalg argument to value returned by " +
-      "#message_integrity_algorithm" do
+    it "requires micalg argument" do
       args.delete :micalg
-      retval_segments = subject.call(args).split(/\s*;\s*/)
-      micalg_def = %[micalg="#{adapter.message_integrity_algorithm}"]
-      expect(retval_segments[1..-1]).to include(micalg_def)
+      expect { subject.call(args) }.to raise_error(ArgumentError)
     end
 
     it "tells about PGP protocol given as argument" do
