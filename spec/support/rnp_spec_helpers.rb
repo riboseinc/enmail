@@ -15,4 +15,8 @@ shared_context "rnp spec helpers" do
   def adapter_class
     ::EnMail::Adapters::RNP
   end
+
+  def default_expected_micalg
+    "pgp-sha1"
+  end
 end
