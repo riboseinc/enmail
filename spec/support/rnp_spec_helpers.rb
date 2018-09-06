@@ -17,6 +17,6 @@ shared_context "rnp spec helpers" do
   end
 
   def default_expected_micalg
-    "pgp-sha1"
+    "pgp-sha512"
   end
 end
