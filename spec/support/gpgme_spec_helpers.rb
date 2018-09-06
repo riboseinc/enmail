@@ -12,4 +12,8 @@ shared_context "gpgme spec helpers" do
   def adapter_class
     ::EnMail::Adapters::GPGME
   end
+
+  def default_expected_micalg
+    "pgp-sha1"
+  end
 end

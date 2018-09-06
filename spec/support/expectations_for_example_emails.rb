@@ -40,10 +40,12 @@ shared_context "expectations for example emails" do
     expect(message.subject).to eq(mail_subject)
   end
 
-  def pgp_signed_part_expectations(message_or_part, expected_signer: mail_from)
+  def pgp_signed_part_expectations(message_or_part, expected_signer: mail_from,
+    expected_micalg: default_expected_micalg)
+
     expect(message_or_part.mime_type).to eq("multipart/signed")
     expect(message_or_part.content_type_parameters).to include(
-      "micalg" => "pgp-sha1",
+      "micalg" => expected_micalg,
       "protocol" => "application/pgp-signature",
     )
     expect(message_or_part.parts.size).to eq(2)
