@@ -47,9 +47,19 @@ RSpec.describe EnMail::Adapters::RNP, requires: :rnp do
       expect(retval[1]).to be_a_valid_pgp_signature_of(text).signed_by(signer)
     end
 
+    it "uses specific algorithm for signature computation" do
+      allow(adapter).to receive(:hash_algorithm).and_return("DUMMYALGO1")
+      expect(adapter.rnp).to receive(:detached_sign).
+        with(hash_including(hash: "DUMMYALGO1"))
+      subject.(text, signer)
+    end
+
     it "returns a digest algorithm as 1st element of the returned array" do
+      allow(adapter).to receive(:hash_algorithm).and_return("DUMMYALGO1")
+      # Would fail otherwise due to unknown algorithm
+      allow(adapter.rnp).to receive(:detached_sign).and_return("PGP-STRING")
       retval = subject.(text, signer)
-      expect(retval[0]).to match(/\Apgp-[a-z0-9]+\z/)
+      expect(retval[0]).to eq("pgp-dummyalgo1")
     end
   end
 
@@ -88,6 +98,13 @@ RSpec.describe EnMail::Adapters::RNP, requires: :rnp do
     it "adds a signature by given user to the encrypted text" do
       retval = subject.(text, signer, recipients)
       expect(retval).to be_a_pgp_encrypted_message.signed_by(signer)
+    end
+
+    it "uses specific algorithm for signature computation" do
+      allow(adapter).to receive(:hash_algorithm).and_return("DUMMYALGO1")
+      expect(adapter.rnp).to receive(:encrypt_and_sign).
+        with(hash_including(hash: "DUMMYALGO1"))
+      subject.(text, signer, recipients)
     end
   end
 end
