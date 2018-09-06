@@ -38,9 +38,10 @@ module EnMail
           signers: [signer_key],
           input: build_input(text),
           armored: true,
+          hash: hash_algorithm,
         )
 
-        ["pgp-sha1", signature]
+        ["pgp-#{hash_algorithm.downcase}", signature]
       end
 
       def encrypt_string(text, recipients)
@@ -64,6 +65,7 @@ module EnMail
           signers: signer_key,
           input: build_input(text),
           armored: true,
+          hash: hash_algorithm,
         )
       end
 
@@ -102,6 +104,10 @@ module EnMail
       def homedir_info
         @homedir_info ||=
           ::Rnp.homedir_info(options[:homedir] || Rnp.default_homedir)
+      end
+
+      def hash_algorithm
+        "SHA1"
       end
     end
   end
