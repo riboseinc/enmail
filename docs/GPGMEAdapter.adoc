@@ -24,3 +24,8 @@ Optional.  Password for signer's key.  Must be a string.
 
 If you want to use home directory in a non-standard location, change it for
 whole GPGME in following way: `GPGME::Engine.home_dir = 'path/to/home_dir'`
+
+== Issue tracker
+
+Bugs, feature requests, and other issues are tracked with `adapter: gpgme`
+label: https://github.com/riboseinc/enmail/issues?q=is%3Aissue+is%3Aopen+label%3A%22adapter%3A+gpgme%22
