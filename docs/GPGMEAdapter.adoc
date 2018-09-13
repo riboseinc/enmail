@@ -1,0 +1,26 @@
+= GPGME Adapter Guide
+
+`GPGME` adapter provides OpenPGP-compliant cryptography via
+https://gnupg.org/software/gpgme/index.html[GnuPG Made Easy] library.
+
+== Dependencies
+
+This adapter requries two additional pieces of software to be installed:
+
+1. GnuPG, version 2.2
+2. `https://rubygems.org/gems/gpgme[gpgme]` gem
+
+== Options
+
+Following adapter-specific options are supported:
+
+`signer`::
+Optional.  User id or e-mail which identifies key which will be used for message
+signing.  By default, first address from mail's From field is used.
+`key_password`::
+Optional.  Password for signer's key.  Must be a string.
+
+== Caveats
+
+If you want to use home directory in a non-standard location, change it for
+whole GPGME in following way: `GPGME::Engine.home_dir = 'path/to/home_dir'`
