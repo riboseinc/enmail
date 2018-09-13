@@ -1,5 +1,6 @@
 = EnMail
 
+ifdef::env-github[]
 image:https://img.shields.io/gem/v/enmail.svg[
 	Gem Version, link="https://rubygems.org/gems/enmail"]
 image:https://img.shields.io/travis/riboseinc/enmail/master.svg[
@@ -8,6 +9,7 @@ image:https://img.shields.io/codecov/c/github/riboseinc/enmail.svg[
 	Test Coverage, link="https://codecov.io/gh/riboseinc/enmail"]
 image:https://img.shields.io/codeclimate/maintainability/riboseinc/enmail.svg[
 	"Code Climate", link="https://codeclimate.com/github/riboseinc/enmail"]
+endif::[]
 
 EnMail (encrypted mail) signs or encrypts correspondence sent via the Ruby
 https://rubygems.org/gems/mail[mail] gem.
