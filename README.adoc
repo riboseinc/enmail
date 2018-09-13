@@ -47,60 +47,14 @@ EnMail.protect :sign_and_encrypt_combined, mail, adapter: adapter
 
 == Adapters
 
-=== RNP
-
-`RNP` adapter provides OpenPGP-compliant cryptography via
-https://www.rnpgp.com/[RNP] library.
-
-==== Dependencies
-
-This adapter requries two additional pieces of software to be installed:
-
-1. RNP library, version 0.9.2 or newer
-2. `https://rubygems.org/gems/rnp[rnp]` gem, version 1.0.1 or newer
-
-==== Options
-
-Following adapter-specific options are supported:
-
-`homedir`::
-Optional.  Path to RNP home directory, which contains public and secret
-keyrings.  In most situations, RNP is able to read GnuPG home directories,
-hence it's common to set it to `<your_home_directory>/.gpg`.  Defaults to
-`<your_home_directory>/.rnp`.
-`signer`::
-Optional.  User id or e-mail which identifies key which will be used for message
-signing.  By default, first address from mail's From field is used.
-`key_password`::
-Optional.  Password for signer's key.  Can be a string or proc, see
-`rnp` gem documentation for `Rnp#password_provider=`.
-
-=== GPGME
-
-`GPGME` adapter provides OpenPGP-compliant cryptography via
-https://gnupg.org/software/gpgme/index.html[GnuPG Made Easy] library.
-
-==== Dependencies
-
-This adapter requries two additional pieces of software to be installed:
-
-1. GnuPG, version 2.2
-2. `https://rubygems.org/gems/gpgme[gpgme]` gem
-
-==== Options
-
-Following adapter-specific options are supported:
-
-`signer`::
-Optional.  User id or e-mail which identifies key which will be used for message
-signing.  By default, first address from mail's From field is used.
-`key_password`::
-Optional.  Password for signer's key.  Must be a string.
-
-==== Caveats
-
-If you want to use home directory in a non-standard location, change it for
-whole GPGME in following way: `GPGME::Engine.home_dir = 'path/to/home_dir'`
+ifdef::env-browser,env-github[]
+* <<docs/GPGMEAdapter.adoc#,GPGME>>
+* <<docs/RNPAdapter.adoc#,RNP>>
+endif::[]
+ifndef::env-browser,env-github[]
+* {file:docs/GPGMEAdapter.adoc}
+* {file:docs/RNPAdapter.adoc}
+endif::[]
 
 == Development
 
