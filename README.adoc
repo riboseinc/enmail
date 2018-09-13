@@ -47,6 +47,22 @@ EnMail.protect :sign_and_encrypt_combined, mail, adapter: adapter
 
 == Adapters
 
+.Adapter features comparison
+[options="header"]
+|=======
+|                    | GPGME    | RNP
+| Protocol           | Open PGP | Open PGP
+| Supporting library | https://gnupg.org/software/gpgme/index.html[GnuPG Made Easy] | https://www.rnpgp.com/[RNP]
+| Native extensions  | yes      | yes, from https://github.com/ffi/ffi[FFI]
+| Sign               | yes      | yes
+| Encrypt            | yes      | yes
+| Sign and encrypt   | yes, encapsulated and combined | yes, encapsulated and combined
+| Password-protected keys | yes, password must be a String | yes, password must be a String or Proc
+| Bugs, issues and feature requests | https://github.com/riboseinc/enmail/issues?q=is%3Aissue+is%3Aopen+label%3A%22adapter%3A+gpgme%22[See GitHub] | https://github.com/riboseinc/enmail/issues?q=is%3Aissue+is%3Aopen+label%3A%22adapter%3A+rnp%22[See GitHub]
+|=======
+
+See adapter-specific guides for details:
+
 ifdef::env-browser,env-github[]
 * <<docs/GPGMEAdapter.adoc#,GPGME>>
 * <<docs/RNPAdapter.adoc#,RNP>>
