@@ -13,7 +13,9 @@ shared_context "gpgme spec helpers" do
     ::EnMail::Adapters::GPGME
   end
 
+  # Actual preference is stored in gpg.conf, which is located in GnuPG home
+  # (+tmp/pgp_home+), and created by Rake task.
   def default_expected_micalg
-    "pgp-sha1"
+    "pgp-sha512"
   end
 end
