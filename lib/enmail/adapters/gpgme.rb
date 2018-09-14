@@ -26,6 +26,7 @@ module EnMail
         plain = ::GPGME::Data.new(text)
         output = ::GPGME::Data.new
         mode = ::GPGME::SIG_MODE_DETACH
+        hash_algorithm = nil
 
         with_ctx(password: options[:key_password]) do |ctx|
           signer_keys = ::GPGME::Key.find(:secret, signer, :sign)
@@ -33,6 +34,8 @@ module EnMail
 
           begin
             ctx.sign(plain, output, mode)
+            hash_algorithm_num = ctx.sign_result.signatures[0].hash_algo
+            hash_algorithm = ::GPGME.hash_algo_name(hash_algorithm_num)
           rescue ::GPGME::Error::UnusableSecretKey => exc
             exc.keys = ctx.sign_result.invalid_signers
             raise exc
@@ -41,7 +44,7 @@ module EnMail
 
         output.seek(0)
 
-        ["pgp-sha1", output.to_s]
+        ["pgp-#{hash_algorithm.downcase}", output.to_s]
       end
 
       def encrypt_string(text, recipients)
