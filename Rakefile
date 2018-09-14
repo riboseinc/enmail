@@ -13,6 +13,9 @@ task :default => :spec
 namespace :pgp_keys do
   def init_homedir_if_missing
     FileUtils.mkdir_p(TMP_PGP_HOME)
+    File.write(File.join(TMP_PGP_HOME, "gpg.conf"), <<~GPGCONF)
+      personal-digest-preferences SHA512
+    GPGCONF
   end
 
   def execute_gpg(*options)
