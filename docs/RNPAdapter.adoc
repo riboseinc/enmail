@@ -26,7 +26,20 @@ signing.  By default, first address from mail's From field is used.
 Optional.  Password for signer's key.  Can be a string or proc, see
 `rnp` gem documentation for `Rnp#password_provider=`.
 
+== Native extensions
+
+The `rnp` gem depends on `https://github.com/ffi/ffi[ffi]` gem, which includes
+native extensions.
+
 == Issue tracker
 
 Bugs, feature requests, and other issues are tracked with `adapter: rnp`
 label: https://github.com/riboseinc/enmail/issues?q=is%3Aissue+is%3Aopen+label%3A%22adapter%3A+rnp%22
+
+== External links
+
+* https://tools.ietf.org/html/rfc1847[RFC 1847 "Security Multiparts for MIME"]
+* https://tools.ietf.org/html/rfc3156[RFC 3156 "MIME Security with OpenPGP"]
+* https://www.rnpgp.com[RNP library home site]
+* https://github.com/riboseinc/rnp[RNP library on GitHub]
+* https://github.com/riboseinc/ruby-rnp[Ruby bindings for RNP library]
