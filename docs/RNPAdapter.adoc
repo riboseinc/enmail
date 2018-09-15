@@ -1,3 +1,6 @@
+<!--
+# @title Adapter Guide: RNP
+-->
 = RNP Adapter Guide
 
 `RNP` adapter provides OpenPGP-compliant cryptography via

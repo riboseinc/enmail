@@ -1,3 +1,6 @@
+<!--
+# @title Adapter Guide: GPGME
+-->
 = GPGME Adapter Guide
 
 `GPGME` adapter provides OpenPGP-compliant cryptography via
