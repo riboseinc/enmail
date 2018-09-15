@@ -20,12 +20,49 @@ signing.  By default, first address from mail's From field is used.
 `key_password`::
 Optional.  Password for signer's key.  Must be a string.
 
-== Caveats
+== Non-standard home directory location
 
-If you want to use home directory in a non-standard location, change it for
-whole GPGME in following way: `GPGME::Engine.home_dir = 'path/to/home_dir'`
+GnuPG home directory is a place where configuration, keyrings, etc. are stored.
+By default, GnuPG home directory is located in `$HOME/.gnupg`.  You can change
+it in a following way:
+
+[source,ruby]
+----
+::GPGME::Engine.home_dir = 'path/to/home_dir'
+----
+
+Be advised that this setting is global.  Hence, if you use GPGME outside EnMail
+as well, your other logic will be affected.  One possible workaround is to sign
+e-mails in a different process.  This should be fairly easy to achieve in Rails,
+as mailing is often handed to some kind of background job processor which runs
+in its own process.  Nevertheless, consider switching to RNP adapter if this
+limitation poses a problem.
+
+== Using `gpg.conf`
+
+GPGME API accepts little configuration options.  Instead, it reads preferences
+from a `gpg.conf` file located in GnuPG home directory (usually `$HOME/.gnupg`).
+You may override defaults there, i.e. set preferred keys or algorithms.
+Refer to GnuPG documentation for
+https://www.gnupg.org/documentation/manuals/gnupg/GPG-Configuration.html[more
+information about configuration files], or for
+https://www.gnupg.org/documentation/manuals/gnupg/GPG-Options.html[list of
+available options].  Also, you will find some nice example `gpg.conf` in this
+https://stackoverflow.com/a/34923350/304175[Stack Overflow answer].
+
+== Native extensions
+
+The `gpgme` gem includes C extensions.
 
 == Issue tracker
 
 Bugs, feature requests, and other issues are tracked with `adapter: gpgme`
 label: https://github.com/riboseinc/enmail/issues?q=is%3Aissue+is%3Aopen+label%3A%22adapter%3A+gpgme%22
+
+== External links
+
+* https://tools.ietf.org/html/rfc1847[RFC 1847 "Security Multiparts for MIME"]
+* https://tools.ietf.org/html/rfc3156[RFC 3156 "MIME Security with OpenPGP"]
+* https://gnupg.org[GNU Privacy Guard home site]
+* https://gnupg.org/software/gpgme/index.html[GPGME (GnuPG Made Easy) library home site]
+* https://github.com/ueno/ruby-gpgme[Ruby bindings for GPGME library]
