@@ -37,6 +37,7 @@ module EnMail
             hash_algorithm_num = ctx.sign_result.signatures[0].hash_algo
             hash_algorithm = ::GPGME.hash_algo_name(hash_algorithm_num)
           rescue ::GPGME::Error::UnusableSecretKey => exc
+            # TODO Copy-pasted from GPGME gem.  Needs any test coverage.
             exc.keys = ctx.sign_result.invalid_signers
             raise exc
           end
