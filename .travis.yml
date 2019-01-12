@@ -78,10 +78,8 @@ script:
 
 matrix:
   include:
-    - rvm: "2.6"
-      env: TEST_WITHOUT_RNP="1"
-    - rvm: "2.6"
-      env: TEST_WITHOUT_GPGME="1"
+    - env: TEST_WITHOUT_RNP="1"
+    - env: TEST_WITHOUT_GPGME="1"
 
   allow_failures:
     - rvm: ruby-head
