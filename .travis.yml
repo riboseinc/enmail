@@ -74,7 +74,7 @@ before_script:
   - bundle exec rake pgp_keys:list
 
 script:
-  - bundle exec rspec --format documentation
+  - bundle exec rspec --format documentation --profile 200
 
 matrix:
   include:
