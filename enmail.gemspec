@@ -26,6 +26,11 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
+  # There is no reason for 2.6.4 to be a minimum supported version of Mail,
+  # except for that this gem was never tested against older versions.
+  # Mail 2.6.4 has been released on March 23, 2016, hence should be considered
+  # old enough.  Nevertheless, pull requests which extend compatibility will be
+  # accepted.
   spec.add_dependency "mail", "~> 2.6.4"
 
   spec.add_development_dependency "bundler", ">= 1.14", "< 3.0"
