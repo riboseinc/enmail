@@ -21,7 +21,6 @@ module EnMail
 
       private
 
-      # TODO return actual digest algorithm name instead of pgp-sha1.
       def compute_signature(text, signer)
         plain = ::GPGME::Data.new(text)
         output = ::GPGME::Data.new

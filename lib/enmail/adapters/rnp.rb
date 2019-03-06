@@ -30,7 +30,6 @@ module EnMail
 
       private
 
-      # TODO return actual digest algorithm name instead of pgp-sha1.
       def compute_signature(text, signer)
         signer_key = find_key_for(signer, need_secret: true)
 
