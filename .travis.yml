@@ -7,7 +7,6 @@ rvm:
   - 2.5
   - 2.4
   - 2.3
-  - truffleruby
   - ruby-head
 
 env:
@@ -81,6 +80,8 @@ matrix:
   include:
     - env: TEST_WITHOUT_RNP="1"
     - env: TEST_WITHOUT_GPGME="1"
+    - rvm: truffleruby
+      env: TEST_WITHOUT_GPGME="1"
     - rvm: jruby
       env: TEST_WITHOUT_GPGME="1"
 
