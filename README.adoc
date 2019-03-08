@@ -30,19 +30,17 @@ mail.to = "Someone Else <someone@example.com>"
 mail.subject = "It is very important"
 mail.body = "Or, whatever"
 
-adapter = ::EnMail::Adapters::RNP
-
 # sign message
-EnMail.protect :sign, mail, adapter: adapter
+EnMail.protect :sign, mail, adapter: :rnp
 
 # encrypt message
-EnMail.protect :encrypt, mail, adapter: adapter
+EnMail.protect :encrypt, mail, adapter: :rnp
 
 # sign and encrypt message
-EnMail.protect :sign_and_encrypt_encapsulated, mail, adapter: adapter
+EnMail.protect :sign_and_encrypt_encapsulated, mail, adapter: :rnp
 
 # or
-EnMail.protect :sign_and_encrypt_combined, mail, adapter: adapter
+EnMail.protect :sign_and_encrypt_combined, mail, adapter: :rnp
 ----
 
 == Adapters

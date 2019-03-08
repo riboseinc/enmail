@@ -20,7 +20,8 @@ module EnMail
   module_function
 
   def protect(mode, message, adapter:, **options)
-    adapter_obj = adapter.new(options)
+    adapter_class = Adapters::Base.resolve_adapter_name(adapter)
+    adapter_obj = adapter_class.new(options)
     adapter_obj.public_send mode, message
   end
 end
