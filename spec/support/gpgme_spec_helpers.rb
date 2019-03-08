@@ -9,8 +9,8 @@ shared_context "gpgme spec helpers" do
     Mail::Part.new(decrypted_raw_message)
   end
 
-  def adapter_class
-    ::EnMail::Adapters::GPGME
+  def adapter_name
+    :gpgme
   end
 
   # Actual preference is stored in gpg.conf, which is located in GnuPG home

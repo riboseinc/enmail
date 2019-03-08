@@ -13,7 +13,7 @@ RSpec.describe "Signing and encrypting in encapsulated fashion with GPGME",
   specify "a non-multipart text-only message" do
     mail = simple_mail
 
-    EnMail.protect :sign_and_encrypt_encapsulated, mail, adapter: adapter_class
+    EnMail.protect :sign_and_encrypt_encapsulated, mail, adapter: adapter_name
     mail.deliver
     common_message_expectations(mail)
     pgp_encrypted_part_expectations(mail)
@@ -26,7 +26,7 @@ RSpec.describe "Signing and encrypting in encapsulated fashion with GPGME",
   specify "a non-multipart HTML message" do
     mail = simple_html_mail
 
-    EnMail.protect :sign_and_encrypt_encapsulated, mail, adapter: adapter_class
+    EnMail.protect :sign_and_encrypt_encapsulated, mail, adapter: adapter_name
     mail.deliver
     common_message_expectations(mail)
     pgp_encrypted_part_expectations(mail)
@@ -39,7 +39,7 @@ RSpec.describe "Signing and encrypting in encapsulated fashion with GPGME",
   specify "a multipart text+HTML message" do
     mail = text_html_mail
 
-    EnMail.protect :sign_and_encrypt_encapsulated, mail, adapter: adapter_class
+    EnMail.protect :sign_and_encrypt_encapsulated, mail, adapter: adapter_name
     mail.deliver
     common_message_expectations(mail)
     pgp_encrypted_part_expectations(mail)
@@ -53,7 +53,7 @@ RSpec.describe "Signing and encrypting in encapsulated fashion with GPGME",
   specify "a multipart message with binary attachments" do
     mail = text_jpeg_mail
 
-    EnMail.protect :sign_and_encrypt_encapsulated, mail, adapter: adapter_class
+    EnMail.protect :sign_and_encrypt_encapsulated, mail, adapter: adapter_name
     mail.deliver
     common_message_expectations(mail)
     pgp_encrypted_part_expectations(mail)
@@ -68,7 +68,7 @@ RSpec.describe "Signing and encrypting in encapsulated fashion with GPGME",
     mail = simple_mail
     signer = "whatever@example.test"
 
-    EnMail.protect :sign_and_encrypt_encapsulated, mail, adapter: adapter_class,
+    EnMail.protect :sign_and_encrypt_encapsulated, mail, adapter: adapter_name,
                                                          signer: signer
     mail.deliver
     common_message_expectations(mail)
@@ -82,7 +82,7 @@ RSpec.describe "Signing and encrypting in encapsulated fashion with GPGME",
     mail = simple_mail
     signer = "cato.elder+pwd@example.test"
 
-    EnMail.protect :sign_and_encrypt_encapsulated, mail, adapter: adapter_class,
+    EnMail.protect :sign_and_encrypt_encapsulated, mail, adapter: adapter_name,
                                                          signer: signer,
                                                          key_password: "1234"
     mail.deliver

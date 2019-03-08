@@ -13,7 +13,7 @@ RSpec.describe "Signing and encrypting in combined fashion with RNP",
   specify "a non-multipart text-only message" do
     mail = simple_mail
 
-    EnMail.protect :sign_and_encrypt_combined, mail, adapter: adapter_class
+    EnMail.protect :sign_and_encrypt_combined, mail, adapter: adapter_name
     mail.deliver
     common_message_expectations(mail)
     pgp_signed_and_encrypted_part_expectations(mail)
@@ -25,7 +25,7 @@ RSpec.describe "Signing and encrypting in combined fashion with RNP",
   specify "a non-multipart HTML message" do
     mail = simple_html_mail
 
-    EnMail.protect :sign_and_encrypt_combined, mail, adapter: adapter_class
+    EnMail.protect :sign_and_encrypt_combined, mail, adapter: adapter_name
     mail.deliver
     common_message_expectations(mail)
     pgp_signed_and_encrypted_part_expectations(mail)
@@ -37,7 +37,7 @@ RSpec.describe "Signing and encrypting in combined fashion with RNP",
   specify "a multipart text+HTML message" do
     mail = text_html_mail
 
-    EnMail.protect :sign_and_encrypt_combined, mail, adapter: adapter_class
+    EnMail.protect :sign_and_encrypt_combined, mail, adapter: adapter_name
     mail.deliver
     common_message_expectations(mail)
     pgp_signed_and_encrypted_part_expectations(mail)
@@ -50,7 +50,7 @@ RSpec.describe "Signing and encrypting in combined fashion with RNP",
   specify "a multipart message with binary attachments" do
     mail = text_jpeg_mail
 
-    EnMail.protect :sign_and_encrypt_combined, mail, adapter: adapter_class
+    EnMail.protect :sign_and_encrypt_combined, mail, adapter: adapter_name
     mail.deliver
     common_message_expectations(mail)
     pgp_signed_and_encrypted_part_expectations(mail)
@@ -64,7 +64,7 @@ RSpec.describe "Signing and encrypting in combined fashion with RNP",
     mail = simple_mail
     signer = "whatever@example.test"
 
-    EnMail.protect :sign_and_encrypt_combined, mail, adapter: adapter_class,
+    EnMail.protect :sign_and_encrypt_combined, mail, adapter: adapter_name,
                                                      signer: signer
     mail.deliver
     common_message_expectations(mail)
@@ -77,7 +77,7 @@ RSpec.describe "Signing and encrypting in combined fashion with RNP",
     mail = simple_mail
     signer = "cato.elder+pwd@example.test"
 
-    EnMail.protect :sign_and_encrypt_combined, mail, adapter: adapter_class,
+    EnMail.protect :sign_and_encrypt_combined, mail, adapter: adapter_name,
                                                      signer: signer,
                                                      key_password: "1234"
     mail.deliver

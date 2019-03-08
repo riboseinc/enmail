@@ -12,8 +12,8 @@ shared_context "rnp spec helpers" do
     Mail::Part.new(decrypted_raw_message)
   end
 
-  def adapter_class
-    ::EnMail::Adapters::RNP
+  def adapter_name
+    :rnp
   end
 
   def default_expected_micalg

@@ -11,7 +11,7 @@ RSpec.describe "Encrypting with GPGME", requires: :gpgme do
   specify "a non-multipart text-only message" do
     mail = simple_mail
 
-    EnMail.protect :encrypt, mail, adapter: adapter_class
+    EnMail.protect :encrypt, mail, adapter: adapter_name
     mail.deliver
     common_message_expectations(mail)
     pgp_encrypted_part_expectations(mail)
@@ -21,7 +21,7 @@ RSpec.describe "Encrypting with GPGME", requires: :gpgme do
   specify "a non-multipart HTML message" do
     mail = simple_html_mail
 
-    EnMail.protect :encrypt, mail, adapter: adapter_class
+    EnMail.protect :encrypt, mail, adapter: adapter_name
     mail.deliver
     common_message_expectations(mail)
     pgp_encrypted_part_expectations(mail)
@@ -31,7 +31,7 @@ RSpec.describe "Encrypting with GPGME", requires: :gpgme do
   specify "a multipart text+HTML message" do
     mail = text_html_mail
 
-    EnMail.protect :encrypt, mail, adapter: adapter_class
+    EnMail.protect :encrypt, mail, adapter: adapter_name
     mail.deliver
     common_message_expectations(mail)
     pgp_encrypted_part_expectations(mail)
@@ -41,7 +41,7 @@ RSpec.describe "Encrypting with GPGME", requires: :gpgme do
   specify "a multipart message with binary attachments" do
     mail = text_jpeg_mail
 
-    EnMail.protect :encrypt, mail, adapter: adapter_class
+    EnMail.protect :encrypt, mail, adapter: adapter_name
     mail.deliver
     common_message_expectations(mail)
     pgp_encrypted_part_expectations(mail)

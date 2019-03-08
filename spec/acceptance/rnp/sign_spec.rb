@@ -11,7 +11,7 @@ RSpec.describe "Signing with RNP", requires: :rnp do
   specify "a non-multipart text-only message" do
     mail = simple_mail
 
-    EnMail.protect :sign, mail, adapter: adapter_class
+    EnMail.protect :sign, mail, adapter: adapter_name
     mail.deliver
     common_message_expectations(mail)
     pgp_signed_part_expectations(mail)
@@ -22,7 +22,7 @@ RSpec.describe "Signing with RNP", requires: :rnp do
   specify "a non-multipart HTML message" do
     mail = simple_html_mail
 
-    EnMail.protect :sign, mail, adapter: adapter_class
+    EnMail.protect :sign, mail, adapter: adapter_name
     mail.deliver
     common_message_expectations(mail)
     pgp_signed_part_expectations(mail)
@@ -33,7 +33,7 @@ RSpec.describe "Signing with RNP", requires: :rnp do
   specify "a multipart text+HTML message" do
     mail = text_html_mail
 
-    EnMail.protect :sign, mail, adapter: adapter_class
+    EnMail.protect :sign, mail, adapter: adapter_name
     mail.deliver
     common_message_expectations(mail)
     pgp_signed_part_expectations(mail)
@@ -45,7 +45,7 @@ RSpec.describe "Signing with RNP", requires: :rnp do
   specify "a multipart message with binary attachments" do
     mail = text_jpeg_mail
 
-    EnMail.protect :sign, mail, adapter: adapter_class
+    EnMail.protect :sign, mail, adapter: adapter_name
     mail.deliver
     common_message_expectations(mail)
     pgp_signed_part_expectations(mail)
@@ -58,7 +58,7 @@ RSpec.describe "Signing with RNP", requires: :rnp do
     mail = simple_mail
     signer = "whatever@example.test"
 
-    EnMail.protect :sign, mail, adapter: adapter_class, signer: signer
+    EnMail.protect :sign, mail, adapter: adapter_name, signer: signer
     mail.deliver
     common_message_expectations(mail)
     pgp_signed_part_expectations(mail, expected_signer: signer)
@@ -69,7 +69,7 @@ RSpec.describe "Signing with RNP", requires: :rnp do
     mail = simple_mail
     signer = "cato.elder+pwd@example.test"
 
-    EnMail.protect :sign, mail, adapter: adapter_class, signer: signer,
+    EnMail.protect :sign, mail, adapter: adapter_name, signer: signer,
                                 key_password: "1234"
     mail.deliver
     common_message_expectations(mail)
