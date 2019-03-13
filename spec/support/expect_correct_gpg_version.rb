@@ -4,6 +4,8 @@
 expected_gpg_version = ENV.fetch("EXPECT_GPG_VERSION", nil)
 
 if expected_gpg_version && ENV.fetch("TEST_WITHOUT_GPGME", nil).nil?
+  require "gpgme"
+
   gpg_version_info = ::GPGME::Engine.info.detect do |ei|
     # GPG supports that protocol by definition, see:
     # https://www.gnupg.org/documentation/manuals/gnupg/Invoking-GPG.html
