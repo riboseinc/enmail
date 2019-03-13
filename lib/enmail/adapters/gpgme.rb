@@ -1,11 +1,6 @@
 # (c) Copyright 2018 Ribose Inc.
 #
 
-begin
-  require "gpgme"
-rescue LoadError
-end
-
 module EnMail
   module Adapters
     # Secures e-mails according to {RFC 3156 "MIME Security with OpenPGP"}[
@@ -18,6 +13,11 @@ module EnMail
       include Helpers::MessageManipulation
       include Helpers::RFC1847
       include Helpers::RFC3156
+
+      def initialize(*args)
+        require_relative "gpgme_requirements"
+        super
+      end
 
       private
 

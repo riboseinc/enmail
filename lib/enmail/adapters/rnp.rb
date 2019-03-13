@@ -1,11 +1,6 @@
 # (c) Copyright 2018 Ribose Inc.
 #
 
-begin
-  require "rnp"
-rescue LoadError
-end
-
 module EnMail
   module Adapters
     # Secures e-mails according to {RFC 3156 "MIME Security with OpenPGP"}[
@@ -24,6 +19,7 @@ module EnMail
       attr_reader :rnp
 
       def initialize(*args)
+        require_relative "rnp_requirements"
         super
         @rnp = build_rnp_and_load_keys
       end
