@@ -57,12 +57,14 @@ env:
 
 before_install:
   - mkdir -p ${DEPS_PREFIX}
-  - pushd ci
+  - pushd ci/gpg
   - >
     ./install_gpg_all.sh "${GPG_VERSION}"
     --build-dir "${DEPS_BUILD_DIR}/gpg"
     --configure-opts "${GPG_CONFIGURE_OPTS}"
     --folding-style travis
+  - popd
+  - pushd ci
   - ./install_botan.sh
   - ./install_json_c.sh
   - ./install_rnp.sh
