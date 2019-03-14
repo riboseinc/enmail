@@ -111,6 +111,13 @@ bundle exec rake pgp_keys:regenerate
 NOTE: Always run tests after pulling new changes from the upstream.  If they
 fail, it's likely that OpenPGP keys should be regenerated.
 
+=== Submodules
+
+GnuPG is installed in Travis CI via scripts maintained in a sister repository
+https://github.com/riboseinc/gpg-build-scripts[riboseinc/gpg-build-scripts],
+and included here as a Git submodule.  Learn more about submodules from
+https://blog.github.com/2016-02-01-working-with-submodules/[The GitHub Blog].
+
 === Contributing
 
 First, thank you for contributing! We love pull requests from everyone.
