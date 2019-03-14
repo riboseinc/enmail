@@ -1,0 +1,3 @@
+[submodule "ci/gpg"]
+	path = ci/gpg
+	url = https://github.com/riboseinc/gpg-build-scripts.git
