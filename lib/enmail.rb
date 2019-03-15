@@ -4,6 +4,7 @@
 require "mail"
 
 require "enmail/version"
+require "enmail/dependency_constraints"
 
 require "enmail/helpers/message_manipulation"
 require "enmail/helpers/rfc1847"
