@@ -30,8 +30,11 @@ mail.to = "Someone Else <someone@example.com>"
 mail.subject = "It is very important"
 mail.body = "Or, whatever"
 
-# sign message
+# sign message with RNP
 EnMail.protect :sign, mail, adapter: :rnp
+
+# or, with GPGME
+EnMail.protect :sign, mail, adapter: :gpgme
 
 # encrypt message
 EnMail.protect :encrypt, mail, adapter: :rnp
@@ -56,6 +59,7 @@ EnMail.protect :sign_and_encrypt_combined, mail, adapter: :rnp
 | Encrypt            | yes      | yes
 | Sign and encrypt   | yes, encapsulated and combined | yes, encapsulated and combined
 | Password-protected keys | yes, password must be a String | yes, password must be a String or Proc
+| Adapter symbol     | `:gpgme` | `:rnp`
 | Bugs, issues and feature requests | https://github.com/riboseinc/enmail/issues?q=is%3Aissue+is%3Aopen+label%3A%22adapter%3A+gpgme%22[See GitHub] | https://github.com/riboseinc/enmail/issues?q=is%3Aissue+is%3Aopen+label%3A%22adapter%3A+rnp%22[See GitHub]
 |=======
 
@@ -69,6 +73,32 @@ ifndef::env-browser,env-github[]
 * {file:docs/GPGMEAdapter.adoc}
 * {file:docs/RNPAdapter.adoc}
 endif::[]
+
+=== Specifying adapter to be used
+
+The `EnMail#protect` method requires specifying a cryptography adapter via
+`:adapter` keyword argument.  It can be a class (e.g. `EnMail::Adapters::RNP`),
+or a symbol which represents one of the stock adapters (`:rnp`, `:gpgme`).
+
+[source,ruby]
+----
+mail = build_some_email
+
+# following two are equivalent
+EnMail.protect :sign, mail, adapter: :rnp
+EnMail.protect :sign, mail, adapter: EnMail::Adapters::RNP
+
+# a custom adapter class may be defined
+class MyRNPAdapter < EnMail::Adapters::RNP
+  def sign(message)
+    puts "I am signing!"
+    super
+  end
+end
+
+# will print "I am signing!" just before signing
+EnMail.protect :sign, mail, adapter: MyRNPAdapter
+----
 
 == Development
 
