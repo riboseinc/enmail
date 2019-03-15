@@ -3,8 +3,8 @@
 
 module EnMail
   module Adapters
-    # Secures e-mails according to {RFC 3156 "MIME Security with OpenPGP"}[
-    # https://tools.ietf.org/html/rfc3156].
+    # Secures e-mails according to {RFC 3156 "MIME Security with
+    # OpenPGP"}[https://tools.ietf.org/html/rfc3156].
     #
     # This adapter uses {RNP}[https://github.com/riboseinc/rnp] library via
     # {ruby-rnp gem}[https://github.com/riboseinc/ruby-rnp].

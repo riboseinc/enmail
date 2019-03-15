@@ -3,12 +3,12 @@
 
 module EnMail
   module Adapters
-    # Secures e-mails according to {RFC 3156 "MIME Security with OpenPGP"}[
-    # https://tools.ietf.org/html/rfc3156].
+    # Secures e-mails according to {RFC 3156 "MIME Security with
+    # OpenPGP"}[https://tools.ietf.org/html/rfc3156].
     #
-    # This adapter uses {GnuPG Made Easy (GPGME)}[
-    # https://www.gnupg.org/software/gpgme/index.html] library via interface
-    # provided by {gpgme gem}[https://github.com/ueno/ruby-gpgme].
+    # This adapter uses {GnuPG Made Easy
+    # (GPGME)}[https://www.gnupg.org/software/gpgme/index.html] library via
+    # interface provided by {gpgme gem}[https://github.com/ueno/ruby-gpgme].
     class GPGME < Base
       include Helpers::MessageManipulation
       include Helpers::RFC1847
