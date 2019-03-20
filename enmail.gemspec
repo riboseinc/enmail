@@ -33,6 +33,7 @@ Gem::Specification.new do |spec|
   # old enough.  Nevertheless, pull requests which extend compatibility will be
   # accepted.
   spec.add_dependency "mail", "~> 2.6.4"
+  spec.add_dependency "zeitwerk", "~> 1.0"
 
   spec.add_development_dependency "bundler", ">= 1.14", "< 3.0"
   spec.add_development_dependency "gpgme", *EnMail::DependencyConstraints::GPGME

@@ -1,20 +1,25 @@
 # (c) Copyright 2018 Ribose Inc.
 #
 
+require "zeitwerk"
+
+loader_inflector = Zeitwerk::Inflector.new
+
+def loader_inflector.camelize(basename, _abspath)
+  case basename
+  when "enmail" then "EnMail"
+  when "rnp", "gpgme", /^rfc\d/ then basename.upcase
+  else super
+  end
+end
+
+loader = Zeitwerk::Loader.for_gem
+loader.inflector = loader_inflector
+# Ignore files which serve for loading optional dependencies.
+loader.ignore("#{__dir__}/enmail/adapters/*_requirements.rb")
+loader.setup # ready!
+
 require "mail"
-
-require "enmail/version"
-require "enmail/dependency_constraints"
-
-require "enmail/helpers/message_manipulation"
-require "enmail/helpers/rfc1847"
-require "enmail/helpers/rfc3156"
-
-require "enmail/adapters/base"
-require "enmail/adapters/gpgme"
-require "enmail/adapters/rnp"
-
-require "enmail/extensions/message_transport_encoding_restrictions"
 
 module EnMail
   module_function
