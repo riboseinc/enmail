@@ -7,7 +7,7 @@ https://gnupg.org/software/gpgme/index.html[GnuPG Made Easy] library.
 
 This adapter requries two additional pieces of software to be installed:
 
-1. GnuPG, version 2.2
+1. GnuPG, version 2.1 or newer
 2. `https://rubygems.org/gems/gpgme[gpgme]` gem
 
 == Options
