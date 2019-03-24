@@ -60,11 +60,17 @@ namespace :pgp_keys do
 
   desc "Generates keys in tmp/pgp_home"
   task :generate => :prepare do
+    # NOTE:
+    # - "cert" flag is implicit in "Key-Usage".  It is harmless to specify
+    #   it in GnuPG 2.2, but it is not recognized in 2.1.
+    # - For keys which are not password-protected, "%no-protection" is required
+    #   in GnuPG 2.2, whereas it is ignored (with a warning) in 2.1.
+
     # Key pairs without password
     generate_pgp_keys(<<~KEY_PARAMS)
       %no-protection
       Key-Type: RSA
-      Key-Usage: sign, cert
+      Key-Usage: sign
       Key-Length: 2048
       Subkey-Type: RSA
       Subkey-Length: 2048
@@ -78,7 +84,7 @@ namespace :pgp_keys do
     generate_pgp_keys(<<~KEY_PARAMS)
       %no-protection
       Key-Type: RSA
-      Key-Usage: sign, cert
+      Key-Usage: sign
       Key-Length: 2048
       Subkey-Type: RSA
       Subkey-Length: 2048
@@ -92,7 +98,7 @@ namespace :pgp_keys do
     generate_pgp_keys(<<~KEY_PARAMS)
       %no-protection
       Key-Type: RSA
-      Key-Usage: sign, cert
+      Key-Usage: sign
       Key-Length: 2048
       Subkey-Type: RSA
       Subkey-Length: 2048
@@ -106,7 +112,7 @@ namespace :pgp_keys do
     # Password-protected key pairs
     generate_pgp_keys(<<~KEY_PARAMS)
       Key-Type: RSA
-      Key-Usage: sign, cert
+      Key-Usage: sign
       Key-Length: 2048
       Subkey-Type: RSA
       Subkey-Length: 2048
