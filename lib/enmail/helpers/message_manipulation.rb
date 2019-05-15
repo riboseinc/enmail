@@ -25,11 +25,21 @@ module EnMail
         part = ::Mail::Part.new
         part.content_type = message.content_type
         if message.multipart?
-          message.body.parts.each { |p| part.add_part p.dup }
+          message.body.parts.each { |p| part.add_part duplicate_part(p) }
         else
           part.body = message.body.decoded
         end
         part
+      end
+
+      # Duplicates a message part, preserving its Content-ID if present.
+      #
+      # @param [Mail::Part] part message part
+      # @return [Mail::Part] duplicate of +part+
+      def duplicate_part(part)
+        duplicate = part.dup
+        duplicate.add_content_id(part.content_id) unless part.content_id.nil?
+        duplicate
       end
 
       # Detects a list of e-mails which should be used to define a list of
