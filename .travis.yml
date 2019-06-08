@@ -85,6 +85,10 @@ matrix:
     - env: TEST_WITHOUT_GPGME="1"
     # Test against older GPG versions
     - env: GPG_VERSION="2.1" EXPECT_GPG_VERSION="2.1"
+    - gemfile: "ci/Mail-2.6.4.gemfile"
+    - gemfile: "ci/Mail-2.6.gemfile"
+    - gemfile: "ci/Mail-head.gemfile"
 
   allow_failures:
     - rvm: ruby-head
+    - gemfile: "ci/Mail-head.gemfile"

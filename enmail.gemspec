@@ -32,7 +32,11 @@ Gem::Specification.new do |spec|
   # Mail 2.6.4 has been released on March 23, 2016, hence should be considered
   # old enough.  Nevertheless, pull requests which extend compatibility will be
   # accepted.
-  spec.add_dependency "mail", "~> 2.6.4"
+  #
+  # Version 2.7.0 has been blacklisted due to some bug (not sure which one
+  # exactly) in that version, which is fatal for EnMail.  That bug has been
+  # fixed in 2.7.1.
+  spec.add_dependency "mail", "~> 2.6", ">= 2.6.4", "!= 2.7.0"
 
   spec.add_development_dependency "bundler", ">= 1.14", "< 3.0"
   spec.add_development_dependency "gpgme", *EnMail::DependencyConstraints::GPGME
