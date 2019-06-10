@@ -1,3 +1,3 @@
-[submodule "ci/gpg"]
-	path = ci/gpg
+[submodule "ci/helpers/installers/gpg"]
+	path = ci/helpers/installers/gpg
 	url = https://github.com/riboseinc/gpg-build-scripts.git
