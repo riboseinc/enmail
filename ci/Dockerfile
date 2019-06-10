@@ -33,21 +33,22 @@ SHELL ["/bin/bash", "-l", "-c"]
 ENV HOME="/home/testrunner"
 
 ###   ARGS   ###
+# Using specific commit, because I want to workaround the problem on master.
+ARG GIT_REF="ba19bd3241f147944ef430bdf178775e318524b8"
 ARG RUBY_VERSION="2.6"
 
 ENV BUILD_DIR="${HOME}/enmail"
 
-RUN mkdir -p ${BUILD_DIR}
-COPY . ${BUILD_DIR}
-WORKDIR ${BUILD_DIR}
+RUN git clone https://github.com/riboseinc/enmail.git ${BUILD_DIR}
 
+WORKDIR ${BUILD_DIR}
+RUN git checkout ${GIT_REF}
 RUN rvm use ${RUBY_VERSION} --install --fuzzy --ruby-version
 RUN gem install bundler -v "~> 2.0"
 
-#ENV BUNDLE_GEMFILE=$PWD/ci/Mail
 RUN bundle install
 
 # Generate OpenPGP test keys
 RUN bundle exec rake pgp_keys:generate pgp_keys:list
 
-CMD bundle exec rspec --format documentation --profile 200
+CMD bundle exec rspec --format documentation --backtrace

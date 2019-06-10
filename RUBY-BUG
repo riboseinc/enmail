@@ -1,0 +1,74 @@
+# Possible race conditions in Ruby's Open3.
+
+## Background
+
+I am developing EnMail gem, which adds encryption to a popular Mail gem.
+In tests, GnuPG process is spawned in order to verify that e-mail message has
+been signed or encrypted properly.  Data is passed to and received from GnuPG
+process via standard input, output and error.  Precisely, it is achieved by
+calling Open3#capture3 from RSpec matchers contained in a side project
+RSpec::PGPMatchers: https://github.com/riboseinc/rspec-pgp_matchers/blob/e4ddf56b53f1c1d7fbfba6c694ee9c56049e7f63/lib/rspec/pgp_matchers/gpg_runner.rb#L11-L22.
+
+Unfortunately, these matchers fail randomly with exception
+"Errno::EBADF: Bad file descriptor - dup2".
+
+## Details
+
+
+
+
+## What does EBADF mean
+
+From GNU C library manual:
+
+--------------------------------------------------------------------------------
+Macro: int EBADF
+
+    “Bad file descriptor.” For example, I/O on a descriptor that has been closed or reading from a descriptor open only for writing (or vice versa). 
+--------------------------------------------------------------------------------
+(https://www.gnu.org/software/libc/manual/html_node/Error-Codes.html)
+
+From dup2 manual:
+
+--------------------------------------------------------------------------------
+EBADF
+    oldfd isn't an open file descriptor, or newfd is out of the allowed range for file descriptors. 
+--------------------------------------------------------------------------------
+(https://linux.die.net/man/2/dup2)
+
+
+
+
+todo:
+good spawn trace: https://travis-ci.org/riboseinc/enmail/jobs/543184224
+
+## How to reproduce the issue
+
+I have managed to craft a Dockerfile in which problem can occur.
+
+Following one-line builds a Docker image, and then repeat tests till they fail.
+I believe that ten-odd attempts are enough to replicate a test failure.
+
+--------------------------------------------------------------------------------
+bash -l -c 'docker build -f ci/Dockerfile -t enmail:test . ; COUNTER=0; while true; do let COUNTER+=1; echo; echo "===== ATTEMPT $COUNTER ====="; echo; docker run -it enmail:test; if [[ $? != 0 ]]; then break; fi; done'
+--------------------------------------------------------------------------------
+
+## Affected Ruby versions and operating systems
+
+Problem has been observed on following Ruby versions:
+
+* MRI 2.6.3
+
+It wasn't properly tested which other versions are also affected.
+
+## Affected operating systems
+
+Problem has been observed on following platforms:
+
+* Ubuntu 19.04 Dingo Disco
+* Ubuntu 16.04 Xenial Xerus
+  - https://travis-ci.org/riboseinc/enmail/jobs/543184224
+* MacOS, for example:
+  - https://travis-ci.org/riboseinc/enmail/jobs/545273825
+
+It wasn't properly tested if other systems are also affected.
