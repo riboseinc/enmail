@@ -11,8 +11,6 @@ RUN /helpers/system/init_user-testrunner.sh
 RUN /helpers/system/install-rvm.sh
 RUN /helpers/system/install-cmake.sh
 
-RUN apt-get install -y autoconf gcc g++ libbz2-dev libncurses5-dev libtool python wget zlib1g-dev
-
 USER testrunner
 SHELL ["/bin/bash", "-l", "-c"]
 

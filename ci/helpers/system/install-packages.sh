@@ -14,3 +14,6 @@ apt-get install -y software-properties-common
 # Sudo is sudo…
 # Vim is optional, but I really love it.
 apt-get install -y build-essential bzip2 curl git make sudo vim
+
+
+apt-get install -y autoconf gcc g++ libbz2-dev libncurses5-dev libtool python wget zlib1g-dev
