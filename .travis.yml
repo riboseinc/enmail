@@ -14,7 +14,7 @@ env:
 
 script:
   - docker build -f ci/Dockerfile -t enmail:test --build-arg RUBY_VERSION=${RUBY} --build-arg GPG_VERSION=${GPG_VERSION} .
-  - bundle exec rspec --format documentation --profile 200
+  - docker run -it enmail:test
 
 matrix:
   include:
