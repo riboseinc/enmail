@@ -10,6 +10,7 @@ set -eux
 
 : "${CORES:=2}"
 : "${MAKE:=make}"
+: "${JSONC_PREFIX:=/usr/local}"
 
 jsonc_build="${DEPS_BUILD_DIR}/json-c"
 

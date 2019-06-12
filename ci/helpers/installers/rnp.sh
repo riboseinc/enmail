@@ -10,6 +10,9 @@ set -eux
 
 : "${CORES:=2}"
 : "${MAKE:=make}"
+: "${BOTAN_PREFIX:=/usr/local}"
+: "${JSONC_PREFIX:=/usr/local}"
+: "${RNP_PREFIX:=/usr/local}"
 
 rnp_build="${DEPS_BUILD_DIR}/rnp"
 

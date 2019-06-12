@@ -10,6 +10,7 @@ set -eux
 
 : "${CORES:=2}"
 : "${MAKE:=make}"
+: "${BOTAN_PREFIX:=/usr/local}"
 
 botan_build="${DEPS_BUILD_DIR}/botan"
 
