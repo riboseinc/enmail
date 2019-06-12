@@ -8,8 +8,8 @@ COPY ci/helpers /helpers
 RUN /helpers/system/packages.sh
 RUN /helpers/system/init_user-root.sh
 RUN /helpers/system/init_user-testrunner.sh
-RUN /helpers/installers/install-rvm.sh
-RUN /helpers/installers/install-cmake.sh
+RUN /helpers/installers/rvm.sh
+RUN /helpers/installers/cmake.sh
 
 USER testrunner
 SHELL ["/bin/bash", "-l", "-c"]
@@ -37,12 +37,12 @@ ENV GPG_PREFIX="/usr/local"
 ENV GPG_CONFIGURE_OPTS="--disable-doc --enable-pinentry-curses --disable-pinentry-emacs --disable-pinentry-gtk2 --disable-pinentry-gnome3 --disable-pinentry-qt --disable-pinentry-qt4 --disable-pinentry-qt5 --disable-pinentry-tqt --disable-pinentry-fltk --prefix=${GPG_PREFIX} --with-libgpg-error-prefix=${GPG_PREFIX} --with-libassuan-prefix=${GPG_PREFIX} --with-libgpg-error-prefix=${GPG_PREFIX} --with-libgcrypt-prefix=${GPG_PREFIX} --with-libassuan-prefix=${GPG_PREFIX} --with-ksba-prefix=${GPG_PREFIX} --with-npth-prefix=${GPG_PREFIX}"
 #ENV PATH="${GPG_PREFIX}/bin:${RNP_PREFIX}/bin:${PATH}"
 
-WORKDIR /helpers/build_scripts
-RUN ./install_botan.sh
-RUN ./install_json_c.sh
-RUN ./install_rnp.sh
+WORKDIR /helpers/installers
+RUN ./botan.sh
+RUN ./json_c.sh
+RUN ./rnp.sh
 
-WORKDIR /helpers/build_scripts/gpg
+WORKDIR /helpers/installers/gpg
 RUN ./install_gpg_all.sh --suite-version "${GPG_VERSION}" --sudo --configure-opts "${GPG_CONFIGURE_OPTS}" --build-dir "${DEPS_BUILD_DIR}/gnupg"
 
 RUN git clone https://github.com/rbenv/rbenv.git ${HOME}/.rbenv
