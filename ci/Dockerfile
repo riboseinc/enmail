@@ -50,13 +50,15 @@ FROM enmail-builder
 USER testrunner
 SHELL ["/bin/bash", "-l", "-c"]
 
-ARG RUBY_VERSION="2.6.3"
+# TODO
+RUN sudo apt-get install -y libreadline6-dev libssl-dev
+
+ARG RUBY_VERSION="2.6"
 
 RUN mkdir -p ${BUILD_DIR}
 COPY . ${BUILD_DIR}
 WORKDIR ${BUILD_DIR}
 
-RUN sudo apt-get install -y libreadline6-dev libssl-dev
 
 #RUN rbenv install ${RUBY_VERSION}
 #RUN rbenv local ${RUBY_VERSION}
