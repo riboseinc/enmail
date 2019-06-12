@@ -56,10 +56,12 @@ RUN mkdir -p ${BUILD_DIR}
 COPY . ${BUILD_DIR}
 WORKDIR ${BUILD_DIR}
 
-RUN rbenv install ${RUBY_VERSION}
-RUN rbenv local ${RUBY_VERSION}
+RUN apt-get install -y libreadline6-dev libssl-dev
 
-#RUN rvm use ${RUBY_VERSION} --install --ruby-version
+#RUN rbenv install ${RUBY_VERSION}
+#RUN rbenv local ${RUBY_VERSION}
+
+RUN rvm use ${RUBY_VERSION} --install --binary --fuzzy --ruby-version
 RUN gem install bundler -v "~> 2.0"
 
 #ENV BUNDLE_GEMFILE=$PWD/ci/Mail
