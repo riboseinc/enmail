@@ -32,7 +32,7 @@ RUN ./json_c.sh
 RUN ./rnp.sh
 
 WORKDIR /helpers/installers/gpg
-RUN ./install_gpg_all.sh --suite-version "${GPG_VERSION}" --sudo --configure-opts "${GPG_CONFIGURE_OPTS}" --build-dir "${DEPS_BUILD_DIR}/gnupg"
+RUN ./install_gpg_all.sh --suite-version "${GPG_VERSION}" --sudo --ldconfig --configure-opts "${GPG_CONFIGURE_OPTS}" --build-dir "${DEPS_BUILD_DIR}/gnupg"
 
 RUN git clone https://github.com/rbenv/rbenv.git ${HOME}/.rbenv
 RUN mkdir -p ${HOME}/.rbenv/plugins
