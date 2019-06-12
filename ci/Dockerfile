@@ -29,7 +29,6 @@ ENV GPG_CONFIGURE_OPTS="--disable-doc --enable-pinentry-curses --disable-pinentr
 ENV PYTHON="python3"
 
 WORKDIR /helpers/installers
-RUN sudo apt-get install -y python
 RUN ./botan.sh
 RUN ./json_c.sh
 RUN ./rnp.sh
