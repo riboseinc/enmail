@@ -30,6 +30,7 @@ ENV PYTHON="python3"
 
 WORKDIR /helpers/installers
 RUN ./botan.sh
+RUN sudo apt-get install -y wget
 RUN ./json_c.sh
 RUN ./rnp.sh
 
