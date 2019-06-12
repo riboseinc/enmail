@@ -5,10 +5,10 @@ USER root
 SHELL ["/bin/bash", "-c"]
 
 COPY ci/docker_helpers /helpers
-RUN /helpers/system/install-packages.sh
+RUN /helpers/system/packages.sh
 RUN /helpers/system/init_user-root.sh
 RUN /helpers/system/init_user-testrunner.sh
-RUN /helpers/system/install-rvm.sh
+RUN /helpers/installers/install-rvm.sh
 RUN /helpers/installers/install-cmake.sh
 
 USER testrunner
