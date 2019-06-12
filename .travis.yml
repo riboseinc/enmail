@@ -1,4 +1,4 @@
-dist: xenial
+os: osx
 sudo: required
 language: ruby
 
