@@ -9,7 +9,7 @@ RUN /helpers/system/install-packages.sh
 RUN /helpers/system/init_user-root.sh
 RUN /helpers/system/init_user-testrunner.sh
 RUN /helpers/system/install-rvm.sh
-RUN /helpers/system/install-cmake.sh
+RUN /helpers/installers/install-cmake.sh
 
 USER testrunner
 SHELL ["/bin/bash", "-l", "-c"]
