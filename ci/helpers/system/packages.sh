@@ -17,7 +17,8 @@ apt-get install -y sudo
 # cURL is necessary to download RVM.
 # Git is obligatory for obvious reasons.
 # Libtool is required to build RNP from Git sources.
-apt-get install -y autoconf build-essential bzip2 cmake curl git libtool
+# Python is required to build Botan.
+apt-get install -y autoconf build-essential bzip2 cmake curl git libtool python3
 
 # Some GUI toolkit or framework is required to build GnuPG's Pinentry, and
 # ncurses is the least demanding option.
