@@ -24,7 +24,7 @@ apt-get install -y autoconf build-essential bzip2 cmake curl git libtool
 apt-get install -y libncurses5-dev
 
 # These are RNP dependencies
-apt-get install -y libbotan-2-dev libbz2-dev libjson-c-dev zlib1g-dev
+apt-get install -y libbz2-dev zlib1g-dev
 
 # Vim is entirely optional, but I really love to have it.
 apt-get install -y vim
