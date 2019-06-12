@@ -4,7 +4,7 @@ USER root
 # Apt-get does not play well with -l (https://superuser.com/a/1182104/137385)
 SHELL ["/bin/bash", "-c"]
 
-COPY ci/docker_helpers /helpers
+COPY ci/helpers /helpers
 RUN /helpers/system/packages.sh
 RUN /helpers/system/init_user-root.sh
 RUN /helpers/system/init_user-testrunner.sh
