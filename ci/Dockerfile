@@ -56,7 +56,7 @@ RUN mkdir -p ${BUILD_DIR}
 COPY . ${BUILD_DIR}
 WORKDIR ${BUILD_DIR}
 
-RUN apt-get install -y libreadline6-dev libssl-dev
+RUN sudo apt-get install -y libreadline6-dev libssl-dev
 
 #RUN rbenv install ${RUBY_VERSION}
 #RUN rbenv local ${RUBY_VERSION}
