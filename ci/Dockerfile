@@ -26,7 +26,10 @@ ENV BUILD_DIR="${HOME}/enmail"
 ENV DEPS_BUILD_DIR="${HOME}/dependencies-src"
 ENV GPG_CONFIGURE_OPTS="--disable-doc --enable-pinentry-curses --disable-pinentry-emacs --disable-pinentry-gtk2 --disable-pinentry-gnome3 --disable-pinentry-qt --disable-pinentry-qt4 --disable-pinentry-qt5 --disable-pinentry-tqt --disable-pinentry-fltk --prefix=${GPG_PREFIX} --with-libgpg-error-prefix=${GPG_PREFIX} --with-libassuan-prefix=${GPG_PREFIX} --with-libgpg-error-prefix=${GPG_PREFIX} --with-libgcrypt-prefix=${GPG_PREFIX} --with-libassuan-prefix=${GPG_PREFIX} --with-ksba-prefix=${GPG_PREFIX} --with-npth-prefix=${GPG_PREFIX}"
 
+ENV PYTHON="python3"
+
 WORKDIR /helpers/installers
+RUN sudo apt-get install -y python
 RUN ./botan.sh
 RUN ./json_c.sh
 RUN ./rnp.sh

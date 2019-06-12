@@ -10,6 +10,7 @@ set -eux
 
 : "${CORES:=2}"
 : "${MAKE:=make}"
+: "${CMAKE:=cmake}"
 : "${BOTAN_PREFIX:=/usr/local}"
 : "${JSONC_PREFIX:=/usr/local}"
 : "${RNP_PREFIX:=/usr/local}"
@@ -22,13 +23,14 @@ if [ ! -e "${RNP_PREFIX}/lib/librnp.so" ] && \
 	git clone https://github.com/riboseinc/rnp ${rnp_build}
 	pushd "${rnp_build}"
 	git checkout "$RNP_VERSION"
-	cmake \
+	${CMAKE} \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DBUILD_SHARED_LIBS=yes \
 		-DBUILD_TESTING=no \
 		-DCMAKE_PREFIX_PATH="${BOTAN_PREFIX};${JSONC_PREFIX}" \
 		-DCMAKE_INSTALL_PREFIX="${RNP_PREFIX}" \
 		.
-	${MAKE} -j${CORES} install
+	${MAKE} -j${CORES}
+	sudo ${MAKE} install
 	popd
 fi

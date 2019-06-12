@@ -28,6 +28,7 @@ if [ ! -e "${JSONC_PREFIX}/lib/libjson-c.so" ] && \
 
 	autoreconf -ivf
 	env CFLAGS="-fno-omit-frame-pointer -g" ./configure --prefix="${JSONC_PREFIX}"
-	${MAKE} -j${CORES} install
+	${MAKE} -j${CORES}
+	sudo ${MAKE} install
 	popd
 fi

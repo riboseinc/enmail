@@ -10,6 +10,7 @@ set -eux
 
 : "${CORES:=2}"
 : "${MAKE:=make}"
+: "${PYTHON:=python}"
 : "${BOTAN_PREFIX:=/usr/local}"
 
 botan_build="${DEPS_BUILD_DIR}/botan"
@@ -23,7 +24,8 @@ if [ ! -e "${BOTAN_PREFIX}/lib/libbotan-2.so" ] && \
 
 	git clone --depth 1 https://github.com/randombit/botan "${botan_build}"
 	pushd "${botan_build}"
-	./configure.py --prefix="${BOTAN_PREFIX}" --with-debug-info --cxxflags="-fno-omit-frame-pointer"
-	${MAKE} -j${CORES} install
+	${PYTHON} ./configure.py --prefix="${BOTAN_PREFIX}" --with-debug-info --cxxflags="-fno-omit-frame-pointer"
+	${MAKE} -j${CORES}
+	sudo ${MAKE} install
 	popd
 fi
