@@ -1,0 +1,9 @@
+tap "riboseinc/rnp"
+brew "rnp"
+
+# Install GnuPG
+# - for latest version, use Brewfile
+# - for older versions, use Ribose's GnuPG build scripts
+if ENV["GPG_VERSION"] == "latest"
+  brew "gnupg"
+end

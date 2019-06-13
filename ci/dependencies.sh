@@ -2,22 +2,10 @@
 
 set -eux
 
-# For better performance, skip Homebrew auto updates.
-# Travis CI updates their images from time to time, anyway.
-export HOMEBREW_NO_AUTO_UPDATE=1
-
-# For simplicity, all software dependenies are declared in this very file.
-
-# Install RNP
-brew tap riboseinc/rnp
-brew install rnp
-
 # Install GnuPG
-# - for latest version, use Homebrew
+# - for latest version, use Brewfile
 # - for older versions, use Ribose's GnuPG build scripts
-if [[ "$GPG_VERSION" == "latest" ]]; then
-	brew install gnupg
-else
+if [[ "$GPG_VERSION" != "latest" ]]; then
 	pushd ${TRAVIS_BUILD_DIR}/ci/gpg
 
 	# Install to /usr/local
