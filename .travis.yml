@@ -2,6 +2,11 @@ os: osx
 sudo: required
 language: ruby
 
+addons:
+  homebrew:
+    brewfile: ci/brewfile
+    update: true
+
 rvm:
   - 2.6
   - 2.5
