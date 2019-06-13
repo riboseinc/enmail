@@ -5,7 +5,7 @@ language: ruby
 addons:
   homebrew:
     brewfile: ci/brewfile
-    update: true
+    # update: true
 
 rvm:
   - 2.6
