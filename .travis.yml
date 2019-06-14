@@ -4,6 +4,7 @@ language: minimal
 env:
   global:
     - GPG_VERSION="latest"
+    - RUBY=2.6 # default
   matrix:
     - RUBY=2.6
     - RUBY=2.5
