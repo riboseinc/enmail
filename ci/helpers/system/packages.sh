@@ -3,6 +3,9 @@ set -ex
 
 export DEBIAN_FRONTEND=noninteractive
 
+# Allow outdated OpenSSL versions for Ruby 2.3 and older.
+echo "deb http://security.ubuntu.com/ubuntu cosmic-security main" >> /etc/apt/sources.list
+
 apt-get update
 
 # If you want custom PPAs, you need following.
