@@ -13,10 +13,10 @@ set -eux
 
 rnp_build="${DEPS_BUILD_DIR}/rnp"
 
-if [ ! -e "${RNP_PREFIX}/lib/librnp.so" ] && \
-	 [ ! -e "${RNP_PREFIX}/lib/librnp.dylib" ]; then
+if [[ ! -e "${RNP_PREFIX}/lib/librnp.so" ]] && \
+	 [[ ! -e "${RNP_PREFIX}/lib/librnp.dylib" ]]; then
 
-	git clone https://github.com/riboseinc/rnp ${rnp_build}
+	git clone https://github.com/riboseinc/rnp "${rnp_build}"
 	pushd "${rnp_build}"
 	git checkout "$RNP_VERSION"
 	cmake \
