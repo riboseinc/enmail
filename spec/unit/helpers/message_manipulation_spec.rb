@@ -42,6 +42,60 @@ RSpec.describe EnMail::Helpers::MessageManipulation do
     end
   end
 
+  describe "#duplicate_part" do
+    subject { adapter.method(:duplicate_part) }
+
+    shared_examples "examples for #duplicate_part" do
+      it "returns a different MIME part" do
+        expect(subject.(source_part)).not_to equal(source_part)
+      end
+
+      it "duplicates in a way that encoded source and target are equal" do
+        dup = subject.(source_part)
+        expect(dup.to_s).to eq(source_part.to_s) & be_a(String) & match(/\w/)
+      end
+
+      it "preserves Content-ID in duplicated MIME part" do
+        source_part.add_content_id("123")
+        dup = subject.(source_part)
+        expect(dup.content_id).to eq(source_part.content_id) & eq("123")
+      end
+
+      it "does not add a Content-ID unless source MIME part has one" do
+        # Condition below may seem excessive, but has been added due to some bug
+        # in the Mail 2.7.1 gem.  It appears that doing `content_id = nil` when
+        # `content_id` is already `nil`, actually generates a random Content-ID,
+        # and assigns it to given MIME part.
+        source_part.content_id = nil if source_part.content_id
+        dup = subject.(source_part)
+        expect(dup.content_id).to eq(source_part.content_id) & be(nil)
+      end
+    end
+
+    context "for textual MIME part" do
+      let(:source_part) { text_jpeg_mail.parts[0] }
+      include_examples "examples for #duplicate_part"
+    end
+
+    context "for binary MIME part" do
+      let(:source_part) { text_jpeg_mail.parts[1] }
+      include_examples "examples for #duplicate_part"
+    end
+
+    context "for compound MIME part" do
+      let(:source_part) do
+        text_part = Mail::Part.new
+        text_part.body = "Whatever"
+
+        part = Mail::Part.new
+        part.add_part text_part
+        part.add_file filename: "pic.jpg", content: SMALLEST_JPEG
+        part
+      end
+      include_examples "examples for #duplicate_part"
+    end
+  end
+
   describe "#find_recipients_for" do
     subject { adapter.method(:find_recipients_for) }
     let(:mail) { simple_mail }
