@@ -21,12 +21,12 @@ RSpec.describe EnMail::Helpers::RFC3156 do
 
     before do
       allow(adapter).to receive(:body_to_part).and_return(msg_part_dbl)
-      allow(adapter).
-        to receive(:build_encryption_control_part).and_return(msg_ctrl_dbl)
-      allow(adapter).
-        to receive(:build_encrypted_part).and_return(enc_part_dbl)
-      allow(adapter).
-        to receive(:sign_and_encrypt_string).and_return(enc_dummy)
+      allow(adapter)
+        .to receive(:build_encryption_control_part).and_return(msg_ctrl_dbl)
+      allow(adapter)
+        .to receive(:build_encrypted_part).and_return(enc_part_dbl)
+      allow(adapter)
+        .to receive(:sign_and_encrypt_string).and_return(enc_dummy)
       allow(adapter).to receive(:restrict_encoding)
     end
 
@@ -49,14 +49,14 @@ RSpec.describe EnMail::Helpers::RFC3156 do
     end
 
     it "clears the old message body" do
-      expect { subject.(mail) }.
-        to change { mail.body.decoded }.to(blank_string_rx)
+      expect { subject.(mail) }
+        .to change { mail.body.decoded }.to(blank_string_rx)
     end
 
     it "adds the control information as the 1st MIME part" do
       subject.(mail)
-      expect(adapter).
-        to have_received(:build_encryption_control_part).with(no_args)
+      expect(adapter)
+        .to have_received(:build_encryption_control_part).with(no_args)
       expect(mail.parts[0]).to be(msg_ctrl_dbl)
     end
 
@@ -64,8 +64,8 @@ RSpec.describe EnMail::Helpers::RFC3156 do
       "and signs it in a single OpenPGP message" do
       subject.(mail)
       expect(adapter).to have_received(:body_to_part).with(mail)
-      expect(adapter).to have_received(:sign_and_encrypt_string).
-        with(msg_part_dbl, mail_from, [mail_to])
+      expect(adapter).to have_received(:sign_and_encrypt_string)
+        .with(msg_part_dbl, mail_from, [mail_to])
     end
 
     it "adds the signed and encrypted message as the 2nd MIME part" do

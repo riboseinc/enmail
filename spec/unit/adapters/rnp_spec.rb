@@ -11,12 +11,12 @@ RSpec.describe EnMail::Adapters::RNP, requires: :rnp do
 
   describe ":homedir option" do
     before do
-      allow(Rnp).to receive(:new).
-        and_return(double.as_null_object)
-      allow(Rnp).to receive(:homedir_info).
-        and_return(public: { path: "." }, secret: { path: "." })
-      allow(Rnp).to receive(:default_homedir).
-        and_return("default/rnp/home")
+      allow(Rnp).to receive(:new)
+        .and_return(double.as_null_object)
+      allow(Rnp).to receive(:homedir_info)
+        .and_return(public: { path: "." }, secret: { path: "." })
+      allow(Rnp).to receive(:default_homedir)
+        .and_return("default/rnp/home")
     end
 
     it "allows to override homedir" do
@@ -49,8 +49,8 @@ RSpec.describe EnMail::Adapters::RNP, requires: :rnp do
 
     it "uses specific algorithm for signature computation" do
       allow(adapter).to receive(:hash_algorithm).and_return("DUMMYALGO1")
-      expect(adapter.rnp).to receive(:detached_sign).
-        with(hash_including(hash: "DUMMYALGO1"))
+      expect(adapter.rnp).to receive(:detached_sign)
+        .with(hash_including(hash: "DUMMYALGO1"))
       subject.(text, signer)
     end
 
@@ -102,8 +102,8 @@ RSpec.describe EnMail::Adapters::RNP, requires: :rnp do
 
     it "uses specific algorithm for signature computation" do
       allow(adapter).to receive(:hash_algorithm).and_return("DUMMYALGO1")
-      expect(adapter.rnp).to receive(:encrypt_and_sign).
-        with(hash_including(hash: "DUMMYALGO1"))
+      expect(adapter.rnp).to receive(:encrypt_and_sign)
+        .with(hash_including(hash: "DUMMYALGO1"))
       subject.(text, signer, recipients)
     end
   end

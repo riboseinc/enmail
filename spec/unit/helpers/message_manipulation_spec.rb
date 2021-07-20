@@ -124,7 +124,9 @@ RSpec.describe EnMail::Helpers::MessageManipulation do
     let(:part1) { ::Mail::Part.new(body: "Some Text.") }
     let(:part2) { ::Mail::Part.new(body: "More Text.") }
     let(:new_parts) { [part1, part2] }
-    let(:args) { [mail, content_type: "multipart/whatever", parts: new_parts] }
+    let(:args) do
+      [mail, { content_type: "multipart/whatever", parts: new_parts }]
+    end
 
     shared_examples "shared examples for #rewrite_body" do
       it "replaces existing body with given parts" do

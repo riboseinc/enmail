@@ -85,7 +85,7 @@ module EnMail
         part
       end
 
-      def multipart_signed_content_type(protocol: sign_protocol, micalg:)
+      def multipart_signed_content_type(micalg:, protocol: sign_protocol)
         %[multipart/signed; protocol="#{protocol}"; micalg="#{micalg}"]
       end
 

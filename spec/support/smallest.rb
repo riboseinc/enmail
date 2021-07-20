@@ -4,10 +4,11 @@
 # The smallest possible JPEG.
 # From: https://github.com/mathiasbynens/small
 SMALLEST_JPEG = (
-  "\xFF\xD8\xFF\xDB\x00C\x00\x03\x02\x02\x02\x02\x02\x03\x02\x02\x02\x03\x03" +
-  "\x03\x03\x04\x06\x04\x04\x04\x04\x04\b\x06\x06\x05\x06\t\b\n\n\t\b\t\t\n\f" +
-  "\x0F\f\n\v\x0E\v\t\t\r\x11\r\x0E\x0F\x10\x10\x11\x10\n\f\x12\x13\x12\x10" +
-  "\x13\x0F\x10\x10\x10\xFF\xC9\x00\v\b\x00\x01\x00\x01\x01\x01\x11\x00\xFF" +
-  "\xCC\x00\x06\x00\x10\x10\x05\xFF\xDA\x00\b\x01\x01\x00\x00?\x00\xD2\xCF " +
-  "\xFF\xD9"
+  "\xFF\xD8\xFF\xDB\u0000C\u0000\u0003\u0002\u0002\u0002\u0002\u0002\u0003"
+  "\u0002\u0002\u0002\u0003\u0003\u0003\u0003\u0004\u0006\u0004\u0004\u0004"
+  "\u0004\u0004\b\u0006\u0006\u0005\u0006\t\b\n\n\t\b\t\t\n\f\u000F\f\n\v\u000E"
+  "\v\t\t\r\u0011\r\u000E\u000F\u0010\u0010\u0011\u0010\n\f\u0012\u0013\u0012"
+  "\u0010\u0013\u000F\u0010\u0010\u0010\xFF\xC9\u0000\v\b\u0000\u0001\u0000"
+  "\u0001\u0001\u0001\u0011\u0000\xFF\xCC\u0000\u0006\u0000\u0010\u0010\u0005"
+  "\xFF\xDA\u0000\b\u0001\u0001\u0000\u0000?\u0000\xD2\xCF \xFF\xD9"
 ).force_encoding("ASCII-8BIT").freeze

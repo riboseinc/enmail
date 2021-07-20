@@ -49,13 +49,13 @@ shared_context "expectations for example emails" do
       "protocol" => "application/pgp-signature",
     )
     expect(message_or_part.parts.size).to eq(2)
-    expect(message_or_part.parts[1].mime_type).
-      to eq("application/pgp-signature")
+    expect(message_or_part.parts[1].mime_type)
+      .to eq("application/pgp-signature")
     expect(message_or_part.parts[1].content_type_parameters).to be_empty
 
-    expect(message_or_part.parts[1].body.decoded).
-      to be_a_valid_pgp_signature_of(message_or_part.parts[0].encoded).
-      signed_by(expected_signer)
+    expect(message_or_part.parts[1].body.decoded)
+      .to be_a_valid_pgp_signature_of(message_or_part.parts[0].encoded)
+      .signed_by(expected_signer)
   end
 
   def pgp_encrypted_part_expectations(message_or_part)
@@ -64,14 +64,14 @@ shared_context "expectations for example emails" do
       "protocol" => "application/pgp-encrypted",
     )
     expect(message_or_part.parts.size).to eq(2)
-    expect(message_or_part.parts[0].mime_type).
-      to eq("application/pgp-encrypted")
+    expect(message_or_part.parts[0].mime_type)
+      .to eq("application/pgp-encrypted")
     expect(message_or_part.parts[0].content_type_parameters).to be_empty
     expect(message_or_part.parts[0].body.encoded).to eq("Version: 1")
 
-    expect(message_or_part.parts[1].body.decoded).
-      to be_a_pgp_encrypted_message.
-      encrypted_for(mail_to)
+    expect(message_or_part.parts[1].body.decoded)
+      .to be_a_pgp_encrypted_message
+      .encrypted_for(mail_to)
   end
 
   def pgp_signed_and_encrypted_part_expectations(message_or_part,
@@ -80,9 +80,9 @@ shared_context "expectations for example emails" do
     # an encrypted message, it just has some signatures added.
     pgp_encrypted_part_expectations(message_or_part)
 
-    expect(message_or_part.parts[1].body.decoded).
-      to be_a_pgp_encrypted_message.
-      signed_by(expected_signer)
+    expect(message_or_part.parts[1].body.decoded)
+      .to be_a_pgp_encrypted_message
+      .signed_by(expected_signer)
   end
 
   def resilent_transport_encoding_expectations(message_or_part)

@@ -36,21 +36,21 @@ RSpec.describe EnMail::Adapters::GPGME, requires: :gpgme do
     it "can sign with a password-protected key" do
       options[:key_password] = valid_password
       retval = subject.(text, signer_with_password)
-      expect(retval[1]).
-        to be_a_valid_pgp_signature_of(text).signed_by(signer_with_password)
+      expect(retval[1])
+        .to be_a_valid_pgp_signature_of(text).signed_by(signer_with_password)
     end
 
     it "raises exception when key password is missing for " +
       "a password-protected key" do
-      expect { subject.(text, signer_with_password) }.
-        to raise_exception(::GPGME::Error::General)
+      expect { subject.(text, signer_with_password) }
+        .to raise_exception(::GPGME::Error::General)
     end
 
     it "raises exception when key password is invalid" do
-      invalid_password = valid_password + "5"
+      invalid_password = "#{valid_password}5"
       options[:key_password] = invalid_password
-      expect { subject.(text, signer_with_password) }.
-        to raise_exception(::GPGME::Error::BadPassphrase)
+      expect { subject.(text, signer_with_password) }
+        .to raise_exception(::GPGME::Error::BadPassphrase)
     end
   end
 
@@ -96,21 +96,21 @@ RSpec.describe EnMail::Adapters::GPGME, requires: :gpgme do
     it "can sign with a password-protected key" do
       options[:key_password] = valid_password
       retval = subject.(text, signer_with_password, recipients)
-      expect(retval).
-        to be_a_pgp_encrypted_message.signed_by(signer_with_password)
+      expect(retval)
+        .to be_a_pgp_encrypted_message.signed_by(signer_with_password)
     end
 
     it "raises exception when key password is missing for " +
       "a password-protected key" do
-      expect { subject.(text, signer_with_password, recipients) }.
-        to raise_exception(::GPGME::Error::General)
+      expect { subject.(text, signer_with_password, recipients) }
+        .to raise_exception(::GPGME::Error::General)
     end
 
     it "raises exception when key password is invalid" do
-      invalid_password = valid_password + "5"
+      invalid_password = "#{valid_password}5"
       options[:key_password] = invalid_password
-      expect { subject.(text, signer_with_password, recipients) }.
-        to raise_exception(::GPGME::Error::BadPassphrase)
+      expect { subject.(text, signer_with_password, recipients) }
+        .to raise_exception(::GPGME::Error::BadPassphrase)
     end
   end
 end

@@ -14,12 +14,12 @@ RSpec.describe EnMail::Helpers::RFC1847 do
   let(:custom_micalg) { "custom-micalg" }
 
   before do
-    allow(adapter).
-      to receive(:sign_protocol).and_return(custom_sign_protocol)
-    allow(adapter).
-      to receive(:encryption_protocol).and_return(custom_enc_protocol)
-    allow(adapter).
-      to receive(:message_integrity_algorithm).and_return(custom_micalg)
+    allow(adapter)
+      .to receive(:sign_protocol).and_return(custom_sign_protocol)
+    allow(adapter)
+      .to receive(:encryption_protocol).and_return(custom_enc_protocol)
+    allow(adapter)
+      .to receive(:message_integrity_algorithm).and_return(custom_micalg)
   end
 
   describe "#encrypt" do
@@ -34,12 +34,12 @@ RSpec.describe EnMail::Helpers::RFC1847 do
 
     before do
       allow(adapter).to receive(:body_to_part).and_return(msg_part_dbl)
-      allow(adapter).
-        to receive(:build_encryption_control_part).and_return(msg_ctrl_dbl)
-      allow(adapter).
-        to receive(:build_encrypted_part).and_return(enc_part_dbl)
-      allow(adapter).
-        to receive(:encrypt_string).and_return(enc_dummy)
+      allow(adapter)
+        .to receive(:build_encryption_control_part).and_return(msg_ctrl_dbl)
+      allow(adapter)
+        .to receive(:build_encrypted_part).and_return(enc_part_dbl)
+      allow(adapter)
+        .to receive(:encrypt_string).and_return(enc_dummy)
       allow(adapter).to receive(:restrict_encoding)
     end
 
@@ -62,22 +62,22 @@ RSpec.describe EnMail::Helpers::RFC1847 do
     end
 
     it "clears the old message body" do
-      expect { subject.(mail) }.
-        to change { mail.body.decoded }.to(blank_string_rx)
+      expect { subject.(mail) }
+        .to change { mail.body.decoded }.to(blank_string_rx)
     end
 
     it "adds the control information as the 1st MIME part" do
       subject.(mail)
-      expect(adapter).
-        to have_received(:build_encryption_control_part).with(no_args)
+      expect(adapter)
+        .to have_received(:build_encryption_control_part).with(no_args)
       expect(mail.parts[0]).to be(msg_ctrl_dbl)
     end
 
     it "converts the old message body to a a MIME part, and encrypts it" do
       subject.(mail)
       expect(adapter).to have_received(:body_to_part).with(mail)
-      expect(adapter).to have_received(:encrypt_string).
-        with(msg_part_dbl, [mail_to])
+      expect(adapter).to have_received(:encrypt_string)
+        .with(msg_part_dbl, [mail_to])
     end
 
     it "adds the encrypted message as the 2nd MIME part" do
@@ -100,8 +100,8 @@ RSpec.describe EnMail::Helpers::RFC1847 do
     before do
       allow(adapter).to receive(:body_to_part).and_return(msg_part_dbl)
       allow(adapter).to receive(:build_signature_part).and_return(sig_dbl)
-      allow(adapter).to receive(:compute_signature).
-        and_return([mic_dummy, sig_dummy])
+      allow(adapter).to receive(:compute_signature)
+        .and_return([mic_dummy, sig_dummy])
       allow(adapter).to receive(:restrict_encoding)
     end
 
@@ -124,8 +124,8 @@ RSpec.describe EnMail::Helpers::RFC1847 do
     end
 
     it "clears the old message body" do
-      expect { subject.(mail) }.
-        to change { mail.body.decoded }.to(blank_string_rx)
+      expect { subject.(mail) }
+        .to change { mail.body.decoded }.to(blank_string_rx)
     end
 
     it "converts the old message body to a a MIME part, and re-appends it " +
@@ -137,8 +137,8 @@ RSpec.describe EnMail::Helpers::RFC1847 do
 
     it "computes the signature for the 1st MIME part" do
       subject.(mail)
-      expect(adapter).to have_received(:compute_signature).
-        with(mail.parts[0].encoded, mail_from)
+      expect(adapter).to have_received(:compute_signature)
+        .with(mail.parts[0].encoded, mail_from)
     end
 
     it "adds the signature as the 2nd MIME part" do
@@ -226,8 +226,8 @@ RSpec.describe EnMail::Helpers::RFC1847 do
     subject { adapter.method(:build_encryption_control_part) }
 
     before do
-      allow(adapter).
-        to receive(:encryption_control_information).and_return("DUMMY")
+      allow(adapter)
+        .to receive(:encryption_control_information).and_return("DUMMY")
     end
 
     it "builds a MIME part with correct content type" do
@@ -270,7 +270,7 @@ RSpec.describe EnMail::Helpers::RFC1847 do
       args[:micalg] = micalg
       retval_segments = subject.call(args).split(/\s*;\s*/)
       micalg_def = %[micalg="#{micalg}"]
-      expect(retval_segments[1..-1]).to include(micalg_def)
+      expect(retval_segments[1..]).to include(micalg_def)
     end
 
     it "requires micalg argument" do
@@ -284,14 +284,14 @@ RSpec.describe EnMail::Helpers::RFC1847 do
       args[:protocol] = sign_protocol
       retval_segments = subject.call(args).split(/\s*;\s*/)
       protocol_def = %[protocol="#{sign_protocol}"]
-      expect(retval_segments[1..-1]).to include(protocol_def)
+      expect(retval_segments[1..]).to include(protocol_def)
     end
 
     it "defaults protocol argument to value returned by #sign_protocol" do
       args.delete :protocol
       retval_segments = subject.call(args).split(/\s*;\s*/)
       protocol_def = %[protocol="#{adapter.sign_protocol}"]
-      expect(retval_segments[1..-1]).to include(protocol_def)
+      expect(retval_segments[1..]).to include(protocol_def)
     end
   end
 
@@ -314,14 +314,14 @@ RSpec.describe EnMail::Helpers::RFC1847 do
       args[:protocol] = encryption_protocol
       retval_segments = subject.call(args).split(/\s*;\s*/)
       protocol_def = %[protocol="#{encryption_protocol}"]
-      expect(retval_segments[1..-1]).to include(protocol_def)
+      expect(retval_segments[1..]).to include(protocol_def)
     end
 
     it "defaults protocol argument to value returned by #encryption_protocol" do
       args.delete :protocol
       retval_segments = subject.call(args).split(/\s*;\s*/)
       protocol_def = %[protocol="#{adapter.encryption_protocol}"]
-      expect(retval_segments[1..-1]).to include(protocol_def)
+      expect(retval_segments[1..]).to include(protocol_def)
     end
   end
 end
