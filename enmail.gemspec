@@ -44,5 +44,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake", ">= 10", "< 13"
   spec.add_development_dependency "rnp", *EnMail::DependencyConstraints::RNP
   spec.add_development_dependency "rspec", "~> 3.0"
-  spec.add_development_dependency "rspec-pgp_matchers", "~> 0.1.1"
+  spec.add_development_dependency "rspec-pgp_matchers", "~> 0.2.0"
 end

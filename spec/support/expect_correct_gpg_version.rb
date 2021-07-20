@@ -1,7 +1,7 @@
 # (c) Copyright 2018 Ribose Inc.
 #
 
-expected_gpg_version = ENV.fetch("EXPECT_GPG_VERSION", nil)
+expected_gpg_version = ENV.fetch("EXPECTED_GPG_VERSION", nil)
 
 if expected_gpg_version && ENV.fetch("TEST_WITHOUT_GPGME", nil).nil?
   require "gpgme"

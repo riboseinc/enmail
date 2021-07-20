@@ -1,0 +1,147 @@
+name: Tests
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  schedule:
+    - cron: '37 13 * * 0'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby:
+          # - 3.0
+          - 2.7
+          - 2.6
+
+    env:
+      EXPECTED_GPG_VERSION: "2.3"
+      GPG_VERSION: "latest"
+      RNP_VERSION: "v0.11.0"
+
+    steps:
+      - name: Set up environment
+        run: |
+
+          # To install and cache our dependencies we need an absolute path
+          # that does not change, is writable, and resides within
+          # GITHUB_WORKSPACE.
+          # On macOS GITHUB_WORKSPACE includes the github runner version,
+          # so it does not remain constant.
+          # This causes problems with, for example, pkgconfig files
+          # referencing paths that no longer exist.
+          export DEPS_BUILD_DIR="${{ github.workspace }}/build"
+          export DEPS_PREFIX="${{ github.workspace }}/opt"
+          export CACHE_DIR="${DEPS_PREFIX}"
+          export BOTAN_PREFIX="${DEPS_PREFIX}/botan"
+          export JSONC_PREFIX="${DEPS_PREFIX}/json-c"
+          export RNP_PREFIX="${DEPS_PREFIX}/rnp"
+          export GPG_PREFIX="${DEPS_PREFIX}/gpg"
+          export PATH="${RNP_PREFIX}/bin:${GPG_PREFIX}/bin:${PATH}"
+
+          # Many of these are supported only in few GPG components, hence bunch of
+          # harmless warnings typically shows up.
+          export GPG_CONFIGURE_OPTS="
+            --disable-doc \
+            --enable-pinentry-curses \
+            --disable-pinentry-emacs \
+            --disable-pinentry-gtk2 \
+            --disable-pinentry-gnome3 \
+            --disable-pinentry-qt \
+            --disable-pinentry-qt4 \
+            --disable-pinentry-qt5 \
+            --disable-pinentry-tqt \
+            --disable-pinentry-fltk \
+            --prefix=${GPG_PREFIX} \
+            --with-libgpg-error-prefix=${GPG_PREFIX} \
+            --with-libassuan-prefix=${GPG_PREFIX} \
+            --with-libgpg-error-prefix=${GPG_PREFIX} \
+            --with-libgcrypt-prefix=${GPG_PREFIX} \
+            --with-libassuan-prefix=${GPG_PREFIX} \
+            --with-ksba-prefix=${GPG_PREFIX} \
+            --with-npth-prefix=${GPG_PREFIX}"
+
+
+          # Be aware of differences between LD_LIBRARY_PATH and LD_RUN_PATH.
+          # - http://osr507doc.sco.com/en/tools/ccs_linkedit_dynamic_dirsearch.html
+          # - https://www.hpc.dtu.dk/?page_id=1180
+          #
+          # You should be careful when attempting to replicate following in your
+          # setup, because setting LD_LIBRARY_PATH is often a bad idea.  Nevertheless,
+          # it is okay here in Travis, and actually any attempt to change these led me
+          # to linking failures.  Side note: I am not a Linux expert, and you may be
+          # more lucky.
+          #
+          # I'd be happy to get rid of LD_LIBRARY_PATH eventually in some future
+          # pull request.
+          export LD_LIBRARY_PATH="${BOTAN_PREFIX}/lib:${JSONC_PREFIX}/lib:${RNP_PREFIX}/lib"
+          export LD_RUN_PATH="${GPG_PREFIX}/lib"
+
+          for i in \
+            CACHE_DIR \
+            DEPS_BUILD_DIR \
+            DEPS_PREFIX \
+            BOTAN_PREFIX \
+            JSONC_PREFIX \
+            RNP_PREFIX \
+            GPG_PREFIX \
+            PATH \
+            LD_LIBRARY_PATH \
+            LD_RUN_PATH \
+          ; do \
+            echo "${i}=${!i}" >> $GITHUB_ENV; \
+          done
+
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+          submodules: true
+
+      - name: Prepare cache key
+        run: |
+          echo "YEAR_MONTH=$(date +%Y%m)" >> "${GITHUB_ENV}"
+
+      - name: Cache
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.CACHE_DIR }}
+          key: ${{ github.workflow }}-${{ runner.os }}-${{ env.RNP_VERSION }}-${{ env.GPG_VERSION }}-gpg-${{ env.EXPECTED_GPG_VERSION }}-${{ hashFiles('ci/**') }}-${{ hashFiles('.github/workflows/**') }}-${{ env.YEAR_MONTH }}
+
+      - name: Build cache
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p "${DEPS_PREFIX}"
+          pushd ci/gpg
+          ./install_gpg_all.sh \
+            --suite-version "${GPG_VERSION}" \
+            --build-dir "${DEPS_BUILD_DIR}/gpg" \
+            --sudo --ldconfig \
+            --configure-opts "${GPG_CONFIGURE_OPTS}"
+          popd
+          pushd ci
+          ./install_botan.sh
+          ./install_json_c.sh
+          ./install_rnp.sh
+          popd
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+        env:
+          --env: ImageOS=ubuntu18
+
+      - name: Before script
+        run: |
+          bundle exec rake pgp_keys:generate
+          bundle exec rake pgp_keys:list
+
+      - name: Run tests
+        run: bundle exec rspec --format documentation --profile 200
